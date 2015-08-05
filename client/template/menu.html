@@ -1,0 +1,109 @@
+
+<template name="menu">
+
+
+
+    <header class="header black-bg">
+        <div class="sidebar-toggle-box">
+            <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+        </div>
+<!--
+        <a href="/" class="logo" style="margin-top: 5px"><img src="assets/img/Graphical-IO.png" height="30" width="30"></a>
+-->
+
+        <div class="nav notify-row" id="top_menu" >
+            <!--  notification start -->
+            <ul class="nav top-menu">
+            </ul>
+              <!-- notification end -->
+        </div>
+        <div class="top-menu">
+            <ul class="nav pull-left top-menu">
+                <a href="/projectselection" id="selected_project_menu" style="font-size: 20px;cursor: pointer"></a>
+            </ul>
+            <ul class="nav pull-right top-menu">
+                <li><a class="logout" href="{{ urlFor 'login' }}"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
+            </ul>
+        </div>
+    </header>
+    <!--sidebar start-->
+    <aside>
+        <div id="sidebar"  class="nav-collapse ">
+            <!-- sidebar menu start-->
+            <ul class="sidebar-menu" id="nav-accordion">
+
+                <div class="centered img-circle">
+                    {{#if user.pic_url_field }}
+                        <img src="{{pic_url_field}}" width="auto" height="60" style="cursor: pointer;">
+                    {{else}}
+                        <i class="fa fa-user" width="80" style="cursor: pointer;font-size: 60px;"></i>
+                    {{/if}}
+                </div>
+<!--
+                <p class="centered"><a href="profile.html"><img src="assets/img/ui-sherman.jpg" class="img-circle" width="60"></a></p>
+-->
+                <h5 class="centered">
+                    {{#each user.emails}}
+                        {{ address }}
+                    {{/each}}
+                </h5>
+                <li class="mt">
+                     <a class="active" href="/dashboard">
+                         <i class="fa fa-dashboard"></i>
+                         <span>Dashboard</span>
+                     </a>
+                 </li>
+                <li class="sub-menu">
+                    <a class="" href="javascript:void(0);">
+                        <i class=" fa fa fa-cogs"></i>
+                        <span>Settings</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a  href="/user_profile">User Profile</a></li>
+                        <!-- <li><a  href="/logs">Logs</a></li> -->
+                        <!-- <li><a  href="/chat_view">Chat View</a></li>
+                        <li><a  href="/blog">Blog</a></li> -->
+                    </ul>
+                </li>
+            </ul>
+            <!-- sidebar menu end-->
+        </div>
+    </aside>
+
+    <script>
+        $(function() {
+            $('#nav-accordion').dcAccordion({
+                eventType: 'click',
+                autoClose: true,
+                saveState: true,
+                disableLink: true,
+                speed: 'fast',
+                showCount: false,
+                autoExpand: true,
+                classExpand: 'dcjq-current-parent'
+            });
+        });
+
+
+        // $('.aProject').click(function(event)
+        // {
+        //     ProjectSelect(event);
+        //     return false;
+        // });
+
+    </script>
+    <style>
+        .sub a.active{
+            background: none !important;
+        }
+        .navbar-brand-select
+        {
+            position:  absolute !important;
+            width: 100%;
+            left: 0;
+            text-align: center;
+            margin: auto;
+        }
+
+    </style>
+</template>

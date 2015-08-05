@@ -1,0 +1,33 @@
+# Meteor packages used by this project, one per line.
+# Check this file (and the other files in this directory) into your repository.
+#
+# 'meteor add' and 'meteor remove' will edit this file for you,
+# but you can also edit it by hand.
+
+meteor-platform
+accounts-password
+iron:router
+mizzao:bootstrap-3
+jquery
+j4507:datatables-bootstrap-3
+email
+tsega:bootstrap3-datetimepicker
+mystor:device-detection
+autoupdate
+chriswessels:hammer
+fastclick
+pfafman:filesaver
+ryw:blog
+alanning:roles
+cfs:standard-packages
+cfs:filesystem
+cfs:s3
+cfs:gridfs@=0.0.31
+cfs:ui
+alethes:pages
+meteorhacks:fast-render
+reload
+multiply:iron-router-progress
+momentjs:moment
+shammar13:busboy
+backbone

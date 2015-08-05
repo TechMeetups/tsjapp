@@ -1,0 +1,60 @@
+
+<template name="Navbuttons">
+
+    <div class="pull-right">
+        <a href="/Kanban_wall" data-toggle="tooltip" title="Kanban..."><button class="btn btn-default fa fa-trello"></button></a>
+        
+        <a href="/chat_view" data-toggle="tooltip" title="Project chat..."><button class="btn btn-default fa fa-comments-o"></button></a>
+        
+        <a href="/dashboard" data-toggle="tooltip" title="Project dashboard..."><button class="btn btn-default fa fa-dashboard"></button></a>
+
+        <a href="/kanban_circle" data-toggle="tooltip" title="Project birds eye view..."><button class="btn btn-default fa fa-eye"></button></a>
+    </div>
+
+    <script>
+
+        $(document).ready(function()
+        {
+            $('[data-toggle="tooltip"]').tooltip(); 
+        });
+
+    </script>
+
+</template>
+
+<template name="NavKanban">
+    
+    <a href="/Kanban_wall" data-toggle="tooltip" title="Kanban..."><button class="btn btn-default fa fa-trello"></button></a>
+
+</template>
+
+
+
+<template name="backbutton">
+
+	<a href="#"> <button type="button" onclick="backfunc()" class="btn btn-primary"><span class="fa fa-chevron-circle-left"></span> Back </button></a>
+
+	<script>
+	    function backfunc() 
+	    {
+	        history.back() ;
+	    }
+	</script>
+
+</template>
+
+
+<template name="submitbutton">
+
+	<button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Update </button>
+
+</template>
+
+<template name="formfooter">
+	 <div class="form-group">
+    	<div class="col-xs-offset-2 col-xs-10">
+        	{{>submitbutton}}
+            {{>backbutton}}
+    	</div>
+    </div>
+</template>

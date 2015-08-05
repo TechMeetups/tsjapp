@@ -1,0 +1,73 @@
+<head>
+    <title>Graphical.IO</title>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <!--
+    <script src="http://www.blacktie.co/demo/dashgumfree/assets/js/jquery.dcjqaccordion.2.7.js"></script>
+    <script src="http://www.blacktie.co/demo/dashgumfree/assets/js/zabuto_calendar.js"></script>
+    <script src="http://www.blacktie.co/demo/dashgumfree/assets/js/fullcalendar/fullcalendar.min.js"></script>
+    -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script async="" src="https://cdn.rawgit.com/eligrey/Blob.js/master/Blob.js"/>
+    <script src="http://code.jquery.com/mobile/1.4.0-alpha.2/jquery.mobile-1.4.0-alpha.2.min.js"></script>
+    <!-- <script src="http://forresst.github.io/js/jquery.ui.touch-punch.min.js"></script> -->
+
+    <!--<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />-->
+    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>-->
+
+</head>
+<body>
+  <section id="container" >
+      <div class="alert alert-error" style="background-color: lightcoral;text-align: center; display: none" id="main-error-box">
+      <!--<a href="#" class="close" data-dismiss="alert" onclick="$('.alert').hide()">&times;</a>-->
+      <strong id="error-message"></strong>
+      </div>
+      {{#if currentUser}}
+          {{>menu}}
+          <div class="container-fluid">
+              <div class="row-fluid">
+              {{renderPage}}
+              </div>
+          </div>
+      {{else}}
+        <div class="container-fluid">
+            <div class="row-fluid">
+            {{renderPage}}
+            </div>
+        </div>
+      {{/if}}
+      {{>footer}}
+  </section>
+
+
+<template name="loading">
+      <div class="modal-body">
+          <i class="fa fa-cog fa-spin" style="font-size: 50px;"></i><br>
+          <h3>Loading...</h3>
+      </div>
+</template>
+  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="loadingwindow">
+      <div class="modal-dialog modal-sm">
+          <div class="modal-content" style="text-align: center;">
+              <div class="modal-body">
+                  <i class="fa fa-cog fa-spin" style="font-size: 50px;"></i><br>
+                  <h3>Loading...</h3>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="processingmodelwindow">
+      <div class="modal-dialog modal-sm">
+          <div class="modal-content" style="text-align: center;">
+              <div class="modal-body">
+                  <i class="fa fa-cog fa-spin" style="font-size: 50px;"></i><br>
+                  <h3>processing...</h3>
+              </div>
+          </div>
+      </div>
+  </div>
+</body>
