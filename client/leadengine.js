@@ -74,7 +74,25 @@ Template.menu.rendered = function ()
     });
 }
 
+var Auth_Router = Backbone.Router.extend({
+	routes: {
+		"": "root",
+		"/oauth/?code=:code":"auth"
+	},
+  root: function () {},
+	auth: function (code)	{
+    var code = code.split("&");
+    console.log(code)
+    Meteor.call('authenticate', code, function (error, result) {
+      	console.log(error)
+        console.log(result)
+  		});
+	}
+});
+
 Meteor.startup(function(){
+  //router = new Auth_Router();
+
   for(var property in Template){
           if(Blaze.isTemplate(Template[property])){
               var template = Template[property];

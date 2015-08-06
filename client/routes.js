@@ -1,3 +1,4 @@
+
 Router.map(function()
 {
     this.route('userprofile', {path: '/user_profile'});
@@ -31,6 +32,30 @@ Router.map(function()
         }
 
     });
+
+    this.route('/oauth', function ()
+    {
+      console.log(this.request);
+      console.log(this.params.query.code);
+      var code =  this.params.query.code
+      this.render('faindex');
+      // Meteor.call('authenticate', code, function (error, result) {
+      //   console.log(error)
+      //   console.log(result)
+      // });
+    });
+    this.route('/cc_oauth', function ()
+    {
+      console.log(this.request);
+      console.log(this.params.query.code);
+      var code =  this.params.query.code
+      this.render('ccindex');
+      // Meteor.call('authenticate', code, function (error, result) {
+      //   console.log(error)
+      //   console.log(result)
+      // });
+    });
+
 
 });
 

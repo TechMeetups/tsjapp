@@ -1,11 +1,19 @@
 <template name="ccindex">
     <section id="main-content">
         <section class="wrapper">
-            <div class="row">
-                <div class="" style="text-align: center;padding-top: 10px;">
-                    <button type="button" class="btn-lg btn-primary" id="cc_login">CC Login</button>
-                </div>
-            </div>
+          <div class="row">
+              <div class="" style="text-align: center;padding-top: 10px;">
+                  <a href="https://oauth2.constantcontact.com/oauth2/oauth/siteowner/authorize?response_type=code&client_id=sgp54b32c64mqkc9e7g3zm9e&redirect_uri=http://ce9baf06.ngrok.io/cc_oauth/&access_type=offline"> <button type="button" class="btn-lg btn-primary">CC Login</button></a>
+              </div>
+              <div id="code">{{params.query.code}}</div>
+              <div class="" style="text-align: center;padding-top: 10px;">
+                 <button type="button" class="btn-lg btn-primary" id="cc_login">CC Post</button>
+              </div>
+
+              <div class="" style="text-align: center;padding-top: 10px;">
+                 <button type="button" class="btn-lg btn-primary" id="cc_contects">Get Contects</button>
+              </div>
+          </div>
         </section>
     </section>
 </template>

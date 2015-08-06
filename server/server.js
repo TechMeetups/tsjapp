@@ -5,8 +5,19 @@ if (Meteor.isServer)
         adminRole:'admin',
         authorRole: 'blogAuthor'
     });
-
+    // Router.route('/oauth').
+    // get(function () {
+    //     //console.log(this.request);
+    //     var code = this.params['query'].code;
+    //     authenticate(code,function(error, result){
+    //       console.log(error);
+    //       console.log(result);
+    //     })
+    //     this.response.writeHead(200);
+    //    this.response.end('Success\n');
+    // });
     Meteor.startup(function () {
+
         // By default, the email is sent from no-reply@meteor.com. If you wish to receive email from users asking for help with their account, be sure to set this to an email address that you can receive email at.
         Accounts.emailTemplates.from = 'admin <no-reply@CCIntegration.com>';
         // The public name of your application. Defaults to the DNS name of the application (eg: awesome.meteor.com).
@@ -81,7 +92,24 @@ if (Meteor.isServer)
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
         });
    }
+   var authenticate = function (auth_code) {
+     var formData = {
+            grant_type : "authorization_code",
+            code: auth_code,
+            client_id : "sgp54b32c64mqkc9e7g3zm9e",
+            client_secret : "fRzKbhrkdTPttWG4fvfcsCRj",
+            redirect_uri : "http://ce9baf06.ngrok.io/cc_oauth/"
 
+        };
+        url = "https://oauth2.constantcontact.com/oauth2/oauth/token";
+        var result = Meteor.http.call('POST', url,{
+            headers: {
+              "content-type" : "application/x-www-form-urlencoded"
+            },
+            params: formData
+        });
+        return result.data;
+     }
       Meteor.methods(
     {
         'sendMessage': function (toId)
@@ -110,6 +138,20 @@ if (Meteor.isServer)
         resetpassword : function (user_id,pass)
         {
             Accounts.setPassword(user_id, pass);
+        },
+        authenticate : function(code){
+          this.unblock();
+          return authenticate(code)
+        },
+        APICall : function (method,url, code){
+          this.unblock();
+          var result = Meteor.http.call(method, url,{
+              headers: {
+                "Authorization" : "Bearer "+code+""
+              },
+          });
+          return result.data;
+
         }
     });
 
