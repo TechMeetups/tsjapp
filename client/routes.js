@@ -2,6 +2,8 @@ Router.map(function()
 {
     this.route('userprofile', {path: '/user_profile'});
     this.route('dashboard', {path:"/customers"} );
+    this.route('faindex', {path: '/fa_index'});
+    this.route('ccindex', {path: '/cc_index'});
     this.route('login', {path: '/login',
         onBeforeAction: function ()
         {
@@ -29,6 +31,7 @@ Router.map(function()
         }
 
     });
+
 });
 
 // End of Routes  ***********************************************************************************
