@@ -8,7 +8,7 @@ if (Meteor.isServer)
 
     Meteor.startup(function () {
         // By default, the email is sent from no-reply@meteor.com. If you wish to receive email from users asking for help with their account, be sure to set this to an email address that you can receive email at.
-        Accounts.emailTemplates.from = 'admin <no-reply@techmeetups.com>';
+        Accounts.emailTemplates.from = 'admin <no-reply@CCIntegration.com>';
         // The public name of your application. Defaults to the DNS name of the application (eg: awesome.meteor.com).
         Accounts.emailTemplates.siteName = 'Graphical.IO';
         // A Function that takes a user object and returns a String for the subject line of the email.
@@ -35,49 +35,49 @@ if (Meteor.isServer)
       return user;
     });
     var userRegistration = function(user,pass){
-        var fromEmail = "admin@techmeetups.com";
+        var fromEmail = "admin@CCIntegration.com";
         var toEmail = user.emails[0].address;
         Email.send({
             from: fromEmail,
             to: toEmail,
             replyTo: fromEmail ,
-            subject: "Graphical.IO Registration",
+            subject: "CCIntegration Registration",
             text: "Hi "+user.profile.firstname+",\nYour Email: "+user.emails[0].address+" has been registered."+
             "\nYour password is : "+pass+"\n\n"+
             "Thank you.\n"+
-            "The Graphical.IO Team.\n"+Meteor.absoluteUrl()+"\n"
+            "The CCIntegration Team.\n"+Meteor.absoluteUrl()+"\n"
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
         });
     }
 
     var userPasswordReset = function(user,pass)
     {
-        var fromEmail = "admin@techmeetups.com";
+        var fromEmail = "admin@CCIntegration.com";
         var toEmail = user.emails[0].address;
         Email.send({
             from: fromEmail,
             to: toEmail,
             replyTo: fromEmail ,
-            subject: "Graphical.IO Password Reset",
+            subject: "CCIntegration Password Reset",
             text: "Hi "+user.profile.firstname+",\nYour password has been reset."+
             "\nYour new password is : "+pass+"\n\n"+
             "Thank you.\n"+
-            "The Graphical.IO Team.\n"+Meteor.absoluteUrl()+"\n"
+            "The CCIntegration Team.\n"+Meteor.absoluteUrl()+"\n"
             // +"http://www.graphical.io/assets/img/Graphical-IO.png"
         });
     }
     var sendMessage = function (user_email)
     {
-        var fromEmail = "admin@techmeetups.com";
+        var fromEmail = "admin@CCIntegration.com";
         var toEmail = " shawn@techmeetups.com";
         Email.send({
             from: fromEmail,
             to: toEmail,
             replyTo: fromEmail ,
-            subject: "Graphical.IO Registration Request",
+            subject: "CCIntegration Registration Request",
             text: "Hi SysAdmin,\nUser: "+user_email+" wants to register on Graphical.IO\n\n"+
             "Thank you.\n"+
-            "The Graphical.IO Team.\n"+Meteor.absoluteUrl()+"\n"
+            "The CCIntegration Team.\n"+Meteor.absoluteUrl()+"\n"
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
         });
    }

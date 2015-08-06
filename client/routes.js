@@ -1,7 +1,7 @@
 Router.map(function()
 {
-    this.route('userprofile', {path: '/user_profile'}); 
-    this.route('dashboard', {path:"/dashboard"} );
+    this.route('userprofile', {path: '/user_profile'});
+    this.route('dashboard', {path:"/customers"} );
     this.route('login', {path: '/login',
         onBeforeAction: function ()
         {
