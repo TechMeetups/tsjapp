@@ -97,7 +97,7 @@ if (Meteor.isServer)
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
         });
    }
-   var cc_contect_insert : function(data){
+   var cc_contect_insert = function(data){
      var contect = data.result
      for(var i=0;i< contect.length ; i++)
      {

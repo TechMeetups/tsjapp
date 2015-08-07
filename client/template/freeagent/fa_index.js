@@ -3,7 +3,14 @@ function updateUserFaAccess(){
   var fa_access_token = localStorage.getItem("fa_access_token");
   var fa_auth_code = localStorage.getItem("fa_auth_code");
   var fa_token_type = localStorage.getItem("fa_token_type");
-  Meteor.users.update({_id:Meteor.userId()}, { $set:{"profile.fa_auth_code":fa_auth_code,"profile.fa_refresh_token":fa_refresh_token,"profile.fa_access_token":fa_access_token,"profile.fa_token_type":fa_token_type}});
+  Meteor.users.update({_id:Meteor.userId()}, { $set:{"profile.fa_auth_code":fa_auth_code,"profile.fa_refresh_token":fa_refresh_token,
+  "profile.fa_access_token":fa_access_token,"profile.fa_token_type":fa_token_type}},function(error){
+    if(error){
+      console.log("error : "+ error);
+    }else{
+      console.log("User Update Success");
+    }
+  });
 }
 Template.faindex.events({
     'click #fa_refresh' : function(event, template){
@@ -33,6 +40,7 @@ Template.faindex.events({
         error: function (jqXHR, textStatus, errorThrown)
         {
           console.log(textStatus)
+          updateUserFaAccess();
         }
       });
     },

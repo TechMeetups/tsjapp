@@ -2,7 +2,14 @@ function updateUserCCAccess(){
   var cc_access_token = localStorage.getItem("cc_access_token");
   var cc_token_type = localStorage.getItem("cc_token_type");
   var cc_auth_code = localStorage.getItem("cc_auth_code");
-  Meteor.users.update({_id:Meteor.userId()}, { $set:{"profile.cc_token_type":cc_token_type,"profile.cc_access_token":cc_access_token,"profile.cc_auth_code":cc_auth_code}});
+  Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.cc_token_type":cc_token_type,"profile.cc_access_token":cc_access_token,
+  "profile.cc_auth_code":cc_auth_code}},function(error){
+    if(error){
+      console.log("error : "+ error);
+    }else{
+      console.log("User Update Success");
+    }
+  });
 }
 Template.ccindex.events({
     'click #cc_login' : function(event, template){
