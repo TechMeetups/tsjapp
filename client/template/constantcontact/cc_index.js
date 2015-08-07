@@ -8,10 +8,9 @@ Template.ccindex.events({
              code: auth_code,
              client_id : "sgp54b32c64mqkc9e7g3zm9e",
              client_secret : "fRzKbhrkdTPttWG4fvfcsCRj",
-             redirect_uri : "http://ce9baf06.ngrok.io/cc_oauth/"
+             redirect_uri : "http://ccintegration.herokuapp.com/cc_oauth/"
 
          };
-
          localStorage.setItem("cc_auth_code",auth_code);
          url = "https://oauth2.constantcontact.com/oauth2/oauth/token";
          Meteor.call("authenticate", auth_code, function(error, result){
@@ -39,4 +38,18 @@ Template.ccindex.events({
           }
         });
     }
+});
+Template.ccindex.helpers({
+  access_token: function(){
+    return localStorage.getItem("cc_access_token")
+  },
+  token_type: function(){
+    return localStorage.getItem("cc_token_type")
+  },
+  refresh_token: function(){
+    return "n/a";
+  },
+  auth_code: function(){
+    return localStorage.getItem("cc_auth_code")
+  }
 });

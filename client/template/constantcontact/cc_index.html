@@ -2,8 +2,9 @@
     <section id="main-content">
         <section class="wrapper">
           <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12">
               <div class="" style="text-align: center;padding-top: 10px;">
-                  <a href="https://oauth2.constantcontact.com/oauth2/oauth/siteowner/authorize?response_type=code&client_id=sgp54b32c64mqkc9e7g3zm9e&redirect_uri=http://ce9baf06.ngrok.io/cc_oauth/&access_type=offline"> <button type="button" class="btn-lg btn-primary">CC Login</button></a>
+                  <a href="https://oauth2.constantcontact.com/oauth2/oauth/siteowner/authorize?response_type=code&client_id=sgp54b32c64mqkc9e7g3zm9e&redirect_uri=http://ccintegration.herokuapp.com/cc_oauth/&access_type=offline"> <button type="button" class="btn-lg btn-primary">CC Login</button></a>
               </div>
               <div id="code">{{params.query.code}}</div>
               <div class="" style="text-align: center;padding-top: 10px;">
@@ -14,6 +15,16 @@
                  <button type="button" class="btn-lg btn-primary" id="cc_contects">Get Contects</button>
               </div>
           </div>
+          <div class="col-lg-6 col-md-6 col-sm-12">
+              <div class="showback">
+              <h4>Token Details</h4>
+              <div class="alert alert-success"><b>Auth Code : </b> {{auth_code}} </div>
+              <div class="alert alert-success"><b>Refresh Token : </b> {{refresh_token}} </div>
+              <div class="alert alert-success"><b>Access Token : </b> {{access_token}} </div>
+              <div class="alert alert-success"><b>Token Type : </b>  {{token_type}} </div>
+              </div>
+          </div>
+        </div>
         </section>
     </section>
 </template>

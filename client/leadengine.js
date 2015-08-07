@@ -89,7 +89,9 @@ var Auth_Router = Backbone.Router.extend({
   		});
 	}
 });
-
+Deps.autorun(function() {
+  Meteor.subscribe("contacts",Meteor.userId());
+})
 Meteor.startup(function(){
   //router = new Auth_Router();
 

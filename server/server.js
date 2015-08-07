@@ -16,6 +16,11 @@ if (Meteor.isServer)
     //     this.response.writeHead(200);
     //    this.response.end('Success\n');
     // });
+
+    Meteor.publish("contacts", function (user_id)
+    {
+        return contacts.find({user_id:user_id});
+    });
     Meteor.startup(function () {
 
         // By default, the email is sent from no-reply@meteor.com. If you wish to receive email from users asking for help with their account, be sure to set this to an email address that you can receive email at.
@@ -152,6 +157,18 @@ if (Meteor.isServer)
           });
           return result.data;
 
+        },
+        fa_contect_insert :  function (result){
+          this.unblock();
+          result = result.contacts
+          for(var i = 0;i< result.length ; i++){
+            console.log(result[i]);
+            var jsondata = result[i];
+            jsondata['provider'] = "freeagent";
+            jsondata['user_id'] = Meteor.userId();
+            contacts.insert(jsondata);
+          }
+          return result;
         }
     });
 
