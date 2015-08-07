@@ -1,4 +1,23 @@
-
+function resetLoginDetails(){
+profile = Meteor.user().profile
+  if(profile){
+  	localStorage.setItem("cc_access_token",isNotEmptyValue(profile.cc_access_token));
+  	localStorage.setItem("cc_token_type",isNotEmptyValue(profile.cc_token_type));
+  	localStorage.setItem("cc_auth_code",isNotEmptyValue(profile.cc_auth_code));
+  	localStorage.setItem("fa_refresh_token",isNotEmptyValue(profile.fa_refresh_token));
+  	localStorage.setItem("fa_access_token",isNotEmptyValue(profile.fa_access_token));
+  	localStorage.setItem("fa_auth_code",isNotEmptyValue(profile.fa_auth_code));
+  	localStorage.setItem("fa_token_type",isNotEmptyValue(profile.fa_token_type));
+  }else{
+  	localStorage.setItem("cc_access_token","");
+  	localStorage.setItem("cc_token_type","");
+  	localStorage.setItem("cc_auth_code","");
+  	localStorage.setItem("fa_refresh_token","");
+  	localStorage.setItem("fa_access_token","");
+  	localStorage.setItem("fa_auth_code","");
+  	localStorage.setItem("fa_token_type","");
+  }
+}
     Template.login.events({
         'click .login' : function(event, template){
             $('#loginModel').modal('show');
@@ -64,6 +83,7 @@
                       localStorage.setItem("login_user_name",emailVar);
                       localStorage.setItem("login_user_email",emailVar);
                       localStorage.setItem("login_user_pic","");
+                      resetLoginDetails();
                       Router.go('dashboard');
                 }
             });

@@ -98,7 +98,8 @@ if (Meteor.isServer)
         });
    }
    var cc_contect_insert = function(data){
-     var contect = data.result
+     console.log(data);
+     var contect = data.results
      for(var i=0;i< contect.length ; i++)
      {
        var jsondata = results[i];
