@@ -156,7 +156,6 @@ if (Meteor.isServer)
               },
           });
           return result.data;
-
         },
         fa_contect_insert :  function (result){
           this.unblock();
