@@ -1,6 +1,6 @@
 Template.faindex.events({
-    'clcik #fa_refresh' : function(event, template){
-      console.log("fa click");
+    'click #fa_refresh' : function(event, template){
+      console.log("fa_refresh click");
       var formData = {
            grant_type : "refresh_token",
            refresh_token: localStorage.getItem("fa_refresh_token"),
@@ -65,16 +65,6 @@ Template.faindex.events({
     'click #fa_contects' : function(event, template){
       url = "https://api.sandbox.freeagent.com/v2/contacts";
       var access_token = localStorage.getItem("fa_access_token");
-      // Meteor.call("fa_contect","GET",url,access_token, function(error, result){
-      //   if(error){
-      //     console.log("error", error);
-      //   }
-      //   if(result){
-      //      console.log(result)
-      //
-      //   }
-      // });
-
         $.ajax({
           url : url,
           type: "GET",
