@@ -97,6 +97,18 @@ if (Meteor.isServer)
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
         });
    }
+   var cc_contect_insert : function(data){
+     var contect = data.result
+     for(var i=0;i< contect.length ; i++)
+     {
+       var jsondata = results[i];
+       jsondata['provider'] = "constantcontact";
+       jsondata['user_id'] = Meteor.userId();
+       jsondata['email'] = jsondata.email_addresses[0].email_address;
+       contacts.insert(jsondata);
+     }
+
+   }
    var authenticate = function (auth_code) {
      var formData = {
             grant_type : "authorization_code",
@@ -155,6 +167,7 @@ if (Meteor.isServer)
                 "Authorization" : "Bearer "+code+""
               },
           });
+          cc_contect_insert(result.data)
           return result.data;
         },
         fa_contect_insert :  function (result){
