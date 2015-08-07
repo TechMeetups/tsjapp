@@ -41,15 +41,15 @@ Template.ccindex.events({
 });
 Template.ccindex.helpers({
   access_token: function(){
-    return localStorage.getItem("cc_access_token")
+    return localStorage.getItem("cc_access_token");
   },
   token_type: function(){
-    return localStorage.getItem("cc_token_type")
+    return localStorage.getItem("cc_token_type");
   },
   refresh_token: function(){
     return "n/a";
   },
   auth_code: function(){
-    return localStorage.getItem("cc_auth_code")
+    return localStorage.getItem("cc_auth_code");
   }
 });

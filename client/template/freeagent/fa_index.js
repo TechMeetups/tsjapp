@@ -117,8 +117,8 @@ Template.faindex.helpers({
   auth_code: function(){
 
     return localStorage.getItem("fa_auth_code")
-  }
+  },
   cc_contects : function(){
-    return contacts.find({user_id:Meteor.userId()})
+    return contacts.find({user_id:Meteor.userId()});
   }
 });
