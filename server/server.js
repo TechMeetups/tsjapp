@@ -147,7 +147,7 @@ if (Meteor.isServer)
      var url = "https://api.constantcontact.com/v2/contacts?action_by=ACTION_BY_OWNER&api_key="+CC_CLIENT_ID_KEY;
      var result = Meteor.http.call("POST", url,{
          headers: {
-           "Authorization" : "Bearer "+code+"",
+           "Authorization" : "Bearer "+cc_access_token+"",
            "content-type" : "application/json"
          },
          params: data
