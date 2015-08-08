@@ -95,7 +95,7 @@ if (Meteor.isServer)
        jsondata['provider'] = "constantcontact";
        jsondata['user_id'] = Meteor.userId();
        jsondata['email'] = jsondata.email_addresses[0].email_address;
-       var contact = contacts.findOne({email:jsondata.email,provider:"constantcontact"});
+       var contact = contacts.findOne({user_id:Meteor.userId(),email:jsondata.email,provider:"constantcontact"});
        if(contact){
          contacts.update({_id:contact._id},{$set:jsondata});
        }else{
@@ -173,7 +173,7 @@ if (Meteor.isServer)
             var jsondata = result[i];
             jsondata['provider'] = "freeagent";
             jsondata['user_id'] = Meteor.userId();
-            var contact = contacts.findOne({email:jsondata.email,provider:"freeagent"});
+            var contact = contacts.findOne({user_id:Meteor.userId(),email:jsondata.email,provider:"freeagent"});
             if(contact){
               contacts.update({_id:contact._id},{$set:jsondata});
             }else{
@@ -186,6 +186,20 @@ if (Meteor.isServer)
         delete_contact : function(id){
           contacts.remove({_id:id});
           return "success"
+        },
+        sync_contact : function(){
+          this.unblock();
+          var freeagentcontacts = contacts.find({user_id:Meteor.userId(),provider:"freeagent"}).fetch();
+          var constantcontact = contacts.find({user_id:Meteor.userId(),provider:"constantcontact"}).fetch();
+          for(var i =0 ; i< freeagentcontacts.length ;i++){
+            for(var j = 0 ; j < constantcontact.length ; j++){
+              if(freeagentcontacts[i].eamil == constantcontact[j].email){
+                freeagentcontacts[i].sync_state = "sync";
+                contacts.update({_id:idSelector}, {$set:{sync_state:"sync"}});
+              }
+            }
+          }
+          return "sync done"
         }
     });
 }

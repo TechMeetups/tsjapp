@@ -46,7 +46,17 @@ Template.dashboard.events({
         }
       });
   },
-  cc_contects : function(){
-    return contacts.find({user_id:Meteor.userId()});
+  'click #sync_contects' :  function(event, template){
+    $('#processingmodelwindow').modal('show');
+    Meteor.call("sync_contact",function(error, result){
+      if(error){
+        console.log("error", error);
+        $('#processingmodelwindow').modal('hide');
+      }
+      if(result){
+         console.log(result)
+         $('#processingmodelwindow').modal('hide');
+      }
+    });
   }
 });
