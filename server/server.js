@@ -1,17 +1,5 @@
 function create_cc_contactBlock(faContect){
   var newContectblock = {
-	"addresses": [
-    {
-      "address_type": "",
-      "city": "",
-      "country_code": "US",
-      "line1": "",
-      "line2": "",
-      "line3": "",
-      "postal_code": "",
-      "state_code": "",
-      "sub_postal_code": ""
-    }],
 	"lists": [
 		{
 		  "id": "1622842370"
@@ -24,7 +12,7 @@ function create_cc_contactBlock(faContect){
 		{
 		"email_address": faContect.email
 		}
-	],
+	 ],
   "fax": "",
   "first_name": faContect.first_name,
   "home_phone": "",
@@ -34,6 +22,7 @@ function create_cc_contactBlock(faContect){
   "prefix_name": "",
   "work_phone": ""
   };
+  console.log(newContectblock);
 return newContectblock;
 }
 
