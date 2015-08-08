@@ -162,7 +162,7 @@ if (Meteor.isServer)
                 "Authorization" : "Bearer "+code+""
               },
           });
-          //cc_contect_insert(result.data)
+          cc_contect_insert(result.data)
           return result.data;
         },
         fa_contect_insert :  function (result){
