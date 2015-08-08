@@ -236,7 +236,7 @@ if (Meteor.isServer)
           contacts.remove({_id:id});
           return "success"
         },
-        sync_contact : function(){
+        sync_contact : function(cc_acccess_code){
           this.unblock();
           var freeagentcontacts = contacts.find({user_id:Meteor.userId(),provider:"freeagent"}).fetch();
           var constantcontact = contacts.find({user_id:Meteor.userId(),provider:"constantcontact"}).fetch();
@@ -250,7 +250,7 @@ if (Meteor.isServer)
           var freeagentcontactsforcreate = contacts.find({user_id:Meteor.userId(),provider:"freeagent",sync_state:"new"}).fetch();
           for(var c=0;c < freeagentcontactsforcreate.length ;c++){
                 var newobject = create_cc_contactBlock(freeagentcontactsforcreate[c]);
-                var response = create_cc_contect(newobject);
+                var response = create_cc_contect(newobject,cc_acccess_code);
                 if(response){
                   console.log(response)
                 }

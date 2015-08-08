@@ -62,7 +62,8 @@ Template.dashboard.events({
   },
   'click #sync_contects' :  function(event, template){
     $('#processingmodelwindow').modal('show');
-    Meteor.call("sync_contact",function(error, result){
+    var auth_code =   localStorage.getItem("cc_access_token");
+    Meteor.call("sync_contact",auth_code,function(error, result){
       if(error){
         console.log("error", error);
         $('#processingmodelwindow').modal('hide');
