@@ -140,5 +140,4 @@ if (Meteor.isClient)
             }
         }
     });
-
 }

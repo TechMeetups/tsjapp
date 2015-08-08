@@ -21,30 +21,39 @@ Template.dashboard.helpers({
 
 Template.dashboard.events({
   'click #fa_contects' : function(event, template){
-    url = "https://api.sandbox.freeagent.com/v2/contacts";
-    var access_token = localStorage.getItem("fa_access_token");
-      $.ajax({
-        url : url,
-        type: "GET",
-        headers:{ "Authorization" : "Bearer "+access_token+""},
-        success: function(data, textStatus, jqXHR)
-        {
-          console.log(textStatus)
-          console.log(data)
-          Meteor.call("fa_contect_insert",data, function(error, result){
-            if(error){
-              console.log("error", error);
-            }
-            if(result){
-               console.log(result)
-            }
-          });
-        },
-        error: function (jqXHR, textStatus, errorThrown)
-        {
-          console.log(textStatus)
-        }
-      });
+
+    refresh_fa_access_token(function(result){
+      if(result){
+        console.log("callback functin");
+        localStorage.setItem("fa_access_token",result.access_token);
+        localStorage.setItem("fa_token_type",result.token_type);
+        updateUserFaAccess();
+        var access_token = localStorage.getItem("fa_access_token");
+        url = "https://api.sandbox.freeagent.com/v2/contacts";
+        $.ajax({
+          url : url,
+          type: "GET",
+          headers:{ "Authorization" : "Bearer "+access_token+""},
+          success: function(data, textStatus, jqXHR)
+          {
+            console.log(textStatus)
+            console.log(data)
+            Meteor.call("fa_contect_insert",data, function(error, result){
+              if(error){
+                console.log("error", error);
+              }
+              if(result){
+                 console.log(result)
+              }
+            });
+          },
+          error: function (jqXHR, textStatus, errorThrown)
+          {
+            console.log(textStatus)
+          }
+        });
+      }
+    })
   },
   'click #cc_contects' : function(event, template){
       var auth_code =   localStorage.getItem("cc_access_token");
