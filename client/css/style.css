@@ -2478,7 +2478,7 @@ a.dropdown-toggle::before {
   white-space: normal;
 }
 .site-footer{
-  position: absolute;
+  position: fixed;
   bottom:0px;
   width: 100%;
   z-index: 99999;
