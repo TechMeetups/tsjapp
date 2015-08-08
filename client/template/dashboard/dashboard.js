@@ -21,10 +21,9 @@ Template.dashboard.helpers({
 
 Template.dashboard.events({
   'click #fa_contects' : function(event, template){
-
+    $('#processingmodelwindow').modal('show');
     refresh_fa_access_token(function(result){
       if(result){
-        console.log("callback functin");
         localStorage.setItem("fa_access_token",result.access_token);
         localStorage.setItem("fa_token_type",result.token_type);
         updateUserFaAccess();
@@ -41,9 +40,11 @@ Template.dashboard.events({
             Meteor.call("fa_contect_insert",data, function(error, result){
               if(error){
                 console.log("error", error);
+                $('#processingmodelwindow').modal('hide');
               }
               if(result){
                  console.log(result)
+                 $('#processingmodelwindow').modal('hide');
               }
             });
           },
@@ -56,16 +57,18 @@ Template.dashboard.events({
     })
   },
   'click #cc_contects' : function(event, template){
+    $('#processingmodelwindow').modal('show');
       var auth_code =   localStorage.getItem("cc_access_token");
       var params = "?status=ALL&limit=50&api_key="+CC_CLIENT_ID_KEY;
       url = "https://api.constantcontact.com/v2/contacts";
       Meteor.call("APICall","GET",url+params,auth_code, function(error, result){
         if(error){
           console.log("error", error);
+          $('#processingmodelwindow').modal('hide');
         }
         if(result){
            console.log(result)
-
+           $('#processingmodelwindow').modal('hide');
         }
       });
   },

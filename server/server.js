@@ -1,40 +1,39 @@
 function create_cc_contactBlock(faContect){
   var newContectblock = {
-    addresses: [
+    "addresses": [
     {
-      address_type: "",
-      city: "",
-      country_code: "US",
-      line1: "",
-      line2: "",
-      line3: "",
-      postal_code: "",
-      state_code: "",
-      sub_postal_code: ""
+      "address_type": "PERSONAL",
+      "city": "",
+      "country_code": "",
+      "line1": "",
+      "line2": "",
+      "line3": "",
+      "postal_code": "",
+      "state_code": "",
+      "sub_postal_code": ""
     }],
-    lists: [
+    "lists": [
         {
-            id: "1622842370"
+            "id": "1622842370"
         }
     ],
-    cell_phone: "",
-    company_name: faContect.organisation_name,
-    confirmed: false,
-    email_addresses: [
+    "cell_phone": "",
+    "company_name": faContect.organisation_name,
+    "confirmed": false,
+    "email_addresses": [
         {
-            email_address: faContect.email
+            "email_address": faContect.email
         }
     ],
-    fax: "",
-    first_name: faContect.first_name,
-    home_phone: "",
-    job_title: "",
-    last_name: faContect.last_name,
-    middle_name: "",
-    prefix_name: "",
-    work_phone: ""
+    "fax": "",
+    "first_name": faContect.first_name,
+    "home_phone": "",
+    "job_title": "",
+    "last_name": faContect.last_name,
+    "middle_name": "",
+    "prefix_name": "",
+    "work_phone": ""
 };
-  console.log(newContectblock);
 return newContectblock;
 }
 
@@ -134,25 +133,33 @@ if (Meteor.isServer)
        var jsondata = contect[i];
        jsondata['provider'] = "constantcontact";
        jsondata['user_id'] = Meteor.userId();
-       jsondata['email'] = jsondata.email_addresses[0].email_address;
-       var contact = contacts.findOne({user_id:Meteor.userId(),email:jsondata.email,provider:"constantcontact"});
-       if(contact){
-         contacts.update({_id:contact._id},{$set:jsondata});
-       }else{
-         jsondata['sync_state'] = "new";
-         contacts.insert(jsondata);
+       try{
+         jsondata['email'] = jsondata.email_addresses[0].email_address;
+         var contact = contacts.findOne({user_id:Meteor.userId(),email:jsondata.email,provider:"constantcontact"});
+         if(contact){
+           contacts.update({_id:contact._id},{$set:jsondata});
+         }else{
+           jsondata['sync_state'] = "new";
+           contacts.insert(jsondata);
+         }
        }
+       catch(err) {
+         console.log(err)
+        }
+
      }
    }
    var create_cc_contect = function (data,cc_access_token){
      var url = "https://api.constantcontact.com/v2/contacts?action_by=ACTION_BY_OWNER&api_key="+CC_CLIENT_ID_KEY;
+     console.log("call inside create cc")
      var result = Meteor.http.call("POST", url,{
          headers: {
            "Authorization" : "Bearer "+cc_access_token+"",
            "content-type" : "application/json"
          },
-         params: data
+         data:data
      });
+     console.log(result)
      return result;
    }
    var authenticate = function (auth_code) {
@@ -212,14 +219,18 @@ if (Meteor.isServer)
                 "Authorization" : "Bearer "+code+""
               },
           });
-          cc_contect_insert(result.data)
+          try {
+            cc_contect_insert(result.data)
+          }
+          catch(err) {
+            console.log(err)
+          }
           return result.data;
         },
         fa_contect_insert :  function (result){
           this.unblock();
           result = result.contacts
           for(var i = 0;i< result.length ; i++){
-            console.log(result[i]);
             var jsondata = result[i];
             jsondata['provider'] = "freeagent";
             jsondata['user_id'] = Meteor.userId();
@@ -243,18 +254,26 @@ if (Meteor.isServer)
           var constantcontact = contacts.find({user_id:Meteor.userId(),provider:"constantcontact"}).fetch();
           for(var i =0 ; i< freeagentcontacts.length ;i++){
             for(var j = 0 ; j < constantcontact.length ; j++){
-              if(freeagentcontacts[i].eamil == constantcontact[j].email){
+              if(freeagentcontacts[i].email == constantcontact[j].email){
                 contacts.update({_id:freeagentcontacts[i]._id}, {$set:{sync_state:"sync"}});
+                contacts.update({_id:constantcontact[j]._id}, {$set:{sync_state:"sync"}});
               }
             }
           }
           var freeagentcontactsforcreate = contacts.find({user_id:Meteor.userId(),provider:"freeagent",sync_state:"new"}).fetch();
           for(var c=0;c < freeagentcontactsforcreate.length ;c++){
-                var newobject = create_cc_contactBlock(freeagentcontactsforcreate[c]);
+              var newobject = create_cc_contactBlock(freeagentcontactsforcreate[c]);
+              try {
                 var response = create_cc_contect(newobject,cc_acccess_code);
-                if(response){
-                  console.log(response)
-                }
+                 if(response){
+                   console.log(response.statusCode)
+                   if(response.statusCode == 201){
+                     contacts.update({_id:freeagentcontactsforcreate[c]._id}, {$set:{sync_state:"sync"}});
+                   }
+                 }
+              } catch (e) {
+                  console.log(e)
+              }
           }
           return "sync done"
         }
