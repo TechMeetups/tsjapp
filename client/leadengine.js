@@ -74,21 +74,13 @@ Template.menu.rendered = function ()
     });
 }
 
-var Auth_Router = Backbone.Router.extend({
-	routes: {
-		"": "root",
-		"/oauth/?code=:code":"auth"
-	},
-  root: function () {},
-	auth: function (code)	{
-    var code = code.split("&");
-    console.log(code)
-    Meteor.call('authenticate', code, function (error, result) {
-      	console.log(error)
-        console.log(result)
-  		});
-	}
+Template.registerHelper('fa_login_url', function(){
+  return "https://api.sandbox.freeagent.com/v2/approve_app?scope=test&redirect_uri="+FA_AUTH_URL+"&response_type=code&client_id="+FA_CLIENT_ID_KEY+"&access_type=offline";
 });
+Template.registerHelper('cc_login_url', function(){
+  return "https://oauth2.constantcontact.com/oauth2/oauth/siteowner/authorize?response_type=code&client_id="+CC_CLIENT_ID_KEY+"&redirect_uri="+CC_AUTH_URL+"&access_type=offline";
+});
+
 Deps.autorun(function() {
   Meteor.subscribe("contacts",Meteor.userId());
 })
@@ -109,11 +101,10 @@ Meteor.startup(function(){
 if (Meteor.isClient)
 {
 
-
-    Blog.config({
-        blogIndexTemplate: 'blogindextemplate',
-        blogShowTemplate: 'blogshowtemplate'
-    });
+  Blog.config({
+      blogIndexTemplate: 'blogindextemplate',
+      blogShowTemplate: 'blogshowtemplate'
+  });
   Template.menu.helpers({
     user : function() {
       return  Meteor.user();

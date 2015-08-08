@@ -5,18 +5,6 @@ if (Meteor.isServer)
         adminRole:'admin',
         authorRole: 'blogAuthor'
     });
-    // Router.route('/oauth').
-    // get(function () {
-    //     //console.log(this.request);
-    //     var code = this.params['query'].code;
-    //     authenticate(code,function(error, result){
-    //       console.log(error);
-    //       console.log(result);
-    //     })
-    //     this.response.writeHead(200);
-    //    this.response.end('Success\n');
-    // });
-
     Meteor.publish("contacts", function (user_id)
     {
         return contacts.find({user_id:user_id});
@@ -100,24 +88,30 @@ if (Meteor.isServer)
    var cc_contect_insert = function(data){
      console.log(data);
      var contect = data.results
-     for(var i=0;i< contect.length ; i++)
+     console.log(contect);
+     for(var i=0;i < contect.length ; i++)
      {
-       var jsondata = results[i];
+       var jsondata = contect[i];
        jsondata['provider'] = "constantcontact";
        jsondata['user_id'] = Meteor.userId();
        jsondata['email'] = jsondata.email_addresses[0].email_address;
+       var contact = contacts.findOne({email:jsondata.email,provider:"constantcontact"});
+       if(contact){
+         contacts.update({_id:contact._id},{$set:jsondata});
+       }else{
+         jsondata['sync_state'] = "new";
+         contacts.insert(jsondata);
+       }
        contacts.insert(jsondata);
      }
-
    }
    var authenticate = function (auth_code) {
      var formData = {
             grant_type : "authorization_code",
             code: auth_code,
-            client_id : "sgp54b32c64mqkc9e7g3zm9e",
-            client_secret : "fRzKbhrkdTPttWG4fvfcsCRj",
-            redirect_uri : "http://ccintegration.herokuapp.com/cc_oauth/"
-
+            client_id : CC_CLIENT_ID_KEY,
+            client_secret : CC_CLIENT_SECRET_KEY,
+            redirect_uri : CC_AUTH_URL
         };
         url = "https://oauth2.constantcontact.com/oauth2/oauth/token";
         var result = Meteor.http.call('POST', url,{
@@ -129,7 +123,7 @@ if (Meteor.isServer)
         return result.data;
      }
       Meteor.methods(
-    {
+      {
         'sendMessage': function (toId)
         {
             if (Meteor.isServer)
@@ -179,11 +173,19 @@ if (Meteor.isServer)
             var jsondata = result[i];
             jsondata['provider'] = "freeagent";
             jsondata['user_id'] = Meteor.userId();
-            contacts.insert(jsondata);
+            var contact = contacts.findOne({email:jsondata.email,provider:"freeagent"});
+            if(contact){
+              contacts.update({_id:contact._id},{$set:jsondata});
+            }else{
+              jsondata['sync_state'] = "new";
+              contacts.insert(jsondata);
+            }
           }
           return result;
+        },
+        delete_contact : function(id){
+          contacts.remove({_id:id});
+          return "success"
         }
     });
-
-
 }

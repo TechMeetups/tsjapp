@@ -1,17 +1,3 @@
-function updateUserFaAccess(){
-  var fa_refresh_token = localStorage.getItem("fa_refresh_token");
-  var fa_access_token = localStorage.getItem("fa_access_token");
-  var fa_auth_code = localStorage.getItem("fa_auth_code");
-  var fa_token_type = localStorage.getItem("fa_token_type");
-  Meteor.users.update({_id:Meteor.userId()}, { $set:{"profile.fa_auth_code":fa_auth_code,"profile.fa_refresh_token":fa_refresh_token,
-  "profile.fa_access_token":fa_access_token,"profile.fa_token_type":fa_token_type}},function(error){
-    if(error){
-      console.log("error : "+ error);
-    }else{
-      console.log("User Update Success");
-    }
-  });
-}
 Template.faindex.events({
     'click #fa_refresh' : function(event, template){
       console.log("fa_refresh click");
@@ -103,25 +89,58 @@ Template.faindex.events({
             console.log(textStatus)
           }
         });
+    },
+    'click .delete_contact' :function(event, template){
+      var id = $(event.currentTarget).attr('data');
+      bootbox.confirm("Are you sure you want to delete ?", function(result)
+      {
+          if(result)
+          {
+            Meteor.call("delete_contact",id, function(error, result){
+              if(error){
+                console.log("error", error);
+              }
+              if(result){
+                 console.log(result)
+              }
+            });
+          }
+      });
     }
 });
 
 Template.faindex.helpers({
   access_token: function(){
-
-    return localStorage.getItem("fa_access_token")
+    profile = Meteor.user().profile
+    if(profile){
+      return isNotEmptyValue(profile.fa_access_token);
+    }else {
+      return "";
+    }
   },
   token_type: function(){
-
-    return localStorage.getItem("fa_token_type")
+    profile = Meteor.user().profile
+    if(profile){
+      return isNotEmptyValue(profile.fa_token_type);
+    }else {
+      return "";
+    }
   },
   refresh_token: function(){
-
-    return localStorage.getItem("fa_refresh_token")
+    profile = Meteor.user().profile
+    if(profile){
+      return isNotEmptyValue(profile.fa_refresh_token);
+    }else {
+      return "";
+    }
   },
   auth_code: function(){
-
-    return localStorage.getItem("fa_auth_code")
+    profile = Meteor.user().profile
+    if(profile){
+      return isNotEmptyValue(profile.fa_auth_code);
+    }else {
+      return "";
+    }
   },
   cc_contects : function(){
     return contacts.find({user_id:Meteor.userId()});

@@ -1,0 +1,3 @@
+Template.accountsetup.events({
+
+});

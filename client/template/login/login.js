@@ -1,5 +1,5 @@
 function resetLoginDetails(){
-profile = Meteor.user().profile
+  profile = Meteor.user().profile
   if(profile){
   	localStorage.setItem("cc_access_token",isNotEmptyValue(profile.cc_access_token));
   	localStorage.setItem("cc_token_type",isNotEmptyValue(profile.cc_token_type));
@@ -18,7 +18,7 @@ profile = Meteor.user().profile
   	localStorage.setItem("fa_token_type","");
   }
 }
-    Template.login.events({
+Template.login.events({
         'click .login' : function(event, template){
             $('#loginModel').modal('show');
             $('#register_Model').modal('hide');

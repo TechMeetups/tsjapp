@@ -2481,4 +2481,5 @@ a.dropdown-toggle::before {
   position: absolute;
   bottom:0px;
   width: 100%;
+  z-index: 99999;
 }
