@@ -1,3 +1,42 @@
+function create_cc_contactBlock(faContect){
+  var newContectblock = {
+	"addresses": [
+    {
+      "address_type": "",
+      "city": "",
+      "country_code": "US",
+      "line1": "",
+      "line2": "",
+      "line3": "",
+      "postal_code": "",
+      "state_code": "",
+      "sub_postal_code": ""
+    }],
+	"lists": [
+		{
+		  "id": "1622842370"
+		}
+	],
+	  "cell_phone": "",
+	  "company_name": faContect.organisation_name,
+	  "confirmed": false,
+	  "email_addresses": [
+		{
+		"email_address": faContect.email
+		}
+	],
+  "fax": "",
+  "first_name": faContect.first_name,
+  "home_phone": "",
+  "job_title": "",
+  "last_name": faContect.last_name,
+  "middle_name": "",
+  "prefix_name": "",
+  "work_phone": ""
+  };
+return newContectblock;
+}
+
 if (Meteor.isServer)
 {
 
@@ -102,8 +141,18 @@ if (Meteor.isServer)
          jsondata['sync_state'] = "new";
          contacts.insert(jsondata);
        }
-       contacts.insert(jsondata);
      }
+   }
+   var create_cc_contect = function (data,cc_access_token){
+     var url = "https://api.constantcontact.com/v2/contacts?action_by=ACTION_BY_OWNER&api_key="+CC_CLIENT_ID_KEY;
+     var result = Meteor.http.call("POST", url,{
+         headers: {
+           "Authorization" : "Bearer "+code+"",
+           "content-type" : "application/json"
+         },
+         params: data
+     });
+     return result;
    }
    var authenticate = function (auth_code) {
      var formData = {
@@ -194,10 +243,17 @@ if (Meteor.isServer)
           for(var i =0 ; i< freeagentcontacts.length ;i++){
             for(var j = 0 ; j < constantcontact.length ; j++){
               if(freeagentcontacts[i].eamil == constantcontact[j].email){
-                freeagentcontacts[i].sync_state = "sync";
-                contacts.update({_id:idSelector}, {$set:{sync_state:"sync"}});
+                contacts.update({_id:freeagentcontacts[i]._id}, {$set:{sync_state:"sync"}});
               }
             }
+          }
+          var freeagentcontactsforcreate = contacts.find({user_id:Meteor.userId(),provider:"freeagent",sync_state:"new"}).fetch();
+          for(var c=0;c < freeagentcontactsforcreate.length ;c++){
+                var newobject = create_cc_contactBlock(freeagentcontactsforcreate[c]);
+                var response = create_cc_contect(newobject);
+                if(response){
+                  console.log(response)
+                }
           }
           return "sync done"
         }

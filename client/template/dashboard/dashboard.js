@@ -2,6 +2,20 @@
 Template.dashboard.helpers({
   cc_contects : function(){
     return contacts.find({user_id:Meteor.userId()});
+  },
+  provider_label : function(provider_label){
+    if(provider_label && provider_label == "freeagent"){
+      return "label-success"
+    }else{
+      return "label-primary"
+    }
+  },
+  sync_label : function(sync_label){
+    if(sync_label && sync_label == "new"){
+      return  "label-danger"
+    }else {
+      return "btn btn-theme02"
+    }
   }
 });
 
