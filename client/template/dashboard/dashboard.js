@@ -42,7 +42,7 @@ Template.dashboard.events({
         localStorage.setItem("fa_token_type",result.token_type);
         updateUserFaAccess();
         var access_token = localStorage.getItem("fa_access_token");
-        url = "https://api.sandbox.freeagent.com/v2/contacts";
+        url = "https://api.freeagent.com/v2/contacts";
         $.ajax({
           url : url,
           type: "GET",

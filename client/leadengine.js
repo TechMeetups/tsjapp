@@ -75,7 +75,7 @@ Template.menu.rendered = function ()
 }
 
 Template.registerHelper('fa_login_url', function(){
-  return "https://api.sandbox.freeagent.com/v2/approve_app?scope=test&redirect_uri="+FA_AUTH_URL+"&response_type=code&client_id="+FA_CLIENT_ID_KEY+"&access_type=offline";
+  return "https://api.freeagent.com/v2/approve_app?scope=test&redirect_uri="+FA_AUTH_URL+"&response_type=code&client_id="+FA_CLIENT_ID_KEY+"&access_type=offline";
 });
 Template.registerHelper('cc_login_url', function(){
   return "https://oauth2.constantcontact.com/oauth2/oauth/siteowner/authorize?response_type=code&client_id="+CC_CLIENT_ID_KEY+"&redirect_uri="+CC_AUTH_URL+"&access_type=offline";
