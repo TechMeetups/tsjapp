@@ -41,32 +41,10 @@ Template.dashboard.events({
         localStorage.setItem("fa_access_token",result.access_token);
         localStorage.setItem("fa_token_type",result.token_type);
         updateUserFaAccess();
+
         var access_token = localStorage.getItem("fa_access_token");
-        url = "https://api.freeagent.com/v2/contacts";
-        $.ajax({
-          url : url,
-          type: "GET",
-          headers:{ "Authorization" : "Bearer "+access_token+""},
-          success: function(data, textStatus, jqXHR)
-          {
-            console.log(textStatus)
-            console.log(data)
-            Meteor.call("fa_contect_insert",data, function(error, result){
-              if(error){
-                console.log("error", error);
-                $('#processingmodelwindow').modal('hide');
-              }
-              if(result){
-                 console.log(result)
-                 $('#processingmodelwindow').modal('hide');
-              }
-            });
-          },
-          error: function (jqXHR, textStatus, errorThrown)
-          {
-            console.log(textStatus)
-          }
-        });
+        var page =1;
+        getfreeagentcontect(page,access_token)      
       }
     })
   },

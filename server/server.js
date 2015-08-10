@@ -5,8 +5,8 @@ function create_cc_contactBlock(faContect){
       "address_type": "PERSONAL",
       "city": "",
       "country_code": "",
-      "line1": "",
-      "line2": "",
+      "line1": faContect.address1,
+      "line2": faContect.town,
       "line3": "",
       "postal_code": "",
       "state_code": "",
@@ -234,12 +234,14 @@ if (Meteor.isServer)
             var jsondata = result[i];
             jsondata['provider'] = "freeagent";
             jsondata['user_id'] = Meteor.userId();
-            var contact = contacts.findOne({user_id:Meteor.userId(),email:jsondata.email,provider:"freeagent"});
-            if(contact){
-              contacts.update({_id:contact._id},{$set:jsondata});
-            }else{
-              jsondata['sync_state'] = "new";
-              contacts.insert(jsondata);
+            if(jsondata.email && jsondata.email.length > 1){
+              var contact = contacts.findOne({user_id:Meteor.userId(),email:jsondata.email,provider:"freeagent"});
+              if(contact){
+                contacts.update({_id:contact._id},{$set:jsondata});
+              }else{
+                jsondata['sync_state'] = "new";
+                contacts.insert(jsondata);
+              }
             }
           }
           return result;
