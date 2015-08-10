@@ -16,9 +16,9 @@
           <div class="col-md-12">
             <div id="name" class="pull-right">
               <div class="" style="text-align: center;padding: 5px;">
-                 <button type="button" class="btn-lg btn-success" id="fa_contects">Get freeagent Contects</button>
-                 <button type="button" class="btn-lg btn-primary" id="cc_contects">Get Constant Contact</button>
-                 <button type="button" class="btn-lg btn-info" id="sync_contects">Sync ConstantContact </button>
+                 <button type="button" class="btn-sm btn-success" id="fa_contects">Get freeagent Contects</button>
+                 <button type="button" class="btn-sm btn-primary" id="cc_contects">Get Constant Contact</button>
+                 <button type="button" class="btn-sm btn-info" id="sync_contects">Sync ConstantContact </button>
               </div>
             </div>
           </div>
@@ -31,17 +31,26 @@
                            <th><i class="fa fa-bullhorn"></i> NAME</th>
                            <th class="hidden-email"><i class="fa fa-envelope-o"></i> Email</th>
                            <th><i class="fa fa-bookmark"></i>COMPANY</th>
-                           <th><i class=""></i> FA/CC</th>
-                           <th>Sync State</th>
+                           <th style="text-align: center;"><i class=""></i> Source </th>
+                           <th>Status</th>
                        </tr>
                        </thead>
                        <tbody>
                          {{#each cc_contects}}
                          <tr>
-                             <td><a href="#">{{first_name}}</a></td>
+                             <td>{{first_name}}</td>
                              <td class="hidden-phone">{{email}}</td>
                              <td>{{organisation_name}}</td>
-                             <td><span class="label {{provider_label provider}} label-mini">{{provider}}</span></td>
+                             {{#if is_freeagent provider}}
+                                 <td style="text-align: center;">
+                                   <img src="{{image_src provider}}" width="" alt="{{provider}}" height="20">
+                                 </td>
+                             {{else}}
+                                 <td style="text-align: center;padding: 2px;">
+                                   <img src="{{image_src provider}}" width="" alt="{{provider}}" height="40">
+                                 </td>
+                               {{/if}}
+                             <!-- <td><span class="label {{provider_label provider}} label-mini">{{provider}}</span></td> -->
                              <td><span class="label {{sync_label sync_state}} label-mini">{{sync_state}}</span></td>
                          </tr>
                          {{/each}}
