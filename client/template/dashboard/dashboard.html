@@ -75,10 +75,10 @@
 </section>
 <script>
 $(document).ready(function() {
-  var queueTable = [];
+  var queueTable = null;
   console.log(contacts_subscribe_list.ready())
   Tracker.autorun(function() {
-    if (contacts_subscribe_list.ready()){
+    if (contacts_subscribe_list.ready() && queueTable == null){
        queueTable =  $('#example').dataTable(
           {
             "scrollY":"380px",
