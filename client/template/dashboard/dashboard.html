@@ -77,15 +77,15 @@ $(document).ready(function() {
   var queueTable =  $('#example').dataTable(
       {
         "scrollY":"380px",
-        "paging":         false,
+        "paging":   false,
+        "bSort": false,
         "aoColumns":[
-         {"bSortable": true},
-         {"bSortable": true},
-         {"bSortable": true},
+         {"bSortable": false},
+         {"bSortable": false},
+         {"bSortable": false},
          {"bSortable": false},
          {"bSortable": false}
      ],
-     "order": [[ 1, "desc" ]],
     "fnInitComplete": function() {
         this.fnAdjustColumnSizing(true);
     }

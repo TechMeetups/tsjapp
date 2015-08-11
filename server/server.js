@@ -125,9 +125,7 @@ if (Meteor.isServer)
         });
    }
    var cc_contect_insert = function(data){
-     console.log(data);
      var contect = data.results
-     console.log(contect);
      for(var i=0;i < contect.length ; i++)
      {
        var jsondata = contect[i];
@@ -159,7 +157,6 @@ if (Meteor.isServer)
          },
          data:data
      });
-     console.log(result)
      return result;
    }
    var authenticate = function (auth_code) {
