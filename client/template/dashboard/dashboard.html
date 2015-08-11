@@ -24,9 +24,10 @@
           <div class="col-md-12">
             <div id="name" class="pull-right">
               <div class="" style="text-align: center;padding: 5px;">
-                 <button type="button" class="btn-sm btn-success" id="fa_contects">Get freeagent Contects</button>
-                 <button type="button" class="btn-sm btn-primary" id="cc_contects">Get Constant Contact</button>
-                 <button type="button" class="btn-sm btn-info" id="sync_contects">Sync ConstantContact </button>
+                 <button type="button" class="btn-sm btn-success" id="fa_contacts">Get FreeAgent contacts</button>
+                 <button type="button" class="btn-sm btn-primary" id="cc_contacts">Get Constant Contact</button>
+                 <button type="button" class="btn-sm btn-info" id="sync_contacts">Synch to Contstant Contact</button>
+                 <button type="button" class="btn-sm btn-success" id="clear_contacts">Clear All</button>
               </div>
             </div>
           </div>
@@ -74,28 +75,35 @@
 </section>
 <script>
 $(document).ready(function() {
-  var queueTable =  $('#example').dataTable(
-      {
-        "scrollY":"380px",
-        "paging":   false,
-        "bSort": false,
-        "aoColumns":[
-         {"bSortable": false},
-         {"bSortable": false},
-         {"bSortable": false},
-         {"bSortable": false},
-         {"bSortable": false}
-     ],
-    "fnInitComplete": function() {
-        this.fnAdjustColumnSizing(true);
+  var queueTable = [];
+  console.log(contacts_subscribe_list.ready())
+  Tracker.autorun(function() {
+    if (contacts_subscribe_list.ready()){
+       queueTable =  $('#example').dataTable(
+          {
+            "scrollY":"380px",
+            "paging":   false,
+            "bSort": false,
+            "aoColumns":[
+             {"bSortable": false},
+             {"bSortable": false},
+             {"bSortable": false},
+             {"bSortable": false},
+             {"bSortable": false}
+         ],
+        "fnInitComplete": function() {
+            this.fnAdjustColumnSizing(true);
+        }
+      });
+      setTimeout(function () {
+        queueTable.fnAdjustColumnSizing();
+      },1000);
     }
+    console.log(contacts_subscribe_list.ready())
   });
-  setTimeout(function () {
-    queueTable.fnAdjustColumnSizing();
-  },1000);
 
   $(window).resize( function () {
-           queueTable.fnAdjustColumnSizing();
+    queueTable.fnAdjustColumnSizing();
    } );
 } );
 </script>

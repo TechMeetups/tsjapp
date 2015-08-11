@@ -244,7 +244,14 @@ if (Meteor.isServer)
           return result;
         },
         delete_contact : function(id){
-          contacts.remove({_id:id});
+          this.unblock();
+          contacts.remove({user_id:id},function(error){
+            if(error){
+              console.log(error)
+            }else{
+
+            }
+          });
           return "success"
         },
         sync_contact : function(cc_acccess_code){

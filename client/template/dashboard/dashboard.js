@@ -34,7 +34,7 @@ Template.dashboard.helpers({
 });
 
 Template.dashboard.events({
-  'click #fa_contects' : function(event, template){
+  'click #fa_contacts' : function(event, template){
     $('#processingmodelwindow').modal('show');
     refresh_fa_access_token(function(result){
       if(result){
@@ -44,11 +44,11 @@ Template.dashboard.events({
 
         var access_token = localStorage.getItem("fa_access_token");
         var page =1;
-        getfreeagentcontect(page,access_token)      
+        getfreeagentcontect(page,access_token)
       }
     })
   },
-  'click #cc_contects' : function(event, template){
+  'click #cc_contacts' : function(event, template){
     $('#processingmodelwindow').modal('show');
       var auth_code =   localStorage.getItem("cc_access_token");
       var params = "?status=ALL&limit=50&api_key="+CC_CLIENT_ID_KEY;
@@ -64,10 +64,23 @@ Template.dashboard.events({
         }
       });
   },
-  'click #sync_contects' :  function(event, template){
+  'click #sync_contacts' :  function(event, template){
     $('#processingmodelwindow').modal('show');
     var auth_code =   localStorage.getItem("cc_access_token");
     Meteor.call("sync_contact",auth_code,function(error, result){
+      if(error){
+        console.log("error", error);
+        $('#processingmodelwindow').modal('hide');
+      }
+      if(result){
+         console.log(result)
+         $('#processingmodelwindow').modal('hide');
+      }
+    });
+  },
+  'click #clear_contacts' :  function(event, template){
+    $('#processingmodelwindow').modal('show');
+    Meteor.call("delete_contact",Meteor.userId(),function(error, result){
       if(error){
         console.log("error", error);
         $('#processingmodelwindow').modal('hide');

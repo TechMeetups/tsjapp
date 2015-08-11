@@ -82,7 +82,7 @@ Template.registerHelper('cc_login_url', function(){
 });
 
 Deps.autorun(function() {
-  Meteor.subscribe("contacts",Meteor.userId());
+  contacts_subscribe_list = Meteor.subscribe("contacts",Meteor.userId());
 })
 Meteor.startup(function(){
   //router = new Auth_Router();

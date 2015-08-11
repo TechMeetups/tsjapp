@@ -84,6 +84,7 @@ Template.login.events({
                       localStorage.setItem("login_user_email",emailVar);
                       localStorage.setItem("login_user_pic","");
                       resetLoginDetails();
+
                       Router.go('dashboard');
                 }
             });
