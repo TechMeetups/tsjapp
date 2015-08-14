@@ -3,5 +3,6 @@ Template.userprofile.events({
         var passwordVar = template.find('#password').value;
         Meteor.call('resetpassword',Meteor.user()._id,passwordVar);
         bootbox.alert("password reset successfully.", function() {});
+        Router.go('/');
     }
 });
