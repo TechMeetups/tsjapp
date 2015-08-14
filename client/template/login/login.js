@@ -134,9 +134,17 @@ Template.login.events({
         'submit #forgotPasswordForm': function(e, t) {
             e.preventDefault();
             var eamil = $('#forgotPasswordForm').find('#forgotPasswordEmail').val();
-            Meteor.call('resetpasswordByEmail',eamil,function(eroor){
-              $('#password-reset').modal('hide');
-              bootbox.alert("Password Reset successfully Please check your email for new password.", function() {});
+            Meteor.call('resetpasswordByEmail',eamil,function(error){
+              if(error){
+                $('#error-message').html(error.reason);
+                $('#main-error-box').css("display","block");
+                setTimeout(function () {
+                    $('#main-error-box').css("display","none");
+                },2000);
+              }else{
+                $('#password-reset').modal('hide');
+                bootbox.alert("Password Reset successfully Please check your email for new password.", function() {});
+              }
             });
         }
 

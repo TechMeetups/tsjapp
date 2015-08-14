@@ -207,7 +207,6 @@ if (Meteor.isServer)
             Accounts.setPassword(user_id, pass);
         },
         resetpasswordByEmail : function (email){
-          this.unblock();
           var user = Meteor.users.findOne({'emails.address': {$regex:email,$options:'i'}});
           console.log(user);
           if(user){
