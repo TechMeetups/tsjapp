@@ -73,6 +73,7 @@ if (Meteor.isServer)
           user.profile = {};
           console.log(options);
           console.log(user);
+          user.profile = {firstname:options.profile.firstname};
           userRegistration(user,"hidden")
       }
       return user;
@@ -204,6 +205,19 @@ if (Meteor.isServer)
         resetpassword : function (user_id,pass)
         {
             Accounts.setPassword(user_id, pass);
+        },
+        resetpasswordByEmail : function (email){
+          this.unblock();
+          var user = Meteor.users.findOne({'emails.address': {$regex:email,$options:'i'}});
+          console.log(user);
+          if(user){
+            pass = guid()
+            Accounts.setPassword(user._id, pass);
+            userPasswordReset(user,pass)
+            return "Password Reset successfully Please check your email for new password."
+          }else{
+            return "User not available with provided email"
+          }
         },
         authenticate : function(code){
           this.unblock();

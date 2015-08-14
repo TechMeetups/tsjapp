@@ -130,7 +130,16 @@ Template.login.events({
                          Router.go('dashboard');
                     }
                 });
+        },
+        'submit #forgotPasswordForm': function(e, t) {
+            e.preventDefault();
+            var eamil = $('#forgotPasswordForm').find('#forgotPasswordEmail').val();
+            Meteor.call('resetpasswordByEmail',eamil,function(eroor){
+              $('#password-reset').modal('hide');
+              bootbox.alert("Password Reset successfully Please check your email for new password.", function() {});
+            });
         }
+
     });
     if (Accounts._resetPasswordToken) {
       Session.set('resetPassword', Accounts._resetPasswordToken);
