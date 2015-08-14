@@ -127,7 +127,7 @@ Template.login.events({
                     else
                     {
                        	$('#register_Model').modal('hide');
-                         Router.go('projectview');
+                         Router.go('dashboard');
                     }
                 });
         }
