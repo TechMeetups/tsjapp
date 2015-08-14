@@ -78,7 +78,7 @@ if (Meteor.isServer)
       return user;
     });
     var userRegistration = function(user,pass){
-        var fromEmail = "admin@CCIntegration.com";
+        var fromEmail = "admin@techmeetups.com";
         var toEmail = user.emails[0].address;
         Email.send({
             from: fromEmail,
@@ -95,7 +95,7 @@ if (Meteor.isServer)
 
     var userPasswordReset = function(user,pass)
     {
-        var fromEmail = "admin@CCIntegration.com";
+        var fromEmail = "admin@techmeetups.com";
         var toEmail = user.emails[0].address;
         Email.send({
             from: fromEmail,
@@ -111,7 +111,7 @@ if (Meteor.isServer)
     }
     var sendMessage = function (user_email)
     {
-        var fromEmail = "admin@CCIntegration.com";
+        var fromEmail = "admin@techmeetups.com";
         var toEmail = " shawn@techmeetups.com";
         Email.send({
             from: fromEmail,
