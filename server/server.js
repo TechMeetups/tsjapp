@@ -1,4 +1,4 @@
-function create_cc_contactBlock(faContect){
+function create_cc_contactBlock(faContect,list_id){
   var newContectblock = {
     "addresses": [
     {
@@ -14,7 +14,7 @@ function create_cc_contactBlock(faContect){
     }],
     "lists": [
         {
-            "id": "1622842370"
+            "id": list_id
         }
     ],
     "cell_phone": "",
@@ -177,6 +177,18 @@ if (Meteor.isServer)
         });
         return result.data;
      }
+     var getcontectlist_id = function(code)
+     {
+       var url = "https://api.constantcontact.com/v2/lists"
+       var params = "?api_key="+CC_CLIENT_ID_KEY;
+       console.log(url);
+       var result = Meteor.http.call("GET", url+params,{
+           headers: {
+             "Authorization" : "Bearer "+code+""
+           }
+       });
+       return result.data[0].id
+     }
       Meteor.methods(
       {
         'sendMessage': function (toId)
@@ -269,6 +281,7 @@ if (Meteor.isServer)
         },
         sync_contact : function(cc_acccess_code){
           this.unblock();
+          var list_id = getcontectlist_id(cc_acccess_code);
           var freeagentcontacts = contacts.find({user_id:Meteor.userId(),provider:"freeagent"}).fetch();
           var constantcontact = contacts.find({user_id:Meteor.userId(),provider:"constantcontact"}).fetch();
           for(var i =0 ; i< freeagentcontacts.length ;i++){
@@ -282,7 +295,7 @@ if (Meteor.isServer)
           var freeagentcontactsforcreate = contacts.find({user_id:Meteor.userId(),provider:"freeagent",sync_state:"new"}).fetch();
           for(var c=0;c < freeagentcontactsforcreate.length ;c++){
 
-              var newobject = create_cc_contactBlock(freeagentcontactsforcreate[c]);
+              var newobject = create_cc_contactBlock(freeagentcontactsforcreate[c],list_id);
               try {
                 var response = create_cc_contect(newobject,cc_acccess_code);
                  if(response){
