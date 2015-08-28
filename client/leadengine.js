@@ -92,7 +92,7 @@ Meteor.startup(function(){
               var template = Template[property];
               // assign the template an onRendered callback who simply prints the view name
               template.onRendered(function(){
-                  toggle_sidebar();
+                  
               });
           }
       }

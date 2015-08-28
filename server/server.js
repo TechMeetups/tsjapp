@@ -281,6 +281,7 @@ if (Meteor.isServer)
           }
           var freeagentcontactsforcreate = contacts.find({user_id:Meteor.userId(),provider:"freeagent",sync_state:"new"}).fetch();
           for(var c=0;c < freeagentcontactsforcreate.length ;c++){
+
               var newobject = create_cc_contactBlock(freeagentcontactsforcreate[c]);
               try {
                 var response = create_cc_contect(newobject,cc_acccess_code);
@@ -290,6 +291,7 @@ if (Meteor.isServer)
                      contacts.update({_id:freeagentcontactsforcreate[c]._id}, {$set:{sync_state:"sync"}});
                    }
                  }
+                 sleep(300);
               } catch (e) {
                   console.log(e)
               }

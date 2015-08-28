@@ -20,13 +20,18 @@
   </style>
   <section id="main-content">
     <section class="wrapper">
-      <div class="row mt">
+      <div class="alert alert-warning alert-dismissible" role="alert" style="margin-bottom: 5px">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+          Setup your Accounts before importing any contacts.
+        </div>
+      <div class="row mt" style="margin-top: 5px;">
+
           <div class="col-md-12">
             <div id="name" class="pull-right">
               <div class="" style="text-align: center;padding: 5px;">
                  <button type="button" class="btn-sm btn-success" id="fa_contacts">Get FreeAgent contacts</button>
-                 <button type="button" class="btn-sm btn-primary" id="cc_contacts">Get Constant Contact</button>
-                 <button type="button" class="btn-sm btn-info" id="sync_contacts">Synch to Contstant Contact</button>
+                 <button type="button" class="btn-sm btn-primary" id="cc_contacts">Get Constant Contact contacts</button>
+                 <button type="button" class="btn-sm btn-info" id="sync_contacts">Sync</button>
                  <button type="button" class="btn-sm btn-success" id="clear_contacts">Clear All</button>
               </div>
             </div>

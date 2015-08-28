@@ -1,4 +1,25 @@
-
+function is_fa_ccount_active(){
+  var active = false
+  var profile = Meteor.user().profile;
+  if(profile){
+    if(profile.fa_access_token && profile.fa_auth_code && profile.fa_refresh_token &&
+       profile.fa_access_token.length > 1 && profile.fa_auth_code.length > 1 && profile.fa_refresh_token.length > 1){
+         active = true
+       }
+  }
+  return active;
+}
+function is_cc_account_active(){
+  var active = false
+  var profile = Meteor.user().profile;
+  if(profile){
+    if(profile.cc_auth_code && profile.cc_access_token &&
+      profile.cc_auth_code.length > 1 && profile.cc_access_token.length > 1){
+        active = true
+      }
+  }
+  return active;
+}
 Template.dashboard.helpers({
   cc_contects : function(){
     return contacts.find({user_id:Meteor.userId()});
@@ -35,6 +56,16 @@ Template.dashboard.helpers({
 
 Template.dashboard.events({
   'click #fa_contacts' : function(event, template){
+    if(!is_fa_ccount_active()){
+      $('#error-message').html("Setup your Accounts before importing any contacts");
+      $('#main-error-box').css("display","block");
+      setTimeout(function () {
+          $('#main-error-box').css("display","none");
+          Router.go('accountsetup');
+      },2000);
+
+      return;
+    }
     $('#processingmodelwindow').modal('show');
     refresh_fa_access_token(function(result){
       if(result){
@@ -49,9 +80,19 @@ Template.dashboard.events({
     })
   },
   'click #cc_contacts' : function(event, template){
+    if(!is_cc_account_active()){
+      $('#error-message').html("Setup your Accounts before importing any contacts");
+      $('#main-error-box').css("display","block");
+      setTimeout(function () {
+          $('#main-error-box').css("display","none");
+          Router.go('accountsetup');
+      },2000);
+
+      return;
+    }
     $('#processingmodelwindow').modal('show');
       var auth_code =   localStorage.getItem("cc_access_token");
-      var params = "?status=ALL&limit=50&api_key="+CC_CLIENT_ID_KEY;
+      var params = "?status=ALL&limit=500&api_key="+CC_CLIENT_ID_KEY;
       url = "https://api.constantcontact.com/v2/contacts";
       Meteor.call("APICall","GET",url+params,auth_code, function(error, result){
         if(error){
@@ -65,6 +106,15 @@ Template.dashboard.events({
       });
   },
   'click #sync_contacts' :  function(event, template){
+    if(!is_cc_account_active() && !is_fa_ccount_active()){
+      $('#error-message').html("Setup your Accounts before importing any contacts");
+      $('#main-error-box').css("display","block");
+      setTimeout(function () {
+          $('#main-error-box').css("display","none");
+          Router.go('accountsetup');
+      },2000);
+      return;
+    }
     $('#processingmodelwindow').modal('show');
     var auth_code =   localStorage.getItem("cc_access_token");
     Meteor.call("sync_contact",auth_code,function(error, result){
