@@ -92,18 +92,9 @@ Template.dashboard.events({
     }
     $('#processingmodelwindow').modal('show');
       var auth_code =   localStorage.getItem("cc_access_token");
-      var params = "?status=ALL&limit=500&api_key="+CC_CLIENT_ID_KEY;
-      url = "https://api.constantcontact.com/v2/contacts";
-      Meteor.call("APICall","GET",url+params,auth_code, function(error, result){
-        if(error){
-          console.log("error", error);
-          $('#processingmodelwindow').modal('hide');
-        }
-        if(result){
-           console.log(result)
-           $('#processingmodelwindow').modal('hide');
-        }
-      });
+      var url = "https://api.constantcontact.com/v2/contacts";
+      var params = "?status=ALL&limit=50";
+      getCCContact(auth_code,url+params)    
   },
   'click #sync_contacts' :  function(event, template){
     if(!is_cc_account_active() && !is_fa_ccount_active()){
