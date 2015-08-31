@@ -304,7 +304,7 @@ if (Meteor.isServer)
                      contacts.update({_id:freeagentcontactsforcreate[c]._id}, {$set:{sync_state:"sync"}});
                    }
                  }
-                 sleep(300);
+                 Meteor.sleep(300);
               } catch (e) {
                   console.log(e)
               }
