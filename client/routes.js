@@ -66,7 +66,7 @@ Router.map(function()
       console.log(this.request);
       console.log(this.params.query.code);
       var auth_code =  this.params.query.code
-      var old_auth_code = localStorage.getItem("fa_auth_code");
+      var old_auth_code = localStorage.getItem("cc_auth_code");
       if(old_auth_code != auth_code){
         localStorage.setItem("cc_auth_code",auth_code);
         $('#processingmodelwindow').modal('show');

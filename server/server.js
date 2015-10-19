@@ -63,6 +63,19 @@ if (Meteor.isServer)
         Accounts.emailTemplates.verifyEmail.text = function(user, url) {
             return 'click on the following link to verify your email address: ' + url;
         };
+
+
+      SyncedCron.add({
+        name: 'FA-CC Contact Sync',
+        schedule: function(parser) {
+          // parser is a later.parse object
+          return parser.text('every 1 minutes');
+        },
+        job: function() {
+          console.log("test 123")
+        }
+      });
+      SyncedCron.start();
     });
     Accounts.onCreateUser(function(options, user) {
       console.log("on account create");
