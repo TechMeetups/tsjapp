@@ -1,3 +1,6 @@
+Router.configure({
+    layoutTemplate: 'layout'
+});
 Router.map(function()
 {
     this.route('userprofile', {path: '/user_profile'});
@@ -22,15 +25,14 @@ Router.map(function()
     });
     this.route('/', function ()
     {
-        if (Meteor.user())
-        {
-          this.render('dashboard');
-        }
-        else
-        {
-          this.render('login');
-        }
-
+      if (Meteor.user())
+      {
+        this.render('dashboard');
+      }
+      else
+      {
+        this.render('login');
+      }
     });
 
     this.route('/oauth', function ()

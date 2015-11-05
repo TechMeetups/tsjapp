@@ -58,24 +58,25 @@ Template.login.events({
         },
         'click #sign-in': function(event, template)
         {
-            // event.preventDefault();
-            var emailVar = $('#loginpage').find('#login_user_id').val();
-            var passwordVar = $('#loginpage').find('#login_password').val();
-            $('#loginModel').modal('hide');
+  // event.preventDefault();
+            var emailVar = $('#login_user_id').val();
+            var passwordVar = $('#login_password').val();
+            IonLoading.show();
 
             Meteor.loginWithPassword(emailVar, passwordVar,function(error)
             {
                 if(error)
                 {
                   	console.log("User Login has some error "+error);
-                    $('#loginModel').modal('hide');
-                    $('#error-message').html(error.reason);
-                    $('#main-error-box').css("display","block");
-                    setTimeout(function () {
-                        $('#main-error-box').css("display","none");
-                    },2000);
-                    $('body').removeClass('modal-open');
-                    $('.modal-backdrop').remove();
+                    // $('#loginModel').modal('hide');
+                    // $('#error-message').html(error.reason);
+                    // $('#main-error-box').css("display","block");
+                    // setTimeout(function () {
+                    //     $('#main-error-box').css("display","none");
+                    // },2000);
+                    // $('body').removeClass('modal-open');
+                    // $('.modal-backdrop').remove();
+                    IonLoading.hide();
                 }
                 else
                 {
@@ -84,7 +85,7 @@ Template.login.events({
                       localStorage.setItem("login_user_email",emailVar);
                       localStorage.setItem("login_user_pic","");
                       resetLoginDetails();
-
+                      IonLoading.hide();
                       Router.go('dashboard');
                 }
             });

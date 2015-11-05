@@ -20,55 +20,70 @@
     <!--<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>-->
 
 </head>
-<body>
-  <section id="container" >
-      <div class="alert alert-error" style="background-color: lightcoral;text-align: center; display: none" id="main-error-box">
-      <!--<a href="#" class="close" data-dismiss="alert" onclick="$('.alert').hide()">&times;</a>-->
-      <strong id="error-message"></strong>
-      </div>
-      {{#if currentUser}}
-          {{>menu}}
-          <div class="container-fluid">
-              <div class="row-fluid">
-              {{renderPage}}
-              </div>
-          </div>
-          {{>footer}}
-      {{else}}
-        <div class="container-fluid">
-            <div class="row-fluid">
-            {{renderPage}}
-            </div>
-        </div>
-      {{/if}}
-  </section>
-
-
 <template name="loading">
       <div class="modal-body">
           <i class="fa fa-cog fa-spin" style="font-size: 50px;"></i><br>
           <h3>Loading...</h3>
       </div>
 </template>
-  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="loadingwindow">
-      <div class="modal-dialog modal-sm">
-          <div class="modal-content" style="text-align: center;">
-              <div class="modal-body">
-                  <i class="fa fa-cog fa-spin" style="font-size: 50px;"></i><br>
-                  <h3>Loading...</h3>
-              </div>
-          </div>
+<template name="checklogin">
+  {{#contentFor "headerButtonLeft"}}
+    {{#if currentUser}}
+      <div class="pull-left">
+        <button class="button button-clear pull-left button-icon icon ion-navicon" data-ion-menu-toggle="left"></button>
+        <span style="padding-right:10px;"></span>
+        <button class="button btn-success logout" data-action="logout">Log Out</button>
       </div>
-  </div>
+    {{else}}
+      <div class="pull-left">
+        <button class="button btn btn-success" data-action="login">Login</button>
+      </div>
+    {{/if}}
+  {{/contentFor}}
+</template>
+<template name="layout">
+{{#ionBody}}
+  {{#ionSideMenuContainer}}
+    {{#ionSideMenus}}
+      {{#ionSideMenu}}
+        <div class="bar bar-header bar-dark">
+          <h1 class="title">Action Menu</h1>
+        </div>
+        <div class="content has-header">
+          <div class="list">
+            <a class="item item-icon-right pointer"  href="/customers" data-ion-menu-close>
+              Customers {{> ionIcon icon="ios-arrow-right"}}
+            </a>
+            <a class="item item-icon-right pointer"   href="/accountsetup" data-ion-menu-close>
+              Setup Account {{> ionIcon icon="ios-arrow-right"}}
+            </a>
+            <a class="item item-icon-right pointer"  href="/user_profile" data-ion-menu-close>
+              Settings {{> ionIcon icon="ios-arrow-right"}}
+            </a>
+          </div>
+        </div>
+      {{/ionSideMenu}}
 
-  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="processingmodelwindow">
-      <div class="modal-dialog modal-sm">
-          <div class="modal-content" style="text-align: center;">
-              <div class="modal-body">
-                  <i class="fa fa-cog fa-spin" style="font-size: 50px;"></i><br>
-                  <h3>processing...</h3>
-              </div>
+      {{#ionSideMenu side="right" }}
+        <div class="bar bar-header bar-dark">
+          <h1 class="title">Right Menu</h1>
+        </div>
+        <div class="content has-header">
+          <div class="list">
+            <div class="item item-icon-left" data-ion-menu-close>
+              {{> ionIcon icon="ios-arrow-left"}} Close Me
+            </div>
           </div>
-      </div>
-  </div>
-</body>
+        </div>
+      {{/ionSideMenu}}
+    {{/ionSideMenus}}
+    {{#ionSideMenuContent}}
+      {{> ionNavBar class="bar-positive"}}
+        {{#ionNavView}}
+          {{> yield}}
+        {{/ionNavView}}
+    {{/ionSideMenuContent}}
+  {{/ionSideMenuContainer}}
+
+{{/ionBody}}
+</template>

@@ -1,27 +1,22 @@
 <template name="userprofile">
-    <section id="main-content">
-        <section class="wrapper">
-            <div class="row">
-                <div class="col-lg-9 main-chart">
-                    <form class="form-horizontal">
+  {{#contentFor "headerButtonLeft"}}
+    {{>ionNavBackButton path="dashboard"}}
+  {{/contentFor}}
 
-                        <div class="form-group">
-                            <label class="control-label col-xs-3">Enter New Password</label>
-                            <div class="col-xs-9">
-                                <input type="password" class="form-control" id="password" placeholder="Password">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-xs-offset-2 col-xs-10">
-                                <button type="button" class="btn btn-primary" id="reset_password">Reset Password</button>
-                            </div>
-                        </div>
-                    </form>
-                </div><!-- /col-lg-9 END SECTION MIDDLE -->
-            </div>
-        </section>
-    </section>
+  {{#contentFor "headerTitle"}}
+    <h1 class="title">User Profile</h1>
+  {{/contentFor}}
+  {{#ionView}}
+    {{#ionContent}}
+    <label type="stacked" class="item item-input item-stacked-label">
+        <span class="input-label">Enter New Password</span>
+        <input type="text" label-type="Password" name="Password" required="" data-schema-key="Password" placeholder="Password" id="Password">
+    </label>
+      <div class="padding">
+      <button type="button" class="button button-positive button-block" id="reset_password">Reset Password</button>
+    </div>
+      {{/ionContent}}
+  {{/ionView}}
 </template>
 
 <template name="integrated">

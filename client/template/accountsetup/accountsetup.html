@@ -1,38 +1,59 @@
 <template name="accountsetup">
-<section id="main-content">
-  <section class="wrapper">
-    <div class="row mt">
-      <div class="col-md-12">
-				<div class="col-lg-4 col-md-4 col-sm-4 mb">
-					<div class="product-panel-2 pn">
-            <div>
-              <div class="col-xs-3 col-xs-offset-9" style="padding:10px">
-  										<a href="fa_index"><button class="btn btn-sm btn-clear-g">More</button></a>
-  						</div>
-              <img src="http://freeagent-assets.s3.amazonaws.com/website-2014/images/logo.svg" width="200" alt="" height="100">
-  						<h5 class="mt">&nbsp;</h5>
-            </div>
-            <div class="profile-01 centered">
-              <a href="{{fa_login_url}}"><p>Login</p></a>
-						</div>
-					</div>
-				</div>
-        <div class="col-lg-4 col-md-4 col-sm-4 mb">
-          <div class="product-panel-2 pn">
-            <div>
-              <div class="col-xs-3 col-xs-offset-9" style="padding:10px">
-  										<a href="/cc_index"><button class="btn btn-sm btn-clear-g">More</button></a>
-  						</div>
-              <img src="/assets/img/constant-contact-share-logo.gif" width="120" alt="" height="100">
-              <h5 class="mt">&nbsp;</h5>
-            </div>
-            <div class="profile-01 centered">
-							<a href="{{cc_login_url}}"><p>Login</p></a>
-						</div>
+  {{#contentFor "headerButtonLeft"}}
+    {{>ionNavBackButton path="dashboard" text="dashboard"}}
+  {{/contentFor}}
+
+  {{#contentFor "headerTitle"}}
+    <h1 class="title">Account Setup</h1>
+  {{/contentFor}}
+  {{#ionView}}
+    {{#ionContent class="padding contact-detail"}}
+        <div class="list card">
+          <div class="item item-avatar">
+            <img src="http://freeagent-assets.s3.amazonaws.com/website-2014/images/logo.svg">
+            <h2>Freeagent</h2>
+            <p>Accounting system</p>
+          </div>
+
+          <div class="item item-body">
+            <h4>About</h4>
+            <p>
+              details
+            </p>
+          </div>
+
+          <div class="item tabs tabs-secondary tabs-icon-left">
+            <a class="tab-item font18" href="#" data-action="fake" id="fa_index">
+              More
+            </a>
+            <a class="tab-item font18" href="{{fa_login_url}}" data-action="fake">
+              Login
+            </a>
           </div>
         </div>
-      </div>
-      </div>
-    </section>
-  </section>
+        <div class="list card">
+          <div class="item item-avatar">
+            <img src="/assets/img/constant-contact-share-logo.gif">
+            <h2>constant contact</h2>
+            <p>Email Marketing System</p>
+          </div>
+
+          <div class="item item-body">
+            <h4>About</h4>
+            <p>
+              details
+            </p>
+          </div>
+
+          <div class="item tabs tabs-secondary tabs-icon-left">
+            <a class="tab-item font18" href="#" data-action="fake" id="fa_index">
+              More
+            </a>
+            <a class="tab-item font18" href="{{cc_login_url}}" data-action="fake">
+              Login
+            </a>
+          </div>
+        </div>
+    {{/ionContent}}
+  {{/ionView}}
 </template>
