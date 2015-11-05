@@ -19,17 +19,19 @@
         {{#each cc_contects}}
           {{#if is_freeagent provider}}
             {{#ionItem buttonRight=true avatar=true}}
-              <img src="{{image_src provider}}" width="" alt="{{provider}}" height="20">
+               <img src="{{image_src provider}}" width="" alt="{{provider}}" height="20">
                <h2>{{first_name}},{{email}}</h2>
                <p>{{organisation_name}}</p>
-          {{else}}
-            {{#ionItem buttonRight=true avatar=true}}
-              <h2>{{first_name}}, {{email}}</h2>
-              <p>{{company_name}} </p>
-              <img src="{{image_src provider}}" width="" alt="{{provider}}" height="40">
+               <button class="button button-positive">{{sync_state}}</button>
+             {{/ionItem}}
+            {{else}}
+              {{#ionItem buttonRight=true avatar=true}}
+                <h2>{{first_name}}, {{email}}</h2>
+                <p>{{company_name}} </p>
+                <img src="{{image_src provider}}" width="" alt="{{provider}}" height="40">
+                <button class="button button-positive">{{sync_state}}</button>
+              {{/ionItem}}
             {{/if}}
-            <button class="button button-positive">{{sync_state}}</button>
-          {{/ionItem}}
         {{/each}}
       {{/ionList}}
     {{/ionContent}}
