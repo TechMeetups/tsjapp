@@ -17,21 +17,18 @@
     {{#ionContent}}
       {{#ionList}}
         {{#each cc_contects}}
-          {{#ionItem buttonRight=true avatar=true class="item-icon-right"}}
-          <td>{{first_name}}</td>
-          <td class="hidden-phone">{{email}}</td>
           {{#if is_freeagent provider}}
-               <td>{{organisation_name}}</td>
-              <td style="text-align: center;">
-                <img src="{{image_src provider}}" width="" alt="{{provider}}" height="20">
-              </td>
+            {{#ionItem buttonRight=true avatar=true}}
+              <img src="{{image_src provider}}" width="" alt="{{provider}}" height="20">
+               <h2>{{first_name}},{{email}}</h2>
+               <p>{{organisation_name}}</p>
           {{else}}
-              <td>{{company_name}}</td>
-              <td style="text-align: center;padding: 2px;">
-                <img src="{{image_src provider}}" width="" alt="{{provider}}" height="40">
-              </td>
+            {{#ionItem buttonRight=true avatar=true}}
+              <h2>{{first_name}}, {{email}}</h2>
+              <p>{{company_name}} </p>
+              <img src="{{image_src provider}}" width="" alt="{{provider}}" height="40">
             {{/if}}
-          <td><span class="label {{sync_label sync_state}} label-mini">{{sync_state}}</span></td>
+            <button class="button button-positive">{{sync_state}}</button>
           {{/ionItem}}
         {{/each}}
       {{/ionList}}
