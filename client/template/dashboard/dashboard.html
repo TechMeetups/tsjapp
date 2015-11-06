@@ -22,20 +22,21 @@
         </div>
         {{#each cc_contects}}
           {{#if is_freeagent provider}}
-            {{#ionItem buttonRight=true avatar=true}}
+            {{#ionItem avatar=true}}
                <img src="{{image_src provider}}" width="" alt="{{provider}}" height="20">
                <h2>{{email}}</h2>
+               <span class="pull-right label label-success label-assertive">{{sync_state}}</span>
                <p>{{first_name}}</p>
                <p>{{organisation_name}}</p>
-               <span class="label label-success label-assertive">{{sync_state}}</span>
+
              {{/ionItem}}
             {{else}}
-              {{#ionItem buttonRight=true avatar=true}}
+              {{#ionItem avatar=true}}
                 <img src="{{image_src provider}}" width="" alt="{{provider}}" height="40">
                 <h2>{{email}}</h2>
+                <span class="pull-right label label-success label-assertive">{{sync_state}}</span>
                 <p>{{first_name}} </p>
-                <p>{{company_name}} </p>
-                <span class="label label-success label-assertive">{{sync_state}}</span>
+                <p>{{company_name}} </p>                
               {{/ionItem}}
             {{/if}}
         {{/each}}
