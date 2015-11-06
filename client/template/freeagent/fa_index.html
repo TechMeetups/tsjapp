@@ -1,30 +1,47 @@
 <template name="faindex">
-    <section id="main-content">
-        <section class="wrapper">
-            <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-12">
+  {{#contentFor "headerButtonLeft"}}
+    {{>ionNavBackButton path="dashboard" text="dashboard"}}
+  {{/contentFor}}
+
+  {{#contentFor "headerTitle"}}
+    <h1 class="title">Freeagent</h1>
+  {{/contentFor}}
+  {{#ionView}}
+    {{#ionContent class="padding contact-detail"}}
+        <div class="list card">
+          <div class="item item-avatar">
+            <img src="http://freeagent-assets.s3.amazonaws.com/website-2014/images/logo.svg">
+            <h2>Freeagent</h2>
+            <p>Accounting system</p>
+          </div>
+
+          <div class="item item-body">
+            <h4>Token Details</h4>
+            <p>
+              <div class="alert alert-success"><b>Auth Code : </b> {{auth_code}} </div>
+              <div class="alert alert-success"><b>Refresh Token : </b> {{refresh_token}} </div>
+              <div class="alert alert-success"><b>Access Token : </b> {{access_token}} </div>
+              <div class="alert alert-success"><b>Token Type : </b>  {{token_type}} </div>
+            </p>
+          </div>
+        </div>
+        {{#ionList}}
+            {{#ionItem buttonRight=true avatar=true}}
                 <div class="" style="text-align: center;padding-top: 10px;">
-                    <a href="{{fa_login_url}}"> <button type="button" class="btn-lg btn-primary">FA Login</button></a>
-                </div>
-                <div class="" style="text-align: center;padding-top: 10px;">
-                   <button type="button" class="btn-lg btn-primary" id="fa_refresh">Refresh Token</button>
-                </div>
+                  <a href="{{fa_login_url}}"> <button type="button" class="btn-lg btn-primary">FA Login</button></a>
+              </div>
+             {{/ionItem}}
+             {{#ionItem buttonRight=true avatar=true}}
+               <div class="" style="text-align: center;padding-top: 10px;">
+                  <button type="button" class="btn-lg btn-primary" id="fa_refresh">Refresh Token</button>
+               </div>
+              {{/ionItem}}
+              {{#ionItem buttonRight=true avatar=true}}
                 <div class="" style="text-align: center;padding-top: 10px;">
                    <button type="button" class="btn-lg btn-primary" id="fa_contects">Get Contects</button>
                 </div>
-              </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
-            				<div class="showback">
-            				<h4>Token Details</h4>
-      							<div class="alert alert-success"><b>Auth Code : </b> {{auth_code}} </div>
-      							<div class="alert alert-success"><b>Refresh Token : </b> {{refresh_token}} </div>
-      							<div class="alert alert-success"><b>Access Token : </b> {{access_token}} </div>
-      							<div class="alert alert-success"><b>Token Type : </b>  {{token_type}} </div>
-            				</div>
-                </div>
-            </div>
-
-
-        </section>
-    </section>
+              {{/ionItem}}
+        {{/ionList}}
+    {{/ionContent}}
+  {{/ionView}}
 </template>

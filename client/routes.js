@@ -7,6 +7,7 @@ Router.map(function()
     this.route('dashboard', {path:"/customers"} );
     this.route('faindex', {path: '/fa_index'});
     this.route('ccindex', {path: '/cc_index'});
+    this.route('register', {path: '/register'});
     this.route('accountsetup', {path: '/accountsetup'});
     this.route('login', {path: '/login',
         onBeforeAction: function ()
@@ -31,7 +32,7 @@ Router.map(function()
       }
       else
       {
-        this.render('login');
+        this.render('index');
       }
     });
 

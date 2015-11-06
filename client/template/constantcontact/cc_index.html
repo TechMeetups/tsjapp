@@ -1,25 +1,42 @@
 <template name="ccindex">
-    <section id="main-content">
-        <section class="wrapper">
-          <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <div class="" style="text-align: center;padding-top: 10px;">
-                  <a href="{{cc_login}}"> <button type="button" class="btn-lg btn-primary">CC Login</button></a>
-              </div>
-              <div class="" style="text-align: center;padding-top: 10px;">
-                 <button type="button" class="btn-lg btn-primary" id="cc_contects">Get Contects</button>
-              </div>
+  {{#contentFor "headerButtonLeft"}}
+    {{>ionNavBackButton path="dashboard" text="dashboard"}}
+  {{/contentFor}}
+
+  {{#contentFor "headerTitle"}}
+    <h1 class="title">constant contact</h1>
+  {{/contentFor}}
+  {{#ionView}}
+    {{#ionContent class="padding contact-detail"}}
+        <div class="list card">
+          <div class="item item-avatar">
+            <img src="/assets/img/constant-contact-share-logo.gif">
+            <h2>constant contact</h2>
+            <p>Email Marketing System</p>
           </div>
-          <div class="col-lg-6 col-md-6 col-sm-12">
-              <div class="showback">
-              <h4>Token Details</h4>
+
+          <div class="item item-body">
+            <h4>Token Details</h4>
+            <p>
               <div class="alert alert-success"><b>Auth Code : </b> {{auth_code}} </div>
               <div class="alert alert-success"><b>Refresh Token : </b> {{refresh_token}} </div>
               <div class="alert alert-success"><b>Access Token : </b> {{access_token}} </div>
               <div class="alert alert-success"><b>Token Type : </b>  {{token_type}} </div>
-              </div>
+            </p>
           </div>
         </div>
-        </section>
-    </section>
+        {{#ionList}}
+            {{#ionItem buttonRight=true avatar=true}}
+                <div class="" style="text-align: center;padding-top: 10px;">
+                  <a href="{{cc_login}}"> <button type="button" class="btn-lg btn-primary">CC Login</button></a>
+              </div>
+             {{/ionItem}}
+             {{#ionItem buttonRight=true avatar=true}}
+               <div class="" style="text-align: center;padding-top: 10px;">
+                 <button type="button" class="btn-lg btn-primary" id="cc_contects">Get Contects</button>
+               </div>
+              {{/ionItem}}
+        {{/ionList}}
+    {{/ionContent}}
+  {{/ionView}}
 </template>

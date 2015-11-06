@@ -18,6 +18,45 @@ function resetLoginDetails(){
   	localStorage.setItem("fa_token_type","");
   }
 }
+Template.register.events({
+  'click #user_register': function(event, template)
+  {
+      event.preventDefault();
+      var emailVar = $('#login_user_id').val();
+      var login_user_name = $('#login_user_name').val();
+      var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+
+      if(!emailReg.test(emailVar))
+      {
+          IonLoading.show({
+            customTemplate: 'Please enter valid Email address',
+            duration: 3000
+          });
+          return false;
+      }
+      var passwordVar = $('#login_password').val();
+      //Meteor.loginWithPassword(emailVar, passwordVar);
+      // $('#userwelcomemodel').modal('show');
+      //
+      // control registration with flag
+
+      Accounts.createUser({email: emailVar,password: passwordVar,profile:{firstname:login_user_name}},
+          function(error){
+              $('#register_Model').modal('hide');
+              if(error)
+              {
+                IonLoading.show({
+                  customTemplate: 'error.reason',
+                  duration: 3000
+                });
+              }
+              else
+              {
+                   Router.go('dashboard');
+              }
+          });
+  }
+});
 Template.login.events({
         'click .login' : function(event, template){
             $('#loginModel').modal('show');

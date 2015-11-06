@@ -1,0 +1,18 @@
+<template name="index">
+  {{#contentFor "headerTitle"}}
+    <h1 class="title">CC Integration</h1>
+  {{/contentFor}}
+ {{#contentFor "headerButtonRight"}}
+   <a class="button btn btn-success login" href="/login" data-action="login">Login</a>
+   <a class="button btn btn-success register" href="/register" data-action="Register">Register</a>
+ {{/contentFor}}
+
+  {{#ionView}}
+    {{#ionContent}}
+
+    {{/ionContent}}
+    {{#ionFooterBar class="bar-dark"}}
+      <h1 class="title">(c) 2015 Constant Contact</h1>
+    {{/ionFooterBar}}
+  {{/ionView}}
+</template>

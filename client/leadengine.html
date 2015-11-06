@@ -44,6 +44,7 @@
 <template name="layout">
 {{#ionBody}}
   {{#ionSideMenuContainer}}
+  {{#if currentUser}}
     {{#ionSideMenus}}
       {{#ionSideMenu}}
         <div class="bar bar-header bar-dark">
@@ -64,7 +65,7 @@
         </div>
       {{/ionSideMenu}}
 
-      {{#ionSideMenu side="right" }}
+      <!-- {{#ionSideMenu side="right" }}
         <div class="bar bar-header bar-dark">
           <h1 class="title">Right Menu</h1>
         </div>
@@ -75,9 +76,11 @@
             </div>
           </div>
         </div>
-      {{/ionSideMenu}}
+      {{/ionSideMenu}} -->
     {{/ionSideMenus}}
+    {{/if}}
     {{#ionSideMenuContent}}
+
       {{> ionNavBar class="bar-positive"}}
         {{#ionNavView}}
           {{> yield}}
