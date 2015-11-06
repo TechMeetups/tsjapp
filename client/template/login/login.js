@@ -46,7 +46,7 @@ Template.register.events({
               if(error)
               {
                 IonLoading.show({
-                  customTemplate: 'error.reason',
+                  customTemplate: error.reason,
                   duration: 3000
                 });
               }
@@ -101,7 +101,6 @@ Template.login.events({
             var emailVar = $('#login_user_id').val();
             var passwordVar = $('#login_password').val();
             IonLoading.show();
-
             Meteor.loginWithPassword(emailVar, passwordVar,function(error)
             {
                 if(error)

@@ -16,139 +16,30 @@
   {{#ionView}}
     {{#ionContent}}
       {{#ionList}}
+        <div class="alert alert-warning alert-dismissible" role="alert" style="margin-bottom: 5px">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            Setup your Accounts before importing any contacts.
+        </div>
         {{#each cc_contects}}
           {{#if is_freeagent provider}}
             {{#ionItem buttonRight=true avatar=true}}
                <img src="{{image_src provider}}" width="" alt="{{provider}}" height="20">
-               <h2>{{first_name}},{{email}}</h2>
+               <h2>{{email}}</h2>
+               <p>{{first_name}}</p>
                <p>{{organisation_name}}</p>
-               <button class="button button-positive">{{sync_state}}</button>
+               <span class="badge badge-assertive">{{sync_state}}</span>
              {{/ionItem}}
             {{else}}
               {{#ionItem buttonRight=true avatar=true}}
                 <img src="{{image_src provider}}" width="" alt="{{provider}}" height="40">
-                <h2>{{first_name}}, {{email}}</h2>
+                <h2>{{email}}</h2>
+                <p>{{first_name}} </p>
                 <p>{{company_name}} </p>
-                <button class="button button-positive">{{sync_state}}</button>
+                <span class="badge badge-assertive">{{sync_state}}</span>
               {{/ionItem}}
             {{/if}}
         {{/each}}
       {{/ionList}}
     {{/ionContent}}
   {{/ionView}}
-</template>
-<template name="dashboard1">
-
-  <style>
-      .pn{
-          height: 300px;
-      }
-      .backstretch {
-           display: none;
-      }
-      .completed{
-          background-color: #37372C;
-      }
-      #example_filter{
-        padding-right: 10px;
-      }
-    table.dataTable tbody th,
-    table.dataTable tbody td {
-        white-space: nowrap;
-    }
-  </style>
-  <section id="main-content">
-    <section class="wrapper">
-      <div class="alert alert-warning alert-dismissible" role="alert" style="margin-bottom: 5px">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-          Setup your Accounts before importing any contacts.
-        </div>
-      <div class="row mt" style="margin-top: 5px;">
-
-          <div class="col-md-12">
-            <div id="name" class="pull-right">
-              <div class="" style="text-align: center;padding: 5px;">
-                 <button type="button" class="btn-sm btn-success" id="fa_contacts">Get FreeAgent contacts</button>
-                 <button type="button" class="btn-sm btn-primary" id="cc_contacts">Get Constant Contact contacts</button>
-                 <button type="button" class="btn-sm btn-info" id="sync_contacts">Sync</button>
-                 <button type="button" class="btn-sm btn-success" id="clear_contacts">Clear All</button>
-              </div>
-            </div>
-          </div>
-          <div class="clearfix"></div>
-           <div class="col-md-12">
-               <div class="content-panel">
-                   <table class="table table-striped table-advance table-hover" id="example">
-                       <thead>
-                       <tr>
-                           <th>NAME</th>
-                           <th > Email</th>
-                           <th>COMPANY</th>
-                           <th style="text-align: center;" class="no-sort">Source </th>
-                           <th class="no-sort">Status</th>
-                       </tr>
-                       </thead>
-                       <tbody>
-                         {{#each cc_contects}}
-                         <tr>
-                             <td>{{first_name}}</td>
-                             <td class="hidden-phone">{{email}}</td>
-
-
-                             {{#if is_freeagent provider}}
-                                  <td>{{organisation_name}}</td>
-                                 <td style="text-align: center;">
-                                   <img src="{{image_src provider}}" width="" alt="{{provider}}" height="20">
-                                 </td>
-                             {{else}}
-                                 <td>{{company_name}}</td>
-                                 <td style="text-align: center;padding: 2px;">
-                                   <img src="{{image_src provider}}" width="" alt="{{provider}}" height="40">
-                                 </td>
-                               {{/if}}
-                             <!-- <td><span class="label {{provider_label provider}} label-mini">{{provider}}</span></td> -->
-                             <td><span class="label {{sync_label sync_state}} label-mini">{{sync_state}}</span></td>
-                         </tr>
-                         {{/each}}
-                       </tbody>
-                   </table>
-               </div><!-- /content-panel -->
-           </div><!-- /col-md-12 -->
-       </div><!-- /row -->
-    </section>
-</section>
-<script>
-$(document).ready(function() {
-  var queueTable = null;
-  console.log(contacts_subscribe_list.ready())
-  Tracker.autorun(function() {
-    if (contacts_subscribe_list.ready() && queueTable == null){
-       queueTable =  $('#example').dataTable(
-          {
-            "scrollY":"380px",
-            "paging":   false,
-            "bSort": false,
-            "aoColumns":[
-             {"bSortable": false},
-             {"bSortable": false},
-             {"bSortable": false},
-             {"bSortable": false},
-             {"bSortable": false}
-         ],
-        "fnInitComplete": function() {
-            this.fnAdjustColumnSizing(true);
-        }
-      });
-      setTimeout(function () {
-        queueTable.fnAdjustColumnSizing();
-      },1000);
-    }
-    console.log(contacts_subscribe_list.ready())
-  });
-
-  $(window).resize( function () {
-    queueTable.fnAdjustColumnSizing();
-   } );
-} );
-</script>
 </template>
