@@ -28,7 +28,7 @@ Template.dashboard.helpers({
     if(sync_label && sync_label == "new"){
       return  "label-danger"
     }else {
-      return "btn btn-theme02"
+      return "label-success"
     }
   }
 });
