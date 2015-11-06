@@ -34,10 +34,4 @@ if (Meteor.isClient)
       Router.go("login");
     }
   });
-
-  Template.menu.helpers({
-    user : function() {
-      return  Meteor.user();
-    }
-  });
 }
