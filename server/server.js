@@ -202,6 +202,18 @@ if (Meteor.isServer)
        });
        return result.data[0].id
      }
+     var getEmailcontectlist = function(code)
+     {
+       var url = "https://api.constantcontact.com/v2/lists"
+       var params = "?api_key="+CC_CLIENT_ID_KEY;
+       console.log(url);
+       var result = Meteor.http.call("GET", url+params,{
+           headers: {
+             "Authorization" : "Bearer "+code+""
+           }
+       });
+       return result.data;
+     }
       Meteor.methods(
       {
         'sendMessage': function (toId)
@@ -291,6 +303,10 @@ if (Meteor.isServer)
             }
           });
           return "success"
+        },
+        getEmailcontectlist : function(cc_acccess_code){
+          this.unblock();
+          return getEmailcontectlist(cc_acccess_code);
         },
         sync_contact : function(cc_acccess_code){
           this.unblock();

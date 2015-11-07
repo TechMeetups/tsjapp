@@ -36,6 +36,21 @@
                  <button type="button" class="btn-lg btn-primary" id="cc_contects">Get Contects</button>
                </div>
               {{/ionItem}}
+              {{#ionItem}}
+              <div class="item">
+               <div class="input-label">
+                 Select email list to sync
+               </div>
+               <div class="item item-input-inset">
+                <select class="item-input-wrapper">
+                  {{#each getEmailcontectlist}}
+                  <option {{id}}>{{name}}}</option>
+                  {{/each}}
+                </select>
+                <button class="button button-small" style="padding: 2px 40px 1px;">Save</button>
+                </div>
+              </div>
+               {{/ionItem}}
         {{/ionList}}
     {{/ionContent}}
   {{/ionView}}

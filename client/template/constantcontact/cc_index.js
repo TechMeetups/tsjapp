@@ -40,6 +40,19 @@ Template.ccindex.events({
         });
     }
 });
+var emailList = [];
+Template.ccindex.rendered = function(){
+  var auth_code =   localStorage.getItem("cc_access_token");
+  Meteor.call("getEmailcontectlist",auth_code,function(error, result){
+    if(error){
+      console.log("error", error);
+    }
+    if(result){
+       console.log(result)
+       emailList = result;
+    }
+  });
+}
 Template.ccindex.helpers({
   access_token: function(){
     profile = Meteor.user().profile
@@ -67,5 +80,9 @@ Template.ccindex.helpers({
     }else {
       return "";
     }
+  },
+  getEmailcontectlist : function(){
+    return emailList;
   }
+
 });

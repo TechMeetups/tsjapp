@@ -120,6 +120,5 @@ Template._myPopover.events({
         console.log('Cancelled');
       }
     });
-
 }
 });
