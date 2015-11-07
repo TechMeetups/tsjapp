@@ -337,7 +337,7 @@ if (Meteor.isServer)
             for(var j = 0 ; j < constantcontact.length ; j++){
               if(freeagentcontacts[i].email == constantcontact[j].email){
                 contacts.update({_id:freeagentcontacts[i]._id}, {$set:{sync_state:"sync"}});
-                contacts.update({_id:constantcontact[j]._id}, {$set:{sync_state:"sync"}});
+                contacts.update({_id:constantcddontact[j]._id}, {$set:{sync_state:"sync"}});
               }
             }
           }

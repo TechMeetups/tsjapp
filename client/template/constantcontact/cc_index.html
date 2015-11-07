@@ -26,6 +26,21 @@
           </div>
         </div>
         {{#ionList}}
+          {{#ionItem}}
+            <div class="item">
+             <div class="input-label">
+               Select email list to sync
+             </div>
+             <div class="item item-input-inset">
+              <select class="item-input-wrapper" id="default_email">
+                {{#each emailcontectlist}}
+                  <option value="{{id}}" {{is_selected id}}>{{name}}</option>
+                {{/each}}
+              </select>
+              <button class="button button-small" id="btn_save_eamil_list" style="padding: 2px 40px 1px;">Save</button>
+              </div>
+            </div>
+           {{/ionItem}}
             {{#ionItem buttonRight=true avatar=true}}
                 <div class="" style="text-align: center;padding-top: 10px;">
                   <a href="{{cc_login}}"> <button type="button" class="btn-lg btn-primary">CC Login</button></a>
@@ -36,21 +51,7 @@
                  <button type="button" class="btn-lg btn-primary" id="cc_contects">Get Contects</button>
                </div>
               {{/ionItem}}
-              {{#ionItem}}
-              <div class="item">
-               <div class="input-label">
-                 Select email list to sync
-               </div>
-               <div class="item item-input-inset">
-                <select class="item-input-wrapper" id="default_email">
-                  {{#each emailcontectlist}}
-                    <option value="{{id}}" {{is_selected id}}>{{name}}</option>
-                  {{/each}}
-                </select>
-                <button class="button button-small" id="btn_save_eamil_list" style="padding: 2px 40px 1px;">Save</button>
-                </div>
-              </div>
-               {{/ionItem}}
+
         {{/ionList}}
     {{/ionContent}}
   {{/ionView}}
