@@ -1,3 +1,25 @@
+function create_fa_contactBlock(cc_contect,list_id){
+  var newContectblock = {
+    "contact":{
+    "first_name":cc_contect.first_name,
+    "last_name":cc_contect.last_name,
+    "organisation_name":cc_contect.company_name,
+    "email":cc_contect.email,
+    "billing_email":cc_contect.email,
+    "phone_number":cc_contect.home_phone,
+    "mobile":cc_contect.home_phone,
+    "address1":cc_contect.address1,
+    "address2": "",
+    "address3": "",
+    "town":cc_contect.town,
+    "region": "",
+    "postcode":"",
+    "country":"",
+    "charge_sales_tax":"Auto"
+  }
+};
+return newContectblock;
+}
 function create_cc_contactBlock(faContect,list_id){
   var newContectblock = {
     "addresses": [
@@ -36,7 +58,6 @@ function create_cc_contactBlock(faContect,list_id){
 };
 return newContectblock;
 }
-
 if (Meteor.isServer)
 {
 
@@ -322,7 +343,7 @@ if (Meteor.isServer)
           this.unblock();
           return getEmailcontectlist(cc_acccess_code);
         },
-        sync_contact : function(cc_acccess_code){
+        sync_contact : function(cc_acccess_code,fa_access_token){
           this.unblock();
           var list_id = getcontectlist_id(cc_acccess_code);
           profile = Meteor.user().profile
@@ -351,6 +372,22 @@ if (Meteor.isServer)
                    console.log(response.statusCode)
                    if(response.statusCode == 201){
                      contacts.update({_id:freeagentcontactsforcreate[c]._id}, {$set:{sync_state:"sync"}});
+                   }
+                 }
+                 Meteor.sleep(300);
+              } catch (e) {
+                  console.log(e)
+              }
+          }
+          var constantcontactcontactsforcreate = contacts.find({user_id:Meteor.userId(),provider:"constantcontact",sync_state:"new"}).fetch();
+          for(var c=0;c < constantcontactcontactsforcreate.length ;c++){
+              var newobject = create_fa_contactBlock(constantcontactcontactsforcreate[c]);
+              try {
+                var response = createfreeagentcontect(newobject,fa_access_token);
+                 if(response){
+                   console.log(response.statusCode)
+                   if(response.statusCode == 201){
+                     contacts.update({_id:constantcontactcontactsforcreate[c]._id}, {$set:{sync_state:"sync"}});
                    }
                  }
                  Meteor.sleep(300);

@@ -88,7 +88,16 @@ Template._myPopover.events({
   }
   IonLoading.show();
   var auth_code =   localStorage.getItem("cc_access_token");
-  Meteor.call("sync_contact",auth_code,function(error, result){
+  refresh_fa_access_token(function(result){
+    if(result){
+      localStorage.setItem("fa_access_token",result.access_token);
+      localStorage.setItem("fa_token_type",result.token_type);
+      updateUserFaAccess();
+      var access_token = localStorage.getItem("fa_access_token");
+    }
+  })
+  var fa_access_token = localStorage.getItem("fa_access_token");
+  Meteor.call("sync_contact",auth_code,fa_access_token,function(error, result){
     if(error){
       console.log("error", error);
       IonLoading.hide();
