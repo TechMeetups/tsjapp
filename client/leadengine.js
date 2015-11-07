@@ -9,6 +9,10 @@ Template.registerHelper('cc_login_url', function(){
 Deps.autorun(function() {
   contacts_subscribe_list = Meteor.subscribe("contacts",Meteor.userId());
 })
+
+Deps.autorun(function() {
+  emailLists_subscribe_list = Meteor.subscribe("emailLists",Meteor.userId());
+})
 Meteor.startup(function(){
   //router = new Auth_Router();
 

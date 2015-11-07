@@ -35,9 +35,13 @@ Template.ccindex.events({
             console.log("error", error);
           }
           if(result){
-             console.log(result);
+             console.log("success");
           }
         });
+    },
+    'click #btn_save_eamil_list' : function(event, template){
+      var eamil_id = $('#default_email').val()
+      Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.default_eamil_id":eamil_id}});
     }
 });
 var emailList = [];
@@ -49,7 +53,7 @@ Template.ccindex.rendered = function(){
     }
     if(result){
        console.log(result)
-       emailList = result;
+
     }
   });
 }
@@ -58,6 +62,20 @@ Template.ccindex.helpers({
     profile = Meteor.user().profile
     if(profile){
       return isNotEmptyValue(profile.cc_access_token);
+    }else {
+      return "";
+    }
+  },
+  is_selected : function(id){
+    profile = Meteor.user().profile
+    if(profile){
+      if(profile.default_eamil_id){
+        if(id == profile.default_eamil_id){
+          return "selected";
+        }
+      }else{
+        return "";
+      }
     }else {
       return "";
     }
@@ -81,8 +99,8 @@ Template.ccindex.helpers({
       return "";
     }
   },
-  getEmailcontectlist : function(){
-    return emailList;
+  emailcontectlist : function(){
+    return emailLists.find({user_id:Meteor.userId()});
   }
 
 });

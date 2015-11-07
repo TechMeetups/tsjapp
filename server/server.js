@@ -48,6 +48,11 @@ if (Meteor.isServer)
     {
         return contacts.find({user_id:user_id});
     });
+    Meteor.publish("emailLists", function (user_id)
+    {
+        return emailLists.find({user_id:user_id});
+    });
+
     Meteor.startup(function () {
 
         // By default, the email is sent from no-reply@meteor.com. If you wish to receive email from users asking for help with their account, be sure to set this to an email address that you can receive email at.
@@ -212,7 +217,16 @@ if (Meteor.isServer)
              "Authorization" : "Bearer "+code+""
            }
        });
-       return result.data;
+       var result = result.data
+       for(var i=0; i < result.length;i++){
+         emaillist =  emailLists.findOne({id:result[i].id});
+        if(emaillist){
+          emailLists.update({_id:emaillist._id}, {$set:{id:result[i].id,name:result[i].name}});
+        }else{
+          emailLists.insert({id:result[i].id,name:result[i].name,user_id:Meteor.userId()});
+        }
+       }
+       return result;
      }
       Meteor.methods(
       {
@@ -311,6 +325,12 @@ if (Meteor.isServer)
         sync_contact : function(cc_acccess_code){
           this.unblock();
           var list_id = getcontectlist_id(cc_acccess_code);
+          profile = Meteor.user().profile
+          if(profile){
+            if(profile.default_eamil_id){
+              list_id = profile.default_eamil_id;
+            }
+          }
           var freeagentcontacts = contacts.find({user_id:Meteor.userId(),provider:"freeagent"}).fetch();
           var constantcontact = contacts.find({user_id:Meteor.userId(),provider:"constantcontact"}).fetch();
           for(var i =0 ; i< freeagentcontacts.length ;i++){

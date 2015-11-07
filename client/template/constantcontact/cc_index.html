@@ -42,12 +42,12 @@
                  Select email list to sync
                </div>
                <div class="item item-input-inset">
-                <select class="item-input-wrapper">
-                  {{#each getEmailcontectlist}}
-                  <option {{id}}>{{name}}}</option>
+                <select class="item-input-wrapper" id="default_email">
+                  {{#each emailcontectlist}}
+                    <option value="{{id}}" {{is_selected id}}>{{name}}</option>
                   {{/each}}
                 </select>
-                <button class="button button-small" style="padding: 2px 40px 1px;">Save</button>
+                <button class="button button-small" id="btn_save_eamil_list" style="padding: 2px 40px 1px;">Save</button>
                 </div>
               </div>
                {{/ionItem}}
