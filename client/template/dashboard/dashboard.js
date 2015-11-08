@@ -35,7 +35,7 @@ Template.dashboard.helpers({
 
 Template._myPopover.events({
 'click #fa_contacts' : function(event, template){
-  console.log("clickd")
+  IonPopover.hide()
   if(!is_fa_ccount_active()){
     IonLoading.show({
       customTemplate: "Setup your Accounts before importing any contacts",
@@ -59,6 +59,7 @@ Template._myPopover.events({
   })
 },
 'click #cc_contacts' : function(event, template){
+    IonPopover.hide()
     if(!is_cc_account_active()){
       IonLoading.show({
         customTemplate: "Setup your Accounts before importing any contacts",
@@ -76,6 +77,7 @@ Template._myPopover.events({
     getCCContact(auth_code,url+params)
 },
 'click #sync_contacts' :  function(event, template){
+  IonPopover.hide()
   if(!is_cc_account_active() && !is_fa_ccount_active()){
     IonLoading.show({
       customTemplate: "Setup your Accounts before importing any contacts",
@@ -107,9 +109,10 @@ Template._myPopover.events({
        console.log(result)
        IonLoading.hide();
     }
-  });  
+  });
 },
 'click #clear_contacts' :  function(event, template){
+  IonPopover.hide()
   IonPopup.confirm({
       title: 'Are you sure ?',
       template: 'Are you sure you want clear all contact ?',
