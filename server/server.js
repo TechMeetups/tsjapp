@@ -149,6 +149,34 @@ if (Meteor.isServer)
             // +"http://www.graphical.io/assets/img/Graphical-IO.png"
         });
     }
+    var create_fa_contect = function (method,url, code,json_input){
+      var result = Meteor.http.call(method, url,{
+          headers: {
+            "Authorization" : "Bearer "+code+"",
+            "User-Agent" : "Mozilla/5.0 (Windows NT 5.1; rv:19.0) Gecko/20100101 Firefox/19.0"
+          },
+          data:json_input
+      });
+      try {
+        var jsondata = result.data.contact;
+        jsondata['provider'] = "freeagent";
+        jsondata['user_id'] = Meteor.userId();
+        console.log(jsondata)
+        if(jsondata.email && jsondata.email.length > 1){
+          var contact = contacts.findOne({user_id:Meteor.userId(),email:jsondata.email,provider:"freeagent"});
+          if(contact){
+            contacts.update({_id:contact._id},{$set:jsondata});
+          }else{
+            jsondata['sync_state'] = "sync";
+            contacts.insert(jsondata);
+          }
+        }
+      }
+      catch(err) {
+        console.log(err)
+      }
+      return result;
+    }
     var sendMessage = function (user_email)
     {
         var fromEmail = "admin@techmeetups.com";
@@ -280,7 +308,6 @@ if (Meteor.isServer)
         },
         resetpasswordByEmail : function (email){
           var user = Meteor.users.findOne({'emails.address': {$regex:email,$options:'i'}});
-          console.log(user);
           if(user){
             pass = guid()
             Accounts.setPassword(user._id, pass);
@@ -302,22 +329,6 @@ if (Meteor.isServer)
               },
           });
           try {
-            cc_contect_insert(result.data)
-          }
-          catch(err) {
-            console.log(err)
-          }
-          return result.data;
-        },
-        create_fa_contect : function (method,url, code){
-          this.unblock();
-          var result = Meteor.http.call(method, url,{
-              headers: {
-                "Authorization" : "Bearer "+code+""
-              },
-          });
-          try {
-            console.log(result)
             cc_contect_insert(result.data)
           }
           catch(err) {
@@ -374,7 +385,7 @@ if (Meteor.isServer)
             for(var j = 0 ; j < constantcontact.length ; j++){
               if(freeagentcontacts[i].email == constantcontact[j].email){
                 contacts.update({_id:freeagentcontacts[i]._id}, {$set:{sync_state:"sync"}});
-                contacts.update({_id:constantcddontact[j]._id}, {$set:{sync_state:"sync"}});
+                contacts.update({_id:constantcontact[j]._id}, {$set:{sync_state:"sync"}});
               }
             }
           }
@@ -399,14 +410,15 @@ if (Meteor.isServer)
           for(var c=0;c < constantcontactcontactsforcreate.length ;c++){
               var newobject = create_fa_contactBlock(constantcontactcontactsforcreate[c]);
               try {
-                var response = createfreeagentcontect(newobject,fa_access_token);
+                url = "https://api.freeagent.com/v2/contacts";
+                var response = create_fa_contect("POST",url,fa_access_token, newobject)
+                //var response = createfreeagentcontect(newobject,fa_access_token);
+                console.log(response)
                  if(response){
-                   console.log(response.statusCode)
                    if(response.statusCode == 201){
                      contacts.update({_id:constantcontactcontactsforcreate[c]._id}, {$set:{sync_state:"sync"}});
                    }
                  }
-                 Meteor.sleep(300);
               } catch (e) {
                   console.log(e)
               }

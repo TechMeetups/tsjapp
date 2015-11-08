@@ -96,6 +96,7 @@ Template._myPopover.events({
       var access_token = localStorage.getItem("fa_access_token");
     }
   })
+  IonLoading.show();
   var fa_access_token = localStorage.getItem("fa_access_token");
   Meteor.call("sync_contact",auth_code,fa_access_token,function(error, result){
     if(error){
@@ -106,7 +107,7 @@ Template._myPopover.events({
        console.log(result)
        IonLoading.hide();
     }
-  });
+  });  
 },
 'click #clear_contacts' :  function(event, template){
   IonPopup.confirm({
