@@ -309,6 +309,22 @@ if (Meteor.isServer)
           }
           return result.data;
         },
+        create_fa_contect : function (method,url, code){
+          this.unblock();
+          var result = Meteor.http.call(method, url,{
+              headers: {
+                "Authorization" : "Bearer "+code+""
+              },
+          });
+          try {
+            console.log(result)
+            cc_contect_insert(result.data)
+          }
+          catch(err) {
+            console.log(err)
+          }
+          return result.data;
+        },
         fa_contect_insert :  function (result){
           this.unblock();
           result = result.contacts
