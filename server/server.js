@@ -204,7 +204,7 @@ var syncContacts = function(user){
 
       var newobject = create_cc_contactBlock(freeagentcontactsforcreate[c],list_id);
       try {
-        var response = create_cc_contect(newobject,profile.cc_acccess_code);
+        var response = create_cc_contect(newobject,profile.cc_acccess_code,user._id);
          if(response){
            console.log(response.statusCode)
            if(response.statusCode == 201){
@@ -387,7 +387,7 @@ var syncContacts = function(user){
 
      }
    }
-   var create_cc_contect = function (data,cc_access_token){
+   var create_cc_contect = function (data,cc_access_token,user_id){
      var url = "https://api.constantcontact.com/v2/contacts?action_by=ACTION_BY_OWNER&api_key="+CC_CLIENT_ID_KEY;
      console.log("call inside create cc")
      var result = Meteor.http.call("POST", url,{
@@ -397,6 +397,23 @@ var syncContacts = function(user){
          },
          data:data
      });
+     console.log(result)
+     if(result.statusCode == 201){
+
+       var jsondata = result.data;
+       jsondata['provider'] = "constantcontact";
+       jsondata['user_id'] = user_id;
+       jsondata['email'] = jsondata.email_addresses[0].email_address;
+       if(jsondata.email && jsondata.email.length > 1){
+         var contact = contacts.findOne({user_id:user_id,email:jsondata.email,provider:"constantcontact"});
+         if(contact){
+           contacts.update({_id:contact._id},{$set:jsondata});
+         }else{
+           jsondata['sync_state'] = "sync";
+           contacts.insert(jsondata);
+         }
+       }
+     }
      return result;
    }
    var authenticate = function (auth_code) {
@@ -543,7 +560,7 @@ var syncContacts = function(user){
 
               var newobject = create_cc_contactBlock(freeagentcontactsforcreate[c],list_id);
               try {
-                var response = create_cc_contect(newobject,cc_acccess_code);
+                var response = create_cc_contect(newobject,cc_acccess_code,Meteor.userId());
                  if(response){
                    console.log(response.statusCode)
                    if(response.statusCode == 201){
