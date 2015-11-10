@@ -148,17 +148,21 @@ var autoSyncContact = function(){
   for(var i=0;i < users.length;i++){
     var user = users[i];
     console.log(user)
-    var profile = user.profile;
     if(profile){
-      console.log(profile)
-      if(is_fa_ccount_active_by_user(user)){
-        getFreeagentContectFromServer(user)
-      }
-      if(is_cc_account_active_by_user(user)){
-        getConstantContactFormServer(user)
-      }
-      if(is_fa_ccount_active_by_user(user) && is_cc_account_active_by_user(user)){
-        syncContacts(user)
+      try {
+        console.log(profile)
+        if(is_fa_ccount_active_by_user(user)){
+          getFreeagentContectFromServer(user)
+        }
+        if(is_cc_account_active_by_user(user)){
+          getConstantContactFormServer(user)
+        }
+        if(is_fa_ccount_active_by_user(user) && is_cc_account_active_by_user(user)){
+          syncContacts(user)
+        }
+
+      } catch (e) {
+          console.log(e)
       }
     }
   }
