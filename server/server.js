@@ -60,6 +60,181 @@ return newContectblock;
 }
 if (Meteor.isServer)
 {
+var getFreeagentContectAPI = function(page,token,user){
+  var method = "GET"
+  console.log(token)
+  url = "https://api.freeagent.com/v2/contacts?page="+page+"&per_page=25";
+  var result = Meteor.http.call(method, url,{
+      headers: {
+        "Authorization" : "Bearer "+token+"",
+        "User-Agent" : "Mozilla/5.0 (Windows NT 5.1; rv:19.0) Gecko/20100101 Firefox/19.0"
+      }
+  });
+  result = result.data;
+  var result_count = result.contacts.length;
+  if(result_count > 0){
+    page = page +1 ;
+    faContectInsertToDB(result,user._id);
+    getFreeagentContectAPI(page,token,user);
+  }
+}
+var getFreeagentContectFromServer = function(user){
+  var refresh = refresh_fa_access_token_from_server(user);
+  if(refresh){
+    var page =1;
+    Meteor.users.update({_id:user._id}, {$set:{"profile.fa_access_token":refresh.data.access_token}});
+    getFreeagentContectAPI(page,refresh.data.access_token,user)
+  }
+}
+var refresh_fa_access_token_from_server = function(user){
+  var profile = user.profile;
+  var formData = {
+       grant_type : "refresh_token",
+       refresh_token: profile.fa_refresh_token,
+       client_id : FA_CLIENT_ID_KEY,
+       client_secret : FA_CLIENT_SECRET_KEY
+   };
+   var method ="POST"
+   var url = "https://api.freeagent.com/v2/token_endpoint";
+
+   var result = Meteor.http.call(method, url,{
+       headers: {
+         "User-Agent" : "Mozilla/5.0 (Windows NT 5.1; rv:19.0) Gecko/20100101 Firefox/19.0"
+       },
+       data:formData
+   });
+   if (result){
+     return result;
+   }else{
+     return null;
+   }
+}
+var APICallByServer = function(method,url,code,user_id){
+  var result = Meteor.http.call(method, url,{
+      headers: {
+        "Authorization" : "Bearer "+code+""
+      },
+  });
+  try {
+    cc_contect_insert(result.data,user_id)
+  }
+  catch(err) {
+    console.log(err)
+  }
+  return result.data;
+}
+var getCCContactfromServer = function(auth_code,url,user_id){
+  var auth_code =  auth_code;
+  var params = "&api_key="+CC_CLIENT_ID_KEY;
+  var result = APICallByServer("GET",url+params,auth_code,user_id);
+  if(result){
+     if(result.meta.pagination.next_link){
+       var url = "https://api.constantcontact.com"+result.meta.pagination.next_link
+       console.log(url)
+       getCCContactfromServer(auth_code,url,user_id);
+     }else{
+     }
+  }
+}
+ var getConstantContactFormServer= function(user){
+   var auth_code =   user.profile.cc_access_token
+   var url = "https://api.constantcontact.com/v2/contacts";
+   var params = "?status=ALL&limit=50";
+   getCCContactfromServer(auth_code,url+params,user._id)
+ }
+var autoSyncContact = function(){
+  var users = Meteor.users.find().fetch();
+  console.log("auto sync call")
+  for(var i=0;i < users.length;i++){
+    var user = users[i];
+    console.log(user)
+    var profile = user.profile;
+    if(profile){
+      console.log(profile)
+      if(is_fa_ccount_active_by_user(user)){
+        getFreeagentContectFromServer(user)
+      }
+      if(is_cc_account_active_by_user(user)){
+        getConstantContactFormServer(user)
+      }
+      if(is_fa_ccount_active_by_user(user) && is_cc_account_active_by_user(user)){
+        syncContacts(user)
+      }
+    }
+  }
+}
+var faContectInsertToDB = function(result,userId){
+  result = result.contacts
+  for(var i = 0;i< result.length ; i++){
+    var jsondata = result[i];
+    jsondata['provider'] = "freeagent";
+    jsondata['user_id'] = userId;
+    if(jsondata.email && jsondata.email.length > 1){
+      var contact = contacts.findOne({user_id:userId,email:jsondata.email,provider:"freeagent"});
+      if(contact){
+        contacts.update({_id:contact._id},{$set:jsondata});
+      }else{
+        jsondata['sync_state'] = "new";
+        contacts.insert(jsondata);
+      }
+    }
+  }
+  return result;
+}
+var syncContacts = function(user){
+  profile = user.profile;
+  var list_id = getcontectlist_id(profile.cc_access_token);
+  if(profile){
+    if(profile.default_eamil_id){
+      list_id = profile.default_eamil_id;
+    }
+  }
+  var freeagentcontacts = contacts.find({user_id:user._id,provider:"freeagent"}).fetch();
+  var constantcontact = contacts.find({user_id:user._id,provider:"constantcontact"}).fetch();
+  for(var i =0 ; i< freeagentcontacts.length ;i++){
+    for(var j = 0 ; j < constantcontact.length ; j++){
+      if(freeagentcontacts[i].email == constantcontact[j].email){
+        contacts.update({_id:freeagentcontacts[i]._id}, {$set:{sync_state:"sync"}});
+        contacts.update({_id:constantcontact[j]._id}, {$set:{sync_state:"sync"}});
+      }
+    }
+  }
+  var freeagentcontactsforcreate = contacts.find({user_id:user._id,provider:"freeagent",sync_state:"new"}).fetch();
+  for(var c=0;c < freeagentcontactsforcreate.length ;c++){
+
+      var newobject = create_cc_contactBlock(freeagentcontactsforcreate[c],list_id);
+      try {
+        var response = create_cc_contect(newobject,profile.cc_acccess_code);
+         if(response){
+           console.log(response.statusCode)
+           if(response.statusCode == 201){
+             contacts.update({_id:freeagentcontactsforcreate[c]._id}, {$set:{sync_state:"sync"}});
+           }
+         }
+         Meteor.sleep(300);
+      } catch (e) {
+          console.log(e)
+      }
+  }
+  var constantcontactcontactsforcreate = contacts.find({user_id:user._id,provider:"constantcontact",sync_state:"new"}).fetch();
+  for(var c=0;c < constantcontactcontactsforcreate.length ;c++){
+      var newobject = create_fa_contactBlock(constantcontactcontactsforcreate[c]);
+      try {
+        url = "https://api.freeagent.com/v2/contacts";
+        var response = create_fa_contect("POST",url,profile.fa_access_token, newobject,user._id)
+        //var response = createfreeagentcontect(newobject,fa_access_token);
+        console.log(response)
+         if(response){
+           if(response.statusCode == 201){
+             contacts.update({_id:constantcontactcontactsforcreate[c]._id}, {$set:{sync_state:"sync"}});
+           }
+         }
+      } catch (e) {
+          console.log(e)
+      }
+  }
+}
+
 
     Blog.config({
         adminRole:'admin',
@@ -89,16 +264,14 @@ if (Meteor.isServer)
         Accounts.emailTemplates.verifyEmail.text = function(user, url) {
             return 'click on the following link to verify your email address: ' + url;
         };
-
-
       SyncedCron.add({
         name: 'FA-CC Contact Sync',
         schedule: function(parser) {
           // parser is a later.parse object
-          return parser.text('every 10 minutes');
+          return parser.text('every 60 minutes');
         },
         job: function() {
-          console.log("test 123")
+          autoSyncContact()
         }
       });
       SyncedCron.start();
@@ -149,7 +322,7 @@ if (Meteor.isServer)
             // +"http://www.graphical.io/assets/img/Graphical-IO.png"
         });
     }
-    var create_fa_contect = function (method,url, code,json_input){
+    var create_fa_contect = function (method,url, code,json_input,user_id){
       var result = Meteor.http.call(method, url,{
           headers: {
             "Authorization" : "Bearer "+code+"",
@@ -160,10 +333,9 @@ if (Meteor.isServer)
       try {
         var jsondata = result.data.contact;
         jsondata['provider'] = "freeagent";
-        jsondata['user_id'] = Meteor.userId();
-        console.log(jsondata)
+        jsondata['user_id'] = user_id;
         if(jsondata.email && jsondata.email.length > 1){
-          var contact = contacts.findOne({user_id:Meteor.userId(),email:jsondata.email,provider:"freeagent"});
+          var contact = contacts.findOne({user_id:user_id,email:jsondata.email,provider:"freeagent"});
           if(contact){
             contacts.update({_id:contact._id},{$set:jsondata});
           }else{
@@ -192,16 +364,16 @@ if (Meteor.isServer)
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
         });
    }
-   var cc_contect_insert = function(data){
+   var cc_contect_insert = function(data,user_id){
      var contect = data.results
      for(var i=0;i < contect.length ; i++)
      {
        var jsondata = contect[i];
        jsondata['provider'] = "constantcontact";
-       jsondata['user_id'] = Meteor.userId();
+       jsondata['user_id'] = user_id;
        try{
          jsondata['email'] = jsondata.email_addresses[0].email_address;
-         var contact = contacts.findOne({user_id:Meteor.userId(),email:jsondata.email,provider:"constantcontact"});
+         var contact = contacts.findOne({user_id:user_id,email:jsondata.email,provider:"constantcontact"});
          if(contact){
            contacts.update({_id:contact._id},{$set:jsondata});
          }else{
@@ -323,40 +495,17 @@ if (Meteor.isServer)
         },
         APICall : function (method,url, code){
           this.unblock();
-          var result = Meteor.http.call(method, url,{
-              headers: {
-                "Authorization" : "Bearer "+code+""
-              },
-          });
-          try {
-            cc_contect_insert(result.data)
-          }
-          catch(err) {
-            console.log(err)
-          }
-          return result.data;
+          var result = APICallByServer("GET",url,code,Meteor.userId());
+          return result;
         },
         fa_contect_insert :  function (result){
           this.unblock();
-          result = result.contacts
-          for(var i = 0;i< result.length ; i++){
-            var jsondata = result[i];
-            jsondata['provider'] = "freeagent";
-            jsondata['user_id'] = Meteor.userId();
-            if(jsondata.email && jsondata.email.length > 1){
-              var contact = contacts.findOne({user_id:Meteor.userId(),email:jsondata.email,provider:"freeagent"});
-              if(contact){
-                contacts.update({_id:contact._id},{$set:jsondata});
-              }else{
-                jsondata['sync_state'] = "new";
-                contacts.insert(jsondata);
-              }
-            }
-          }
+          var result = faContectInsertToDB(result,Meteor.userId());
           return result;
         },
         delete_contact : function(id){
           this.unblock();
+          //autoSyncContact()
           contacts.remove({user_id:id},function(error){
             if(error){
               console.log(error)
@@ -411,9 +560,8 @@ if (Meteor.isServer)
               var newobject = create_fa_contactBlock(constantcontactcontactsforcreate[c]);
               try {
                 url = "https://api.freeagent.com/v2/contacts";
-                var response = create_fa_contect("POST",url,fa_access_token, newobject)
+                var response = create_fa_contect("POST",url,fa_access_token, newobject,Meteor.userId())
                 //var response = createfreeagentcontect(newobject,fa_access_token);
-                console.log(response)
                  if(response){
                    if(response.statusCode == 201){
                      contacts.update({_id:constantcontactcontactsforcreate[c]._id}, {$set:{sync_state:"sync"}});

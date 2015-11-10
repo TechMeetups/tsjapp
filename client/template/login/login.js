@@ -106,6 +106,10 @@ Template.login.events({
                 if(error)
                 {
                   	console.log("User Login has some error "+error);
+                    IonLoading.show({
+                      customTemplate: error,
+                      duration: 3000
+                    });
                     // $('#loginModel').modal('hide');
                     // $('#error-message').html(error.reason);
                     // $('#main-error-box').css("display","block");
@@ -138,34 +142,32 @@ Template.login.events({
 
             if(!emailReg.test(emailVar))
             {
-                $('#error-message').html("Please enter valid Email address");
-                $('#main-error-box').css("display","block");
-                setTimeout(function () {
-                    $('#main-error-box').css("display","none");
-                },2000);
+
+                IonLoading.show({
+                  customTemplate: "Please enter valid Email address",
+                  duration: 3000
+                });
                 return false;
             }
+            IonLoading.show();
             var passwordVar = $('#register_page').find('#login_password').val();
             //Meteor.loginWithPassword(emailVar, passwordVar);
             // $('#userwelcomemodel').modal('show');
-            $('#register_Model').modal('hide');
             //
             // control registration with flag
 
             Accounts.createUser({email: emailVar,password: passwordVar,profile:{firstname:login_user_name}},
                 function(error){
-                    $('#register_Model').modal('hide');
                     if(error)
-                    {
-                        $('#error-message').html(error.reason);
-                        $('#main-error-box').css("display","block");
-                        setTimeout(function () {
-                            $('#main-error-box').css("display","none");
-                        },2000);
+                    {   IonLoading.hide();
+                      IonLoading.show({
+                        customTemplate:error.reason,
+                        duration: 3000
+                      });                        
                     }
                     else
                     {
-                       	$('#register_Model').modal('hide');
+                      IonLoading.hide();
                          Router.go('dashboard');
                     }
                 });
