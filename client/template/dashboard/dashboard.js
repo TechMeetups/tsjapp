@@ -46,7 +46,10 @@ Template._myPopover.events({
     },2000);
     return;
   }
-  IonLoading.show();
+
+  IonLoading.show({
+    customTemplate :'<i class="fa fa-cog fa-spin font30"></i>'
+  });
   refresh_fa_access_token(function(result){
     if(result){
       localStorage.setItem("fa_access_token",result.access_token);
@@ -70,7 +73,9 @@ Template._myPopover.events({
       },2000);
       return;
     }
-    IonLoading.show();
+    IonLoading.show({
+     customTemplate :'<i class="fa fa-cog fa-spin font30"></i>'
+    });
     var auth_code =   localStorage.getItem("cc_access_token");
     var url = "https://api.constantcontact.com/v2/contacts";
     var params = "?status=ALL&limit=50";
@@ -88,7 +93,9 @@ Template._myPopover.events({
     },3000);
     return;
   }
-  IonLoading.show();
+  IonLoading.show({
+  customTemplate :'<i class="fa fa-cog fa-spin font30"></i>'
+});
   var auth_code =   localStorage.getItem("cc_access_token");
   refresh_fa_access_token(function(result){
     if(result){
@@ -98,7 +105,9 @@ Template._myPopover.events({
       var access_token = localStorage.getItem("fa_access_token");
     }
   })
-  IonLoading.show();
+  IonLoading.show({
+  customTemplate :'<i class="fa fa-cog fa-spin font30"></i>'
+});
   var fa_access_token = localStorage.getItem("fa_access_token");
   Meteor.call("sync_contact",auth_code,fa_access_token,function(error, result){
     if(error){
@@ -117,7 +126,9 @@ Template._myPopover.events({
       title: 'Are you sure ?',
       template: 'Are you sure you want clear all contact ?',
       onOk: function() {
-        IonLoading.show();
+        IonLoading.show({
+  customTemplate :'<i class="fa fa-cog fa-spin font30"></i>'
+});
         Meteor.call("delete_contact",Meteor.userId(),function(error, result){
           if(error){
             console.log("error", error);

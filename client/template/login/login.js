@@ -100,12 +100,15 @@ Template.login.events({
   // event.preventDefault();
             var emailVar = $('#login_user_id').val();
             var passwordVar = $('#login_password').val();
-            IonLoading.show();
+            IonLoading.show({
+              customTemplate :'<i class="fa fa-cog fa-spin font30"></i>'
+            });
             Meteor.loginWithPassword(emailVar, passwordVar,function(error)
             {
                 if(error)
                 {
                   	console.log("User Login has some error "+error);
+                    IonLoading.hide();
                     IonLoading.show({
                       customTemplate: error,
                       duration: 3000
@@ -118,7 +121,7 @@ Template.login.events({
                     // },2000);
                     // $('body').removeClass('modal-open');
                     // $('.modal-backdrop').remove();
-                    IonLoading.hide();
+                  //  IonLoading.hide();
                 }
                 else
                 {
@@ -149,7 +152,9 @@ Template.login.events({
                 });
                 return false;
             }
-            IonLoading.show();
+            IonLoading.show({
+              customTemplate :'<i class="fa fa-cog fa-spin font30"></i>'
+            });
             var passwordVar = $('#register_page').find('#login_password').val();
             //Meteor.loginWithPassword(emailVar, passwordVar);
             // $('#userwelcomemodel').modal('show');
@@ -163,7 +168,7 @@ Template.login.events({
                       IonLoading.show({
                         customTemplate:error.reason,
                         duration: 3000
-                      });                        
+                      });
                     }
                     else
                     {

@@ -22,7 +22,7 @@
         </div>
         {{#each cc_contects}}
           {{#if is_freeagent provider}}
-            {{#ionItem avatar=true}}
+            {{#ionItem avatar=true  path="tabs.one"}}
                <img src="{{image_src provider}}" width="" alt="{{provider}}" height="20">
                <h2>{{email}}</h2>
                <span class="pull-right label {{sync_label sync_state}} label-assertive">{{sync_state}}</span>
@@ -31,7 +31,7 @@
 
              {{/ionItem}}
             {{else}}
-              {{#ionItem avatar=true}}
+              {{#ionItem avatar=true  path="tabs.one"}}
                 <img src="{{image_src provider}}" width="" alt="{{provider}}" height="40">
                 <h2>{{email}}</h2>
                 <span class="pull-right label {{sync_label sync_state}} label-assertive">{{sync_state}}</span>

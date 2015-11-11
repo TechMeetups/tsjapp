@@ -9,6 +9,15 @@ Router.map(function()
     this.route('ccindex', {path: '/cc_index'});
     this.route('register', {path: '/register'});
     this.route('accountsetup', {path: '/accountsetup'});
+    this.route('contacts.show',  {
+        path: '/customer/:_id'
+    });
+    this.route('tabs.one', {path: '/tabs/one', layoutTemplate: 'tabsLayout'});
+    this.route('tabs.two', {path: '/tabs/two', layoutTemplate: 'tabsLayout'});
+    this.route('tabs.three', {path: '/tabs/three', layoutTemplate: 'tabsLayout'});
+    this.route('tabs.four', {path: '/tabs/four', layoutTemplate: 'tabsLayout'});
+    this.route('fatabs.one', {path: '/fatabs/one', layoutTemplate: 'tabsLayout'});
+    this.route('fatabs.two', {path: '/fatabs/two', layoutTemplate: 'tabsLayout'});
     this.route('login', {path: '/login',
         onBeforeAction: function ()
         {

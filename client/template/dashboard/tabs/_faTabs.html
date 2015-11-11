@@ -1,0 +1,13 @@
+<template name="_faTabs">
+  {{#if isAndroid}}
+    {{#ionTabs style="android" class="tabs-background-positive tabs-color-light"}}
+      {{> ionTab title="Invoice" path="fatabs.one" icon="android-home"}}
+      {{> ionTab title="other" path="fatabs.two" icon="android-star"}}
+    {{/ionTabs}}
+  {{else}}
+    {{#ionTabs style="ios"}}
+      {{> ionTab title="Invoice" path="fatabs.one" iconOff="ios-home-outline" iconOn="ios-home"}}
+      {{> ionTab title="other" path="fatabs.two" iconOff="ios-star-outline" iconOn="ios-star"}}
+    {{/ionTabs}}
+  {{/if}}
+</template>

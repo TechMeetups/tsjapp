@@ -1,0 +1,17 @@
+<template name="_tabs">
+  {{#if isAndroid}}
+    {{#ionTabs style="android" class="tabs-background-positive tabs-color-light"}}
+      {{> ionTab title="Click" path="tabs.one" icon="android-home"}}
+      {{> ionTab title="Open" path="tabs.two" icon="android-star"}}
+      {{> ionTab title="Send" path="tabs.three" icon="android-star"}}
+      {{> ionTab title="General" path="tabs.four" icon="gear-b"}}
+    {{/ionTabs}}
+  {{else}}
+    {{#ionTabs style="ios"}}
+      {{> ionTab title="Click" path="tabs.one" iconOff="ios-home-outline" iconOn="ios-home"}}
+      {{> ionTab title="Open" path="tabs.two" iconOff="ios-star-outline" iconOn="ios-star"}}
+      {{> ionTab title="Send" path="tabs.three" iconOff="ios-star-outline" iconOn="ios-heart"}}
+      {{> ionTab title="General" path="tabs.four" iconOff="ios-gear-outline" iconOn="ios-gear"}}
+    {{/ionTabs}}
+  {{/if}}
+</template>

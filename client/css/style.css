@@ -18,3 +18,17 @@ $loading-font-size: 22px;
   font-size: 18px !important;
   font-weight: 700;
 }
+.font30{
+  font-size: 30px !important;
+}
+.tab-item h2{
+  #padding: 5px;
+  margin: 5px;
+}
+.tab-item .active{
+  background-color: lightgray;
+}
+.tab-item a:hover, a:visited, a:link, a:active
+{
+  text-decoration: none;
+}
