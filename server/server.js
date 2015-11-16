@@ -192,8 +192,6 @@ var getConstantContactClickReport = function(user){
   }
 
 }
-
-
  var getConstantContactFormServer= function(user){
    var auth_code =   user.profile.cc_access_token
    var url = "https://api.constantcontact.com/v2/contacts";
