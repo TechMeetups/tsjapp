@@ -123,6 +123,15 @@ var APICallByServer = function(method,url,code,user_id){
   }
   return result.data;
 }
+var generalAPICall = function(method,url,code,user_id){
+  var result = Meteor.http.call(method, url,{
+      headers: {
+        "Authorization" : "Bearer "+code+""
+      },
+  });
+  return result.data;
+}
+
 var getCCContactfromServer = function(auth_code,url,user_id){
   var auth_code =  auth_code;
   var params = "&api_key="+CC_CLIENT_ID_KEY;
@@ -136,6 +145,55 @@ var getCCContactfromServer = function(auth_code,url,user_id){
      }
   }
 }
+var getEmailCampaigns= function(auth_code,url,user_id){
+  var auth_code =  auth_code;
+  var params = "&api_key="+CC_CLIENT_ID_KEY;
+  var result = generalAPICall("GET",url+params,auth_code,user_id);
+  if(result){
+     insert_email_campaigns(result,user_id)
+     if(result.meta.pagination.next_link){
+       var url = "https://api.constantcontact.com"+result.meta.pagination.next_link
+       console.log(url)
+       getEmailCampaigns(auth_code,url,user_id);
+     }else{
+     }
+  }
+}
+var getClickReport = function(auth_code,url,user_id,campaign_id){
+  var auth_code =  auth_code;
+  var params = "&api_key="+CC_CLIENT_ID_KEY;
+  cc_clicked.remove({user_id:user_id,user_campaign_id:campaign_id})
+  var result = generalAPICall("GET",url+params,auth_code,user_id);
+  if(result){
+     insert_click_reports(result,user_id,campaign_id)
+     if(result.meta.pagination.next_link){
+       var url = "https://api.constantcontact.com"+result.meta.pagination.next_link
+       console.log(url)
+       getClickReport(auth_code,url,user_id);
+     }else{
+     }
+  }
+}
+var getConstantContactEmailCampaigns = function(user){
+  var auth_code =   user.profile.cc_access_token;
+  var url = "https://api.constantcontact.com/v2/emailmarketing/campaigns";
+  var params = "?status=ALL&limit=50";
+  getEmailCampaigns(auth_code,url+params,user._id);
+}
+
+var getConstantContactClickReport = function(user){
+  var auth_code =   user.profile.cc_access_token;
+  var user_id = user._id;
+  var campaigns = cc_campaign.find({user_id:user_id}).fetch();
+  for(var i = 0; i < campaigns.length ;i++){
+    var url = "https://api.constantcontact.com/v2/emailmarketing/campaigns/"+campaigns[i].id+"/tracking/clicks";
+    var params = "?limit=50";
+    getClickReport(auth_code,url+params,user._id,campaigns[i].id);
+  }
+
+}
+
+
  var getConstantContactFormServer= function(user){
    var auth_code =   user.profile.cc_access_token
    var url = "https://api.constantcontact.com/v2/contacts";
@@ -252,7 +310,22 @@ var syncContacts = function(user){
     {
         return emailLists.find({user_id:user_id});
     });
-
+    Meteor.publish("cc_campaign", function (user_id)
+    {
+        return cc_campaign.find({user_id:user_id});
+    });
+    Meteor.publish("cc_sent_report", function (user_id)
+    {
+        return cc_sent_report.find({user_id:user_id});
+    });
+    Meteor.publish("cc_opened_report", function (user_id)
+    {
+        return cc_opened_report.find({user_id:user_id});
+    });
+    Meteor.publish("cc_clicked", function (user_id)
+    {
+        return cc_clicked.find({user_id:user_id});
+    });
     Meteor.startup(function () {
 
         // By default, the email is sent from no-reply@meteor.com. If you wish to receive email from users asking for help with their account, be sure to set this to an email address that you can receive email at.
@@ -367,6 +440,31 @@ var syncContacts = function(user){
             "The CCIntegration Team.\n"+Meteor.absoluteUrl()+"\n"
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
         });
+   }
+   var insert_click_reports = function(data,user_id,campaign_id){
+     var clickReports = data.results
+     for(var i=0;i < clickReports.length ; i++)
+     {
+       var jsondata = clickReports[i];
+         jsondata['user_id'] = user_id;
+         jsondata['user_campaign_id']=campaign_id
+         cc_clicked.insert(jsondata);
+     }
+   }
+   var insert_email_campaigns = function(data,user_id){
+     var campaigns = data.results
+
+     for(var i=0;i < campaigns.length ; i++)
+     {
+       var jsondata = campaigns[i];
+         jsondata['user_id'] = user_id;
+         var campaign = cc_campaign.findOne({id:jsondata.id});
+         if(campaign){
+           cc_campaign.update({_id:campaign._id},{$set:jsondata});
+         }else{
+           cc_campaign.insert(jsondata);
+         }
+     }
    }
    var cc_contect_insert = function(data,user_id){
      var contect = data.results

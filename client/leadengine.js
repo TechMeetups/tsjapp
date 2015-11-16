@@ -13,6 +13,18 @@ Deps.autorun(function() {
 Deps.autorun(function() {
   emailLists_subscribe_list = Meteor.subscribe("emailLists",Meteor.userId());
 })
+Deps.autorun(function() {
+  cc_campaign_subscribe_list = Meteor.subscribe("cc_campaign",Meteor.userId());
+})
+Deps.autorun(function() {
+  cc_sent_report_subscribe_list = Meteor.subscribe("cc_sent_report",Meteor.userId());
+})
+Deps.autorun(function() {
+  cc_opened_report_subscribe_list = Meteor.subscribe("cc_opened_report",Meteor.userId());
+})
+Deps.autorun(function() {
+  cc_clicked_subscribe_list = Meteor.subscribe("cc_clicked",Meteor.userId());
+})
 Meteor.startup(function(){
   //router = new Auth_Router();
 
