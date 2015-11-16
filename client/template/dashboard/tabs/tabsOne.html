@@ -3,7 +3,25 @@
   {{> _tabsHeader}}
   {{> _tabsSubHeader}}
   {{#ionContent class="padding"}}
-    <h1>Tab 1</h1>
+
+  <div class="list card">
+    <div class="item item-avatar">
+      <img src="{{image_src provider}}">
+      <h2>{{first_name}} {{last_name}}</h2>
+      <p>organisation : {{organisation_name}} {{company_name}}</p>
+      <p>{{country}}</p>
+    </div>
+
+    <div class="item item-body">
+      <p>emails : {{email}}</p>
+      <p>status : {{status}}</p>
+      {{{activeLabel}}}
+      <h4>Notes</h4>
+      <p>
+        {{details.notes}}
+      </p>
+    </div>
+  </div>
   {{/ionContent}}
   {{> _tabs}}
   {{/ionView}}

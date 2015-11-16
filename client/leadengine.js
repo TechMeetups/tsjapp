@@ -4,8 +4,6 @@ Template.registerHelper('fa_login_url', function(){
 Template.registerHelper('cc_login_url', function(){
   return "https://oauth2.constantcontact.com/oauth2/oauth/siteowner/authorize?response_type=code&client_id="+CC_CLIENT_ID_KEY+"&redirect_uri="+CC_AUTH_URL+"&access_type=offline";
 });
-
-
 Deps.autorun(function() {
   contacts_subscribe_list = Meteor.subscribe("contacts",Meteor.userId());
 })
@@ -17,7 +15,7 @@ Deps.autorun(function() {
   cc_campaign_subscribe_list = Meteor.subscribe("cc_campaign",Meteor.userId());
 })
 Deps.autorun(function() {
-  cc_sent_report_subscribe_list = Meteor.subscribe("cc_sent_report",Meteor.userId());
+  cc_sent_report_subscribe_list = Meteor.subscribe("cc_send_report",Meteor.userId());
 })
 Deps.autorun(function() {
   cc_opened_report_subscribe_list = Meteor.subscribe("cc_opened_report",Meteor.userId());

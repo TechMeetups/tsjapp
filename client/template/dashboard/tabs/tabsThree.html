@@ -3,7 +3,13 @@
   {{> _tabsHeader}}
   {{> _tabsSubHeader}}
   {{#ionContent class="padding"}}
-    <h1>Tab 3</h1>
+  {{#each cc_send_report_helper}}
+      {{#ionItem}}
+         <h2>{{email_address}}</h2>
+         <p>{{activity_type}}</p>
+         <p> campaign : {{campaign campaign_id}}</p>
+       {{/ionItem}}
+   {{/each}}
   {{/ionContent}}
   {{> _tabs}}
   {{/ionView}}

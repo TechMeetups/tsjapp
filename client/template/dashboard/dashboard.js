@@ -50,16 +50,17 @@ Template._myPopover.events({
   IonLoading.show({
     customTemplate :'<i class="fa fa-cog fa-spin font30"></i>'
   });
-  refresh_fa_access_token(function(result){
-    if(result){
-      localStorage.setItem("fa_access_token",result.access_token);
-      localStorage.setItem("fa_token_type",result.token_type);
-      updateUserFaAccess();
-      var access_token = localStorage.getItem("fa_access_token");
-      var page =1;
-      getfreeagentcontect(page,access_token)
-    }
-  })
+  getfreeagentcontect(Meteor.user());
+  // refresh_fa_access_token(function(result){
+  //   if(result){
+  //     localStorage.setItem("fa_access_token",result.access_token);
+  //     localStorage.setItem("fa_token_type",result.token_type);
+  //     updateUserFaAccess();
+  //     var access_token = localStorage.getItem("fa_access_token");
+  //     var page =1;
+  //     getfreeagentcontect(page,access_token)
+  //   }
+  // })
 },
 'click #cc_contacts' : function(event, template){
     IonPopover.hide()

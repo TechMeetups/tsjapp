@@ -11,13 +11,49 @@ Router.map(function()
     this.route('accountsetup', {path: '/accountsetup'});
     this.route('contacts.show',  {
         path: '/customer/:_id'
+
     });
-    this.route('tabs.one', {path: '/tabs/one', layoutTemplate: 'tabsLayout'});
-    this.route('tabs.two', {path: '/tabs/two', layoutTemplate: 'tabsLayout'});
-    this.route('tabs.three', {path: '/tabs/three', layoutTemplate: 'tabsLayout'});
-    this.route('tabs.four', {path: '/tabs/four', layoutTemplate: 'tabsLayout'});
-    this.route('fatabs.one', {path: '/fatabs/one', layoutTemplate: 'tabsLayout'});
-    this.route('fatabs.two', {path: '/fatabs/two', layoutTemplate: 'tabsLayout'});
+    this.route('tabs.one',
+    {
+      path: '/tabs/one/:_id',
+      data:function(){
+        var id = this.params._id;
+        var data = contacts.findOne({_id:id});
+        console.log(data)
+        return data;
+      },
+    layoutTemplate: 'tabsLayout'});
+    this.route('tabs.two', {path: '/tabs/two/:_id', layoutTemplate: 'tabsLayout',
+    data:function(){
+      var id = this.params._id;
+      var data = contacts.findOne({_id:id});
+      console.log(data)
+      return data;
+    }});
+    this.route('tabs.three', {path: '/tabs/three/:_id', data:function(){
+      var id = this.params._id;
+      var data = contacts.findOne({_id:id});
+      console.log(data)
+      return data;
+    },layoutTemplate: 'tabsLayout'});
+    this.route('tabs.four', {path: '/tabs/four/:_id', data:function(){
+      var id = this.params._id;
+      var data = contacts.findOne({_id:id});
+      console.log(data)
+      return data;
+    },layoutTemplate: 'tabsLayout'});
+    this.route('fatabs.one', {path: '/fatabs/one/:_id', data:function(){
+      var id = this.params._id;
+      var data = contacts.findOne({_id:id});
+      console.log(data)
+      return data;
+    },layoutTemplate: 'tabsLayout'});
+    this.route('fatabs.two', {path: '/fatabs/two/:_id', data:function(){
+      var id = this.params._id;
+      var data = contacts.findOne({_id:id});
+      console.log(data)
+      return data;
+    }, layoutTemplate: 'tabsLayout'});
     this.route('login', {path: '/login',
         onBeforeAction: function ()
         {

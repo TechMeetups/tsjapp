@@ -86,6 +86,7 @@ var getFreeagentContectFromServer = function(user){
     getFreeagentContectAPI(page,refresh.data.access_token,user)
   }
 }
+
 var refresh_fa_access_token_from_server = function(user){
   var profile = user.profile;
   var formData = {
@@ -109,6 +110,30 @@ var refresh_fa_access_token_from_server = function(user){
      return null;
    }
 }
+var fa_access_token_from_server = function(auth_code){
+  var formData = {
+       grant_type : "authorization_code",
+       code: auth_code,
+       client_id : FA_CLIENT_ID_KEY,
+       client_secret : FA_CLIENT_SECRET_KEY,
+       redirect_uri : FA_AUTH_URL
+   };
+   var method ="POST"
+   var url = "https://api.freeagent.com/v2/token_endpoint";
+
+   var result = Meteor.http.call(method, url,{
+       headers: {
+         "User-Agent" : "Mozilla/5.0 (Windows NT 5.1; rv:19.0) Gecko/20100101 Firefox/19.0"
+       },
+       data:formData
+   });
+   if (result){
+     return result;
+   }else{
+     return null;
+   }
+}
+
 var APICallByServer = function(method,url,code,user_id){
   var result = Meteor.http.call(method, url,{
       headers: {
@@ -174,6 +199,36 @@ var getClickReport = function(auth_code,url,user_id,campaign_id){
      }
   }
 }
+var getOpenReport = function(auth_code,url,user_id,campaign_id){
+  var auth_code =  auth_code;
+  var params = "&api_key="+CC_CLIENT_ID_KEY;
+  cc_send_report.remove({user_id:user_id,user_campaign_id:campaign_id})
+  var result = generalAPICall("GET",url+params,auth_code,user_id);
+  if(result){
+     insert_open_reports(result,user_id,campaign_id)
+     if(result.meta.pagination.next_link){
+       var url = "https://api.constantcontact.com"+result.meta.pagination.next_link
+       console.log(url)
+       getOpenReport(auth_code,url,user_id);
+     }else{
+     }
+  }
+}
+var getSendReport = function(auth_code,url,user_id,campaign_id){
+  var auth_code =  auth_code;
+  var params = "&api_key="+CC_CLIENT_ID_KEY;
+  cc_opened_report.remove({user_id:user_id,user_campaign_id:campaign_id})
+  var result = generalAPICall("GET",url+params,auth_code,user_id);
+  if(result){
+     insert_send_reports(result,user_id,campaign_id)
+     if(result.meta.pagination.next_link){
+       var url = "https://api.constantcontact.com"+result.meta.pagination.next_link
+       console.log(url)
+       getSendReport(auth_code,url,user_id);
+     }else{
+     }
+  }
+}
 var getConstantContactEmailCampaigns = function(user){
   var auth_code =   user.profile.cc_access_token;
   var url = "https://api.constantcontact.com/v2/emailmarketing/campaigns";
@@ -184,13 +239,37 @@ var getConstantContactEmailCampaigns = function(user){
 var getConstantContactClickReport = function(user){
   var auth_code =   user.profile.cc_access_token;
   var user_id = user._id;
-  var campaigns = cc_campaign.find({user_id:user_id}).fetch();
+  var campaigns = cc_campaign.find({user_id:user_id,status:"SENT"}).fetch();
+  console.log(campaigns.length);
   for(var i = 0; i < campaigns.length ;i++){
     var url = "https://api.constantcontact.com/v2/emailmarketing/campaigns/"+campaigns[i].id+"/tracking/clicks";
     var params = "?limit=50";
     getClickReport(auth_code,url+params,user._id,campaigns[i].id);
   }
 
+}
+
+var getConstantContactOpenReport = function(user){
+  var auth_code =   user.profile.cc_access_token;
+  var user_id = user._id;
+  var campaigns = cc_campaign.find({user_id:user_id,status:"SENT"}).fetch();
+  console.log(campaigns.length);
+  for(var i = 0; i < campaigns.length ;i++){
+    var url = "https://api.constantcontact.com/v2/emailmarketing/campaigns/"+campaigns[i].id+"/tracking/opens";
+    var params = "?limit=50";
+    getOpenReport(auth_code,url+params,user._id,campaigns[i].id);
+  }
+}
+var getConstantContactSendReport = function(user){
+  var auth_code =   user.profile.cc_access_token;
+  var user_id = user._id;
+  var campaigns = cc_campaign.find({user_id:user_id,status:"SENT"}).fetch();
+  console.log(campaigns.length);
+  for(var i = 0; i < campaigns.length ;i++){
+    var url = "https://api.constantcontact.com/v2/emailmarketing/campaigns/"+campaigns[i].id+"/tracking/sends";
+    var params = "?limit=50";
+    getSendReport(auth_code,url+params,user._id,campaigns[i].id);
+  }
 }
  var getConstantContactFormServer= function(user){
    var auth_code =   user.profile.cc_access_token
@@ -312,9 +391,9 @@ var syncContacts = function(user){
     {
         return cc_campaign.find({user_id:user_id});
     });
-    Meteor.publish("cc_sent_report", function (user_id)
+    Meteor.publish("cc_send_report", function (user_id)
     {
-        return cc_sent_report.find({user_id:user_id});
+        return cc_send_report.find({user_id:user_id});
     });
     Meteor.publish("cc_opened_report", function (user_id)
     {
@@ -447,6 +526,26 @@ var syncContacts = function(user){
          jsondata['user_id'] = user_id;
          jsondata['user_campaign_id']=campaign_id
          cc_clicked.insert(jsondata);
+     }
+   }
+   var insert_open_reports = function(data,user_id,campaign_id){
+     var openReports = data.results
+     for(var i=0;i < openReports.length ; i++)
+     {
+       var jsondata = openReports[i];
+         jsondata['user_id'] = user_id;
+         jsondata['user_campaign_id']=campaign_id
+         cc_opened_report.insert(jsondata);
+     }
+   }
+   var insert_send_reports = function(data,user_id,campaign_id){
+     var sendReports = data.results
+     for(var i=0;i < sendReports.length ; i++)
+     {
+       var jsondata = sendReports[i];
+         jsondata['user_id'] = user_id;
+         jsondata['user_campaign_id']=campaign_id
+         cc_send_report.insert(jsondata);
      }
    }
    var insert_email_campaigns = function(data,user_id){
@@ -609,6 +708,27 @@ var syncContacts = function(user){
         authenticate : function(code){
           this.unblock();
           return authenticate(code)
+        },
+        getFreeagentContectFromServer : function(user){
+          this.unblock();
+          return getFreeagentContectFromServer(user)
+        },
+        getFaAcesstoken : function(auth_code){
+          this.unblock();
+          return fa_access_token_from_server(auth_code);
+        },
+        getConstantContactEmailCampaigns:function(user){
+          this.unblock();
+          return getConstantContactEmailCampaigns(user);
+        },
+        getConstantContactClickReport:function(user){
+          return getConstantContactClickReport(user);
+        },
+        getConstantContactOpenReport:function(user){
+          return getConstantContactOpenReport(user);
+        },
+        getConstantContactSendReport : function(user){
+          return getConstantContactSendReport(user);
         },
         APICall : function (method,url, code){
           this.unblock();

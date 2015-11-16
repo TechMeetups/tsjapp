@@ -3,7 +3,15 @@
   {{> _tabsSubHeader}}
   {{#ionView}}
   {{#ionContent class="padding" }}
-  <h1>Tab 2</h1>
+  <button type='button' class='btn btn-lg btn-default' id="run_report">Run Report</button>
+  <div style="padding:10px;"></div>
+  {{#each cc_opened_report}}
+      {{#ionItem}}
+         <h2>{{email_address}}</h2>
+         <p>{{activity_type}}</p>
+         <p> campaign : {{campaign campaign_id}}</p>
+       {{/ionItem}}
+   {{/each}}
   {{/ionContent}}
   {{> _tabs}}
   {{/ionView}}
