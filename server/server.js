@@ -467,7 +467,7 @@ var syncContacts = function(user){
         name: 'FA-CC Contact Sync',
         schedule: function(parser) {
           // parser is a later.parse object
-          return parser.text('every 60 minutes');
+          return parser.text('every 3 hours');
         },
         job: function() {
           autoSyncContact()
