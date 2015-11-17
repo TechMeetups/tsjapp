@@ -1,17 +1,34 @@
 <template name="tabsTwo">
-  {{> _tabsHeader}}
-  {{> _tabsSubHeader}}
+  {{#ionHeaderBar class="bar-positive"}}
+    {{>ionNavBackButton path="dashboard" text="dashboard"}}
+    <h1 class="title">Invoices</h1>
+  {{/ionHeaderBar}}
   {{#ionView}}
   {{#ionContent class="padding" }}
-  <button type='button' class='btn btn-lg btn-default' id="run_report">Run Report</button>
-  <div style="padding:10px;"></div>
-  {{#each cc_opened_report}}
+  <!-- <button type='button' class='btn btn-lg btn-default' id="run_report">Run Report</button> -->
+  <!-- <div style="padding:10px;"></div> -->
+  <!-- {{#each cc_opened_report}}
       {{#ionItem}}
          <h2>{{email_address}}</h2>
          <p>{{activity_type}}</p>
          <p> campaign : {{campaign campaign_id}}</p>
        {{/ionItem}}
-   {{/each}}
+   {{/each}} -->
+   {{#each invoices}}
+       {{#ionItem}}
+          <h2>Notes : {{comments}}</h2>
+          <p>Status : {{status}}</p>
+          <h2>Invoice Items</h2>
+          {{#each invoice_items}}
+            <p>description : {{description}} | item type : {{item_type}} |  price : {{price}} | quantity : {{quantity}}  </p>
+          {{/each}}
+          <p>Net value : {{net_value}}</p>
+          <p>Sales Tax : {{sales_tax_value}}</p>
+          <p>Total Value : {{total_value}}</p>
+          <p>Paid Value : {{paid_value}}</p>
+          <p>Due Value : {{due_value}}</p>
+        {{/ionItem}}
+    {{/each}}
   {{/ionContent}}
   {{> _tabs}}
   {{/ionView}}

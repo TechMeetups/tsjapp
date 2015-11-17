@@ -1,13 +1,15 @@
 <template name="tabsThree">
   {{#ionView}}
-  {{> _tabsHeader}}
-  {{> _tabsSubHeader}}
+  {{#ionHeaderBar class="bar-positive"}}
+    {{>ionNavBackButton path="dashboard" text="dashboard"}}
+    <h1 class="title">Campaigns</h1>
+  {{/ionHeaderBar}}
   {{#ionContent class="padding"}}
-  {{#each cc_send_report_helper}}
+  {{#each campaigns}}
       {{#ionItem}}
-         <h2>{{email_address}}</h2>
-         <p>{{activity_type}}</p>
-         <p> campaign : {{campaign campaign_id}}</p>
+         <h2>{{name}}</h2>
+         <p>{{status}}</p>
+         <p>{{modified_date}}</p>
        {{/ionItem}}
    {{/each}}
   {{/ionContent}}

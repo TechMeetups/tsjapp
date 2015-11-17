@@ -16,6 +16,9 @@ Template.tabsThree.helpers({
   },
   campaign: function(id){
     return cc_campaign.findOne({id:id}).name;
+  },
+  campaigns : function(){
+    return cc_campaign.find({user_id:Meteor.userId()})
   }
 });
 

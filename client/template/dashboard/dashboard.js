@@ -62,6 +62,66 @@ Template._myPopover.events({
   //   }
   // })
 },
+'click #load_report' : function(event, template){
+  IonPopover.hide();
+  IonLoading.show({
+    customTemplate :'<i class="fa fa-cog fa-spin font30"></i>'
+  });
+  Meteor.call("getConstantContactEmailCampaigns",Meteor.user(), function(error, result){
+    if(error){
+      console.log("error", error);
+    }
+    else
+    {
+        console.log(result)
+        IonLoading.hide();
+        IonLoading.show({
+          customTemplate :'<i class="fa fa-cog fa-spin font30"></i>'
+        });
+        Meteor.call("getConstantContactClickReport",Meteor.user(), function(error, result){
+          if(error){
+            console.log("error", error);
+            IonLoading.hide();
+          }else{
+            IonLoading.hide();
+            console.log("getConstantContactClickReport")
+            console.log(result)
+          }
+        });
+        Meteor.call("getConstantContactOpenReport",Meteor.user(), function(error, result){
+          if(error){
+            console.log("error", error);
+            IonLoading.hide();
+          }else{
+            console.log("getConstantContactClickReport")
+            console.log(result)
+            IonLoading.hide();
+          }
+        });
+        Meteor.call("getConstantContactSendReport",Meteor.user(), function(error, result){
+          if(error){
+            console.log("error", error);
+            IonLoading.hide();
+          }else{
+            console.log("getConstantContactSendReport")
+            console.log(result)
+            IonLoading.hide();
+          }
+        });
+
+        Meteor.call("getFreeagentInvoice",Meteor.user(), function(error, result){
+          if(error){
+            console.log("error", error);
+            IonLoading.hide();
+          }else{
+            console.log("getFreeagentInvoice")
+            console.log(result)
+            IonLoading.hide();
+          }
+        });
+    }
+  });
+},
 'click #cc_contacts' : function(event, template){
     IonPopover.hide()
     if(!is_cc_account_active()){

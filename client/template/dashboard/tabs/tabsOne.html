@@ -1,9 +1,10 @@
 <template name="tabsOne">
   {{#ionView}}
-  {{> _tabsHeader}}
-  {{> _tabsSubHeader}}
+  {{#ionHeaderBar class="bar-positive"}}
+    {{>ionNavBackButton path="dashboard" text="dashboard"}}
+    <h1 class="title">General Information</h1>
+  {{/ionHeaderBar}}
   {{#ionContent class="padding"}}
-
   <div class="list card">
     <div class="item item-avatar">
       <img src="{{image_src provider}}">
@@ -11,15 +12,10 @@
       <p>organisation : {{organisation_name}} {{company_name}}</p>
       <p>{{country}}</p>
     </div>
-
     <div class="item item-body">
       <p>emails : {{email}}</p>
       <p>status : {{status}}</p>
       {{{activeLabel}}}
-      <h4>Notes</h4>
-      <p>
-        {{details.notes}}
-      </p>
     </div>
   </div>
   {{/ionContent}}

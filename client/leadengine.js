@@ -23,6 +23,10 @@ Deps.autorun(function() {
 Deps.autorun(function() {
   cc_clicked_subscribe_list = Meteor.subscribe("cc_clicked",Meteor.userId());
 })
+Deps.autorun(function() {
+  cc_clicked_subscribe_list = Meteor.subscribe("fa_invoices",Meteor.userId());
+})
+
 Meteor.startup(function(){
   //router = new Auth_Router();
 

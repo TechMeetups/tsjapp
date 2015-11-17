@@ -78,6 +78,47 @@ var getFreeagentContectAPI = function(page,token,user){
     getFreeagentContectAPI(page,token,user);
   }
 }
+var getFreeagentInvoiceAPI = function(page,token,user){
+  var method = "GET"
+  console.log(token)
+  url = "https://api.freeagent.com/v2/invoices?page="+page+"&per_page=25&nested_invoice_items=true";
+  var result = Meteor.http.call(method, url,{
+      headers: {
+        "Authorization" : "Bearer "+token+"",
+        "User-Agent" : "Mozilla/5.0 (Windows NT 5.1; rv:19.0) Gecko/20100101 Firefox/19.0"
+      }
+  });
+  result = result.data;
+  var result_count = result.invoices.length;
+  if(result_count > 0){
+    page = page +1 ;
+    faInvoicesInsertToDB(result,user._id);
+    getFreeagentInvoiceAPI(page,token,user);
+  }
+}
+
+var faInvoicesInsertToDB = function(result,userId){
+  result = result.invoices
+  for(var i = 0;i< result.length ; i++){
+    var jsondata = result[i];
+    jsondata['provider'] = "freeagent";
+    jsondata['user_id'] = userId;
+    var fa_invoice = fa_invoices.findOne({user_id:userId,url:jsondata.url,provider:"freeagent"});
+    if(fa_invoice){
+      fa_invoices.update({_id:fa_invoice._id},{$set:jsondata});
+    }else{
+      fa_invoices.insert(jsondata);
+    }
+  }
+}
+var getFreeagentInvoice = function(user){
+  var refresh = refresh_fa_access_token_from_server(user);
+  if(refresh){
+    var page =1;
+    Meteor.users.update({_id:user._id}, {$set:{"profile.fa_access_token":refresh.data.access_token}});
+    getFreeagentInvoiceAPI(page,refresh.data.access_token,user)
+  }
+}
 var getFreeagentContectFromServer = function(user){
   var refresh = refresh_fa_access_token_from_server(user);
   if(refresh){
@@ -402,6 +443,10 @@ var syncContacts = function(user){
     Meteor.publish("cc_clicked", function (user_id)
     {
         return cc_clicked.find({user_id:user_id});
+    });
+    Meteor.publish("fa_invoices", function (user_id)
+    {
+        return fa_invoices.find({user_id:user_id});
     });
     Meteor.startup(function () {
 
@@ -729,6 +774,9 @@ var syncContacts = function(user){
         },
         getConstantContactSendReport : function(user){
           return getConstantContactSendReport(user);
+        },
+        getFreeagentInvoice : function(user){
+          return getFreeagentInvoice(user);
         },
         APICall : function (method,url, code){
           this.unblock();
