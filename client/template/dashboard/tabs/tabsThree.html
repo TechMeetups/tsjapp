@@ -1,7 +1,12 @@
 <template name="tabsThree">
   {{#ionView}}
   {{#ionHeaderBar class="bar-positive"}}
-    {{>ionNavBackButton path="dashboard" text="dashboard"}}
+  <button class="buttons button button-clear back-button pull-left" onclick="window.history.back();return false;">
+    <i class="icon ion-ios-arrow-back"></i>
+      <span class="back-text">
+        Back
+      </span>
+  </button>
     <h1 class="title">Campaigns</h1>
   {{/ionHeaderBar}}
   {{#ionContent class="padding"}}
@@ -10,6 +15,7 @@
          <h2>{{name}}</h2>
          <p>{{status}}</p>
          <p>{{modified_date}}</p>
+         <h2>click : {{clicked_count}} open : {{clicked_count}} send : {{send_count}}</h2>
        {{/ionItem}}
    {{/each}}
   {{/ionContent}}
