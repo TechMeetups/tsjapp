@@ -16,8 +16,7 @@
    {{/each}} -->
    {{#each invoices}}
        {{#ionItem}}
-          <h2>Notes : {{comments}}</h2>
-          <p>Status : {{status}}</p>
+          <h2>Date : {{dated_on}}</h2>
           <h2>Invoice Items</h2>
           {{#each invoice_items}}
             <p>description : {{description}} | item type : {{item_type}} |  price : {{price}} | quantity : {{quantity}}  </p>
@@ -26,6 +25,7 @@
           <p>Sales Tax : {{sales_tax_value}}</p>
           <p>Total Value : {{total_value}}</p>
           <p>Paid Value : {{paid_value}}</p>
+          <p>Status : {{status}}</p>
           <p>Due Value : {{due_value}}</p>
         {{/ionItem}}
     {{/each}}
