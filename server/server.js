@@ -324,6 +324,7 @@ var autoSyncContact = function(){
   for(var i=0;i < users.length;i++){
     var user = users[i];
     console.log(user)
+    profile = user.profile
     if(profile){
       try {
         console.log(profile)
