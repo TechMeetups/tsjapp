@@ -32,3 +32,6 @@ $loading-font-size: 22px;
 {
   text-decoration: none;
 }
+.align-title-center{
+  text-align: center !important;
+}
