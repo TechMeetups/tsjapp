@@ -1,17 +1,17 @@
 <template name="ccindex">
   {{#contentFor "headerButtonLeft"}}
-    {{>ionNavBackButton path="dashboard" text="dashboard"}}
+    {{>ionNavBackButton path="accountsetup" text="Back"}}
   {{/contentFor}}
 
   {{#contentFor "headerTitle"}}
-    <h1 class="title">constant contact</h1>
+    <h1 class="title">Constant Contact</h1>
   {{/contentFor}}
   {{#ionView}}
     {{#ionContent class="padding contact-detail"}}
         <div class="list card">
           <div class="item item-avatar">
             <img src="/assets/img/constant-contact-share-logo.gif">
-            <h2>constant contact</h2>
+            <h2>Constant Contact</h2>
             <p>Email Marketing System</p>
           </div>
 
@@ -27,9 +27,9 @@
         </div>
         {{#ionList}}
           {{#ionItem}}
-            <div class="item">
+            
              <div class="input-label">
-               Select email list to sync
+               Select Email List to sync
              </div>
              <div class="item item-input-inset">
               <select class="item-input-wrapper" id="default_email">
@@ -39,7 +39,7 @@
               </select>
               <button class="button button-small" id="btn_save_eamil_list" style="padding: 2px 40px 1px;">Save</button>
               </div>
-            </div>
+            
            {{/ionItem}}
             {{#ionItem buttonRight=true avatar=true}}
                 <div class="" style="text-align: center;padding-top: 10px;">
@@ -48,7 +48,7 @@
              {{/ionItem}}
              {{#ionItem buttonRight=true avatar=true}}
                <div class="" style="text-align: center;padding-top: 10px;">
-                 <button type="button" class="btn-lg btn-primary" id="cc_contects">Get Contects</button>
+                 <button type="button" class="btn-lg btn-primary" id="cc_contects">Get Contacts</button>
                </div>
               {{/ionItem}}
 
