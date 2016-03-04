@@ -23,6 +23,6 @@ Template.dashboard.helpers({
 Template.dashboard.events({
   'onkeyup #search': function (event, template) {
     console.log($(this).val());
-    session.set("search","")
+    //session.set("search","")
   }
 });
