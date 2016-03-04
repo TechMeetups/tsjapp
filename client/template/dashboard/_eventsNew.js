@@ -11,8 +11,8 @@ AutoForm.hooks({
   }
 });
 Template._eventsNew.events({
-  'click #btn_cancel': function (event, template) {
-    event.preventDefault();
-    Router.go('dashboard');
-  }
+  // 'click #btn_cancel': function (event, template) {
+  //   event.preventDefault();
+  //   Router.go('dashboard');
+  // }
 });

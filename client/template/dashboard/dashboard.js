@@ -19,7 +19,6 @@ Template.dashboard.helpers({
     return Events.find();
   }
 });
-
 Template.dashboard.events({
   'onkeyup #search': function (event, template) {
     console.log($(this).val());
