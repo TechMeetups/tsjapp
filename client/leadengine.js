@@ -1,8 +1,12 @@
-Meteor.startup(function(){
+Meteor.startup(function()
+{
   //router = new Auth_Router();
   AutoForm.setDefaultTemplate('ionic');
-  for(var property in Template){
-          if(Blaze.isTemplate(Template[property])){
+
+  for(var property in Template)
+  {
+          if(Blaze.isTemplate(Template[property]))
+          {
               var template = Template[property];
               // assign the template an onRendered callback who simply prints the view name
               template.onRendered(function(){
@@ -14,8 +18,10 @@ Meteor.startup(function(){
 // Client specific code *******************************************************************************
 if (Meteor.isClient)
 {
-  Template.layout.events({
-    "click .logout": function(event, template){
+  Template.layout.events(
+  {
+    "click .logout": function(event, template)
+    {
       console.log("checklogin")
       Meteor.logout();
       Session.set('login_user',null)

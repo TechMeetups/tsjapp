@@ -1,6 +1,8 @@
-function resetLoginDetails(){
+function resetLoginDetails()
+{
   profile = Meteor.user().profile
-  if(profile){
+  if(profile)
+  {
   	localStorage.setItem("cc_access_token",isNotEmptyValue(profile.cc_access_token));
   	localStorage.setItem("cc_token_type",isNotEmptyValue(profile.cc_token_type));
   	localStorage.setItem("cc_auth_code",isNotEmptyValue(profile.cc_auth_code));

@@ -186,3 +186,17 @@ a.dropdown-toggle::after {
     line-height: 200px ;
     text-align: center;
 }
+
+@media screen and (min-device-width: 480px) {
+    .background.scroll-content {
+      background: url('../img/Happy-Team.jpg') no-repeat;
+      background-size: cover;
+    }
+}
+
+@media screen and (min-device-width: 720px) {
+    .background.scroll-content {
+      background: url('../img/Happy-Team.jpg') no-repeat;
+      background-size: cover;
+    }
+}

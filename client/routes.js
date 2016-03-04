@@ -7,8 +7,11 @@ Router.map(function()
     this.route('dashboard', {path:"/events"} );
     this.route('register', {path: '/register'});
     this.route('accountsetup', {path: '/accountsetup'});
-    this.route('events.show',  {
-        path: '/event/:_id', data:function(){
+    this.route('events.show',  
+    {
+        path: '/event/:_id', 
+        data:function()
+        {
             var id = this.params._id;
             var data = Events.findOne({_id:id});
             return data;
@@ -40,6 +43,7 @@ Router.map(function()
             }
         }
     });
+    
     this.route('/', function ()
     {
       if (Meteor.user())

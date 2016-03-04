@@ -1,5 +1,6 @@
 EVENT_INCREMENT = 10;
-Template.dashboard.created = function () {
+Template.dashboard.created = function () 
+{
   Session.set('search_terms','')
   Session.set("eventLimit",EVENT_INCREMENT)
   this.autorun(function () {
@@ -7,21 +8,29 @@ Template.dashboard.created = function () {
   }.bind(this));
 };
 
-Template.dashboard.rendered = function () {
-  this.autorun(function () {
-    if (!this.subscription.ready()) {
+Template.dashboard.rendered = function () 
+{
+  this.autorun(function () 
+  {
+    if (!this.subscription.ready()) 
+    {
       IonLoading.show();
-    } else {
+    } 
+    else 
+    {
       IonLoading.hide();
     }
   }.bind(this));
 };
 
-Template.dashboard.helpers({
-  events: function () {
+Template.dashboard.helpers(
+{
+  events: function () 
+  {
     return event_manager.getList();
   },
-  format_date : function(date){
+  format_date : function(date)
+  {
     return event_manager.format_data(date)
   },
   moreTasks  : function()
@@ -29,13 +38,17 @@ Template.dashboard.helpers({
       return !(event_manager.getCount() < Session.get("eventLimit"));
     }
 });
-Template.dashboard.events({
-  'keyup #search': function (event, template) {
+
+Template.dashboard.events(
+{
+  'keyup #search': function (event, template) 
+  {
     search_terms = $(event.currentTarget).val();
     //Session.get('search_terms')
     event_manager.search(search_terms)
   },
-  'click #showMoreResults' : function(event, template){
+  'click #showMoreResults' : function(event, template)
+  {
 
     Session.set("eventLimit",Session.get("eventLimit") + EVENT_INCREMENT);
 

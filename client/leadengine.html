@@ -4,6 +4,7 @@
     <script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 </head>
+
 <template name="checklogin">
   {{#contentFor "headerButtonLeft"}}
     {{#if currentUser}}
@@ -19,9 +20,11 @@
     {{/if}}
   {{/contentFor}}
 </template>
+
 <template name="layout">
 {{#ionBody}}
   {{#ionSideMenuContainer}}
+
   {{#if currentUser}}
     {{#ionSideMenus}}
       {{#ionSideMenu}}
@@ -53,14 +56,16 @@
         </div>
       {{/ionSideMenu}} -->
     {{/ionSideMenus}}
+
     {{/if}}
+
     {{#ionSideMenuContent}}
       {{> ionNavBar class="bar-positive"}}
         {{#ionNavView}}
           {{> yield}}
         {{/ionNavView}}
-        {{#ionFooterBar class="bar-dark"}}
-          <h1 class="title">(c) 2015 TechStartupJobs</h1>
+        {{#ionFooterBar class="bar-positive" align-title="left"}}
+          <h2 class="title">(c) 2015 TechMeetups</h2>
         {{/ionFooterBar}}
     {{/ionSideMenuContent}}
   {{/ionSideMenuContainer}}
