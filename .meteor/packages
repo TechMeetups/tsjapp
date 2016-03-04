@@ -37,3 +37,8 @@ fourseven:scss@2.0.0
 meteoric:ionic-sass
 meteoric:ionicons-sass
 meteoric:ionic
+meteoric:autoform-ionic
+matb33:collection-hooks
+aldeed:collection2
+aldeed:autoform
+zimme:iron-router-active
