@@ -23,18 +23,16 @@
                <p>{{format_date start}}</p>
                <p>{{address}}</p>
              {{/ionItem}}
-             {{#if moreTasks}}
-                  <div id="showMoreEvents" style="margin-left: 25px;">
-                      <!-- Loading ...
-                      <span class="loading fa fa-cog fa-spin fa-2x"></span> -->
-                  </div>
-              {{/if}}
+
         {{/each}}
       {{/ionList}}
-      <ion-infinite-scroll
-    on-infinite="showMoreVisible()"
-    distance="1%">
-  </ion-infinite-scroll>
+      {{#if moreTasks}}
+           <div id="showMoreEvents" style="">
+             <button id="showMoreResults" type="button " class="button button-block button-positive">Load More...</button>
+               <!-- Loading ...
+               <span class="loading fa fa-cog fa-spin fa-2x"></span> -->
+           </div>
+       {{/if}}
     </div>
     {{/ionContent}}
   {{/ionView}}
