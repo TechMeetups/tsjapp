@@ -7,7 +7,8 @@
     <button class="button button-clear" data-ion-modal="_eventsNew">{{> ionIcon icon="ios-plus-empty"}}</button>
    {{/contentFor}}
   {{#ionView}}
-    {{#ionContent}}
+    {{#ionContent on-infinite="showMoreVisible()" }}
+    <div id="overflow-scroll">
     {{#ionItem}}
     <label class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
@@ -19,11 +20,22 @@
             {{#ionItem avatar=true  path="events.show" class="item-thumbnail-left"}}
                <img src="{{pic}}" width="" alt="{{name}}" height="20">
                <h2>{{name}}</h2>
-               <p>{{start}}</p>
+               <p>{{format_date start}}</p>
                <p>{{address}}</p>
              {{/ionItem}}
+             {{#if moreTasks}}
+                  <div id="showMoreEvents" style="margin-left: 25px;">
+                      <!-- Loading ...
+                      <span class="loading fa fa-cog fa-spin fa-2x"></span> -->
+                  </div>
+              {{/if}}
         {{/each}}
       {{/ionList}}
+      <ion-infinite-scroll
+    on-infinite="showMoreVisible()"
+    distance="1%">
+  </ion-infinite-scroll>
+    </div>
     {{/ionContent}}
   {{/ionView}}
 </template>

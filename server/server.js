@@ -1,9 +1,20 @@
 
 if (Meteor.isServer)
 {
-    Meteor.publish("events", function (user_id)
+
+    Meteor.publish("events", function (limit, searchValue)
     {
-        return Events.find();
+      console.log(searchValue)
+      console.log(limit)
+      if(!limit || limit < 1)
+          limit = 10 ;
+        if( searchValue &&  searchValue.length > 1){
+          console.log(Events.find({'name': {'$regex': new RegExp(searchValue, "i")}}, {sort:{ created_at:-1},limit:limit}).count());
+          return Events.find({'name': {'$regex': new RegExp(searchValue, "i")}}, {sort:{ created_at:-1},limit:limit});
+        }else{
+          console.log(Events.find({},{limit:limit}).count());
+          return Events.find({},{limit:limit});
+        }
     });
     Meteor.publish('event', function(_id) {
       return Events.find({_id: _id});

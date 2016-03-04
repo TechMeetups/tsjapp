@@ -12,3 +12,8 @@ Template.eventsShow.rendered = function () {
     }
   }.bind(this));
 };
+Template.eventsShow.helpers({
+  format_date : function(date){
+    return event_manager.format_data(date)
+  }
+});
