@@ -1,5 +1,5 @@
 <head>
-    <title>CC Integration</title>
+    <title>TechStartupJobs</title>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
@@ -30,11 +30,8 @@
         </div>
         <div class="content has-header">
           <div class="list">
-            <a class="item item-icon-right pointer"  href="/customers" data-ion-menu-close>
-              Dashboard {{> ionIcon icon="ios-arrow-right"}}
-            </a>
-            <a class="item item-icon-right pointer"   href="/accountsetup" data-ion-menu-close>
-              Setup Account {{> ionIcon icon="ios-arrow-right"}}
+            <a class="item item-icon-right pointer"  href="/events" data-ion-menu-close>
+              events {{> ionIcon icon="ios-arrow-right"}}
             </a>
             <a class="item item-icon-right pointer"  href="/user_profile" data-ion-menu-close>
               User Settings {{> ionIcon icon="ios-arrow-right"}}
@@ -58,13 +55,12 @@
     {{/ionSideMenus}}
     {{/if}}
     {{#ionSideMenuContent}}
-
       {{> ionNavBar class="bar-positive"}}
         {{#ionNavView}}
           {{> yield}}
         {{/ionNavView}}
         {{#ionFooterBar class="bar-dark"}}
-          <h1 class="title">(c) 2015 Constant Contact</h1>
+          <h1 class="title">(c) 2015 TechStartupJobs</h1>
         {{/ionFooterBar}}
     {{/ionSideMenuContent}}
   {{/ionSideMenuContainer}}

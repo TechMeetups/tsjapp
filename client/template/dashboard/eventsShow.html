@@ -1,0 +1,25 @@
+<template name="eventsShow">
+  {{#contentFor "headerButtonLeft"}}
+    {{>ionNavBackButton path="dashboard" text="events"}}
+  {{/contentFor}}
+  {{#contentFor "headerTitle"}}
+    <h1 class="title">{{name}} {{format_date start}}</h1>
+  {{/contentFor}}
+  {{#ionView}}
+  {{#ionContent}}
+    {{#ionList}}
+
+          <div class="item item-divider">{{name}}</div>
+          <div class="item item-body">
+              <div>
+                  <p>{{address}}</p>
+              </div>
+          </div>
+          <div class="item item-divider">{{format_date start}}</div>
+        {{/ionList}}
+      <a ui-sref="tabsController.checkout" class="button  button-block  icon-left ion-ios-cart">Jobseeker ticket (EUR 0.0)</a>
+      <a ui-sref="tabsController.companies" class="button button-stable button-block  icon-right ion-ios-arrow-right">Participating Companies</a>
+      <a ui-sref="tabsController.pitchStandAndSponsor" class="button  button-block  icon-right ion-ios-arrow-right">Pitch, Stand &amp; Sponsor options</a>
+    {{/ionContent}}
+  {{/ionView}}
+</template>

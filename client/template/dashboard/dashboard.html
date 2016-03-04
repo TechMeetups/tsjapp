@@ -1,46 +1,39 @@
 <template name="dashboard">
   {{> checklogin}}
   {{#contentFor "headerTitle"}}
-    <h1 class="title align-title-center">Dashboard</h1>
+    <h1 class="title align-title-center">Events</h1>
   {{/contentFor}}
   {{#contentFor "headerButtonRight"}}
-  <button class="button button-clear" data-ion-popover="_myPopover">
-    {{#if isAndroid}}
-        {{> ionIcon icon='android-more-vertical'}}
-      {{else}}
-        {{> ionIcon icon='more'}}
-      {{/if}}
-  </button>
- {{/contentFor}}
-
+    <button class="button button-clear" data-ion-modal="_eventsNew">{{> ionIcon icon="ios-plus-empty"}}</button>
+   {{/contentFor}}
   {{#ionView}}
-    {{#ionContent}}
+    {{#ionContent on-infinite="showMoreVisible()" }}
+    <div id="overflow-scroll">
+    {{#ionItem}}
+    <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="search" placeholder="Filter city" id="search">
+    </label>
+     {{/ionItem}}
       {{#ionList}}
-        <div class="alert alert-warning alert-dismissible" role="alert" style="margin-bottom: 5px">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-            Setup your Accounts before importing any contacts.
-        </div>
-        {{#each cc_contects}}
-          {{#if is_freeagent provider}}
-            {{#ionItem avatar=true  path="tabs.one"}}
-               <img src="{{image_src provider}}" width="" alt="{{provider}}" height="20">
-               <h2>{{email}}</h2>
-               <span class="pull-right label {{sync_label sync_state}} label-assertive">{{sync_state}}</span>
-               <p>{{first_name}}</p>
-               <p>{{organisation_name}}</p>
-
+        {{#each events}}
+            {{#ionItem avatar=true  path="events.show" class="item-thumbnail-left"}}
+               <img src="{{pic}}" width="" alt="{{name}}" height="20">
+               <h2>{{name}}</h2>
+               <p>{{format_date start}}</p>
+               <p>{{address}}</p>
              {{/ionItem}}
-            {{else}}
-              {{#ionItem avatar=true  path="tabs.one"}}
-                <img src="{{image_src provider}}" width="" alt="{{provider}}" height="40">
-                <h2>{{email}}</h2>
-                <span class="pull-right label {{sync_label sync_state}} label-assertive">{{sync_state}}</span>
-                <p>{{first_name}} </p>
-                <p>{{company_name}} </p>
-              {{/ionItem}}
-            {{/if}}
+
         {{/each}}
       {{/ionList}}
+      {{#if moreTasks}}
+           <div id="showMoreEvents" style="">
+             <button id="showMoreResults" type="button " class="button button-block button-positive">Load More...</button>
+               <!-- Loading ...
+               <span class="loading fa fa-cog fa-spin fa-2x"></span> -->
+           </div>
+       {{/if}}
+    </div>
     {{/ionContent}}
   {{/ionView}}
 </template>
