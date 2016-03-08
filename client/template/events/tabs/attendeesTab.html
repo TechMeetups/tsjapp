@@ -1,0 +1,47 @@
+<template name="attendeesTab">
+  {{#ionView}}
+  {{#ionHeaderBar class="bar-positive"}}
+  <button class="buttons button button-clear back-button pull-left" onclick="window.history.back();return false;">
+    <i class="icon ion-ios-arrow-back"></i>
+      <span class="back-text">
+        Back
+      </span>
+  </button>
+    <h1 class="title align-title-center">Attendees</h1>
+  {{/ionHeaderBar}}
+  {{#contentFor "headerButtonRight"}}
+    <button class="button button-clear" data-ion-modal="_attendeeNew">{{> ionIcon icon="ios-plus-empty"}}</button>
+   {{/contentFor}}
+  {{#ionContent class="padding"}}
+  <div id="overflow-scroll">
+  {{#ionItem}}
+  <label class="item item-input">
+      <i class="icon ion-search placeholder-icon"></i>
+      <input type="search" placeholder="Filter name" id="search">
+  </label>
+   {{/ionItem}}
+    {{#ionList}}
+      {{#each attendees}}
+        <a href="{{build_path _id}}">
+          {{#ionItem avatar=true class="item-thumbnail-left"}}
+              {{#with profile}}
+                <img src="{{pic}}" width="" alt="{{firstname}}" height="20">
+                 <h2>{{firstname}}</h2>
+                 <p>{{skill}}</p>
+               {{/with}}
+           {{/ionItem}}
+         </a>
+      {{/each}}
+    {{/ionList}}
+    {{#if moreTasks}}
+         <div id="showMoreEvents" style="">
+           <button id="showMoreResults" type="button " class="button button-block button-positive">Load More...</button>
+             <!-- Loading ...
+             <span class="loading fa fa-cog fa-spin fa-2x"></span> -->
+         </div>
+     {{/if}}
+  </div>
+  {{/ionContent}}
+  {{> _tabs}}
+  {{/ionView}}
+</template>

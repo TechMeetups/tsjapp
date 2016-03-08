@@ -1,0 +1,20 @@
+<template name="_tabs">
+    {{#ionTabs style="ios"}}
+    <a class="tab-item active" href="/events" data-ion-tab="">
+      <i class="icon ion-android-bar"></i>
+      Events
+    </a>
+    <a class="tab-item" href="/tabs/attendees/{{ build_tab_url }}" data-ion-tab="">
+        <i class="icon ion-ios-people"></i>
+        Attendees
+    </a>
+    <a class="tab-item" href="/tabs/companies/{{ build_tab_url }}" data-ion-tab="">
+        <i class="icon ion-ios-briefcase"></i>
+        Companies
+    </a>
+    <a class="tab-item" href="/checkout" data-ion-tab="">
+      <i class="icon ion-ios-cart"></i>
+       Checkout
+    </a>
+    {{/ionTabs}}
+</template>

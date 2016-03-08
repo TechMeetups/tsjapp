@@ -16,6 +16,34 @@ if (Meteor.isServer)
           return Events.find({},{limit:limit});
         }
     });
+    Meteor.publish("attendees", function (limit, searchValue,event_id)
+    {
+      user_ids=[]
+      event_attendees =   EventAttendee.find({event_id:event_id}, {sort:{ created_at:-1}},{fields: {'attendee_id':1}}).fetch()
+      console.log(event_attendees)
+      for(i =0; i< event_attendees.length ;i++){
+        user_ids.push(event_attendees[i].attendee_id)
+      }
+      console.log(searchValue);
+      if(!limit || limit < 1)
+          limit = 10 ;
+        if( searchValue &&  searchValue.length > 1){
+          console.log(Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},{limit:limit}).count())
+          return Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},{limit:limit});
+          //return Attendees.find({_id:{$in:user_ids},'name':{'$regex': new RegExp(searchValue, "i")}},{sort:{ created_at:-1},limit:limit});
+        }else{
+          return Meteor.users.find({_id:{$in:user_ids}},{limit:limit});
+        }
+    });
+
+    Meteor.publish('attendees_details', function(event_id,attendee_id) {
+      user_ids=[]
+      event_attendees =   EventAttendee.find({event_id:event_id,attendee_id:attendee_id}, {sort:{ created_at:-1}},{fields: {'attendee_id':1}}).fetch()
+      for(i =0; i< event_attendees.length ;i++){
+        user_ids.push(event_attendees[i].attendee_id)
+      }
+      return Meteor.users.find({_id:{$in:user_ids}});
+    });
     Meteor.publish('event', function(_id) {
       return Events.find({_id: _id});
     });
@@ -42,10 +70,10 @@ if (Meteor.isServer)
           user.profile = {user_id :options.profile.user_id,firstname:options.profile.firstname};
           userRegistration(user,options.password)
       }else{
-          user.profile = {};
-          console.log(options);
-          console.log(user);
-          user.profile = {firstname:options.profile.firstname};
+          if(options){
+            user.profile = {};
+            user.profile = options.profile
+          }
           userRegistration(user,"hidden")
       }
       return user;
@@ -142,6 +170,26 @@ if (Meteor.isServer)
         authenticate : function(code){
           this.unblock();
           return authenticate(code)
+        },
+        insert_attendee : function(data,event_id){
+          user_id = Accounts.createUser({
+                          username: data.name,
+                          email : data.email,
+                          password : "welcome",
+                          profile  : {
+                              firstname : data.name,
+                              skill : data.skill,
+                              experience:data.experience,
+                              lookingfor: data.lookingfor,
+                              created_at:new Date(),
+                              pic: data.pic
+                          }
+
+          });
+        //  attendee_id = Attendees.insert(data)
+          event_id = event_id
+          joined_on= new Date();
+          EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:joined_on,created_at:new Date()})
         }
 
     });

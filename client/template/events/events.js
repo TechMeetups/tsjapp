@@ -1,5 +1,5 @@
 EVENT_INCREMENT = 10;
-Template.dashboard.created = function () 
+Template.events.created = function ()
 {
   Session.set('search_terms','')
   Session.set("eventLimit",EVENT_INCREMENT)
@@ -8,24 +8,24 @@ Template.dashboard.created = function ()
   }.bind(this));
 };
 
-Template.dashboard.rendered = function () 
+Template.events.rendered = function ()
 {
-  this.autorun(function () 
+  this.autorun(function ()
   {
-    if (!this.subscription.ready()) 
+    if (!this.subscription.ready())
     {
       IonLoading.show();
-    } 
-    else 
+    }
+    else
     {
       IonLoading.hide();
     }
   }.bind(this));
 };
 
-Template.dashboard.helpers(
+Template.events.helpers(
 {
-  events: function () 
+  events: function ()
   {
     return event_manager.getList();
   },
@@ -39,9 +39,9 @@ Template.dashboard.helpers(
     }
 });
 
-Template.dashboard.events(
+Template.events.events(
 {
-  'keyup #search': function (event, template) 
+  'keyup #search': function (event, template)
   {
     search_terms = $(event.currentTarget).val();
     //Session.get('search_terms')

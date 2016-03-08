@@ -1,0 +1,44 @@
+Template.attendeesTab.helpers({
+  build_path: function(_id){
+    return "/tabs/attendees/"+Router.current().params._id+"/"+_id;
+  },
+  format_date: function(date){
+    return attendee_manager.format_data(date);
+  },
+  attendees: function(){
+    return attendee_manager.getList()
+  },image_src : function(provider_label){
+    if(provider_label && provider_label == "freeagent"){
+      return "http://freeagent-assets.s3.amazonaws.com/website-2014/images/logo.svg"
+    }else{
+      return "/assets/img/constant-contact-share-logo.gif"
+    }
+  },
+  moreTasks:function(){
+    {
+      return !(attendee_manager.getCount() < Session.get("attendee_limit"));
+    }
+  }
+});
+
+Template.attendeesTab.events({
+  "click #showMoreResults": function(event, template){
+    Session.set("attendee_limit",Session.get("attendee_limit") + EVENT_INCREMENT);
+  },
+  'keyup #search': function (event, template)
+  {
+    search_terms = $(event.currentTarget).val();
+    //Session.get('search_terms')
+    attendee_manager.search(search_terms)
+  },
+});
+
+EVENT_INCREMENT = 10;
+Template.attendeesTab.created = function ()
+{
+  Session.set('attendee_terms','')
+  Session.set("attendee_limit",EVENT_INCREMENT)
+  this.autorun(function () {
+    this.subscription = attendee_manager.default_subscribe(Router.current().params._id);
+  }.bind(this));
+};

@@ -54,7 +54,7 @@ Template.register.events({
               }
               else
               {
-                   Router.go('dashboard');
+                   Router.go('events');
               }
           });
   }
@@ -133,7 +133,7 @@ Template.login.events({
                       localStorage.setItem("login_user_pic","");
                       resetLoginDetails();
                       IonLoading.hide();
-                      Router.go('dashboard');
+                      Router.go('events');
                 }
             });
 
@@ -175,7 +175,7 @@ Template.login.events({
                     else
                     {
                       IonLoading.hide();
-                         Router.go('dashboard');
+                         Router.go('events');
                     }
                 });
         },

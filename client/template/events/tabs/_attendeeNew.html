@@ -1,0 +1,38 @@
+<template name="_attendeeNew">
+  {{#ionModal customTemplate=true id="attendeeNew"}}
+  <form id="attendees-new-form" novalidate="novalidate">
+    <div class="bar bar-header bar-stable">
+      <button data-dismiss="modal" type="button" class="button button-clear">Cancel</button>
+      <h2 class="title">Attendees</h2>
+      <button type="submit" class="button button-positive button-clear">Add</button>
+    </div>
+    <div class="content has-header overflow-scroll">
+  <label type="stacked" class="item item-input item-stacked-label">
+      <span class="input-label">Name</span>
+  <input type="text" label-type="stacked" placeholder="Name" name="name" id="name" data-schema-key="name">
+  </label>
+  <label type="stacked" class="item item-input item-stacked-label">
+      <span class="input-label">Email</span>
+      <input type="text" label-type="stacked" placeholder="email" name="email" id="email" data-schema-key="email">
+  </label>
+  <label type="stacked" class="item item-input item-stacked-label">
+      <span class="input-label">skill</span>
+  <input type="text" label-type="stacked" placeholder="Experience" name="skill" id="skill" data-schema-key="skill">
+  </label>
+  <label type="stacked" class="item item-input item-stacked-label">
+      <span class="input-label">lookingfor</span>
+  <input type="text" label-type="stacked" placeholder="lookingfor" name="lookingfor" id="lookingfor" data-schema-key="lookingfor">
+  </label>
+
+  <label type="stacked" class="item item-input item-stacked-label">
+      <span class="input-label">Experience</span>
+      <textarea rows="5" label-type="stacked" placeholder="experience" name="experience" id="experience" data-schema-key="experience"></textarea>
+  </label>
+  <label type="stacked" class="item item-input item-stacked-label">
+      <span class="input-label">pic</span>
+  <input type="text" label-type="stacked" placeholder="Pic url" name="pic url" id="pic" data-schema-key="pic">
+  </label>
+    </div>
+</form>
+  {{/ionModal}}
+</template>

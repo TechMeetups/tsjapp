@@ -1,0 +1,38 @@
+<template name="eventsShow">
+  {{#ionHeaderBar class="bar-positive"}}
+  <button class="buttons button button-clear back-button pull-left" onclick="window.history.back();return false;">
+    <i class="icon ion-ios-arrow-back"></i>
+      <span class="back-text">
+        Back
+      </span>
+  </button>
+    <h1 class="title align-title-center">Event details</h1>
+    <button class="button button-clear" data-ion-modal="_attendeeNew"><i class="icon ion-ios-plus-empty"></i></button>
+  {{/ionHeaderBar}}
+
+  {{#ionView}}
+  {{#ionContent class="padding" }}
+    {{#ionList}}
+
+
+    <div class="list card">
+      <div class="item item-divider">
+        {{ name }} {{format_date start}}
+      </div>
+      <div class="item item-text-wrap">
+        <img src="{{pic}}" width="" alt="{{name}}" height="100">
+      </div>
+      <div class="item item-divider">
+        {{address}}
+      </div>
+    </div>
+
+        {{/ionList}}
+      <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-left ion-ios-cart">Jobseeker ticket (EUR 0.0)</a>
+      <a ui-sref="tabsController.companies" class="button button-stable button-block  icon-right ion-ios-arrow-right">Participating Companies</a>
+      <a ui-sref="tabsController.pitchStandAndSponsor" class="button  button-block  icon-right ion-ios-arrow-right">Pitch, Stand &amp; Sponsor options</a>
+    {{/ionContent}}
+
+    {{> _tabs}}
+  {{/ionView}}
+</template>
