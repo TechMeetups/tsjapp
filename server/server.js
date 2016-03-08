@@ -91,8 +91,8 @@ if (Meteor.isServer)
             from: fromEmail,
             to: toEmail,
             replyTo: fromEmail ,
-            subject: "CCIntegration Registration Request",
-            text: "Hi SysAdmin,\nUser: "+user_email+" wants to register on Graphical.IO\n\n"+
+            subject: "TechStartupJobs Registration Request",
+            text: "Hi SysAdmin,\nUser: "+user_email+" wants to register on TechStartupJobs App\n\n"+
             "Thank you.\n"+
             "The CCIntegration Team.\n"+Meteor.absoluteUrl()+"\n"
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
