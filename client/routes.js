@@ -21,12 +21,7 @@ Router.map(function()
     this.route('attendees.tab',
     {
       path: '/tabs/attendees/:_id',
-      data:function(){
-        var id = this.params._id;
-        var data = Attendees.findOne({_id:id});
-        return data;
-      },
-    layoutTemplate: 'tabsLayout'});
+      layoutTemplate: 'tabsLayout'});
     this.route('attendees.details',
     {
       path: '/tabs/attendees/:_id/:_attendee_id',
