@@ -4,18 +4,38 @@ Router.configure({
 Router.map(function()
 {
     this.route('userprofile', {path: '/user_profile'});
-    this.route('dashboard', {path:"/events"} );
+    this.route('events', {path:"/events"} );
     this.route('register', {path: '/register'});
     this.route('accountsetup', {path: '/accountsetup'});
-    this.route('events.show',  
+    this.route('events.show',
     {
-        path: '/event/:_id', 
+        path: '/event/:_id',
         data:function()
         {
             var id = this.params._id;
             var data = Events.findOne({_id:id});
             return data;
-        }
+        },layoutTemplate: 'tabsLayout'
+    });
+
+    this.route('attendees.tab',
+    {
+      path: '/tabs/attendees/:_id',
+      layoutTemplate: 'tabsLayout'});
+    this.route('attendees.details',
+    {
+      path: '/tabs/attendees/:_id/:_attendee_id',
+      data:function(){
+        var id = this.params._attendee_id;
+        var data = Meteor.users.findOne({_id:id});
+        return data;
+      },
+    layoutTemplate: 'tabsLayout'});
+
+    this.route('companies.tab',
+    {
+      path: '/tabs/companies/:_id',
+     layoutTemplate: 'tabsLayout'
     });
     // this.route('tabs.one',
     // {
@@ -38,17 +58,17 @@ Router.map(function()
             }
             else
             {
-                this.render('dashboard');
+                this.render('events');
                 this.next();
             }
         }
     });
-    
+
     this.route('/', function ()
     {
       if (Meteor.user())
       {
-        this.render('dashboard');
+        this.render('events');
       }
       else
       {
