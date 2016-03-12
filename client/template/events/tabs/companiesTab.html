@@ -1,5 +1,4 @@
 <template name="companiesTab">
-  {{#ionView}}
   {{#ionHeaderBar class="bar-positive"}}
   <button class="buttons button button-clear back-button pull-left" onclick="window.history.back();return false;">
     <i class="icon ion-ios-arrow-back"></i>
@@ -8,10 +7,10 @@
       </span>
   </button>
     <h1 class="title align-title-center">Companies</h1>
+    <button class="button button-clear" data-ion-modal="_companyNew">{{> ionIcon icon="ios-plus-empty"}}</button>
   {{/ionHeaderBar}}
-  {{#contentFor "headerButtonRight"}}
 
-   {{/contentFor}}
+  {{#ionView}}
   {{#ionContent class="padding"}}
   <div id="overflow-scroll">
   {{#ionItem}}
@@ -21,7 +20,15 @@
   </label>
    {{/ionItem}}
     {{#ionList}}
-      
+    {{#each companies}}
+      <a href="{{build_path _id}}">
+        {{#ionItem avatar=true class="item-thumbnail-left"}}
+               <img src="{{pic}}" width="" alt="{{name}}" height="20">
+               <h2>{{name}}</h2>
+               <p>{{desc}}</p>
+         {{/ionItem}}
+       </a>
+    {{/each}}
     {{/ionList}}
     {{#if moreTasks}}
          <div id="showMoreEvents" style="">

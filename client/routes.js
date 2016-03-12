@@ -22,12 +22,23 @@ Router.map(function()
     {
       path: '/tabs/attendees/:_id',
       layoutTemplate: 'tabsLayout'});
+
+
     this.route('attendees.details',
     {
       path: '/tabs/attendees/:_id/:_attendee_id',
       data:function(){
         var id = this.params._attendee_id;
         var data = Meteor.users.findOne({_id:id});
+        return data;
+      },
+    layoutTemplate: 'tabsLayout'});
+    this.route('company.details',
+    {
+      path: '/tabs/company/:_id/:_company_id',
+      data:function(){
+        var id = this.params._company_id;
+        var data = Company.findOne({_id:id});
         return data;
       },
     layoutTemplate: 'tabsLayout'});

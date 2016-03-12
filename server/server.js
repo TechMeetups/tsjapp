@@ -35,7 +35,33 @@ if (Meteor.isServer)
           return Meteor.users.find({_id:{$in:user_ids}},{limit:limit});
         }
     });
-
+    Meteor.publish('company_details', function(event_id,company_id) {
+      company_ids=[]
+      event_company =   EventCompany.find({event_id:event_id,company_id:company_id}, {sort:{ created_at:-1}},{fields: {'company_id':1}}).fetch()
+      for(i =0; i< event_company.length ;i++){
+        company_ids.push(event_company[i].company_id)
+      }
+      return Company.find({_id:{$in:company_ids}});
+    });
+    Meteor.publish("company", function (limit, searchValue,event_id)
+    {
+      company_ids=[]
+      console.log(event_id)
+      event_company =   EventCompany.find({event_id:event_id}, {sort:{ created_at:-1}},{fields: {'company_id':1}}).fetch()
+      console.log(event_company)
+      for(i =0; i< event_company.length ;i++){
+        company_ids.push(event_company[i].company_id)
+      }
+      console.log(searchValue);
+      if(!limit || limit < 1)
+          limit = 10 ;
+        if( searchValue &&  searchValue.length > 1){
+          console.log(Company.find({_id:{$in:company_ids},'name':{'$regex': new RegExp(searchValue, "i")}},{limit:limit}).count())
+          return Company.find({_id:{$in:company_ids},'name':{'$regex': new RegExp(searchValue, "i")}},{limit:limit});
+        }else{
+          return Company.find({_id:{$in:company_ids}},{limit:limit});
+        }
+    });
     Meteor.publish('attendees_details', function(event_id,attendee_id) {
       user_ids=[]
       event_attendees =   EventAttendee.find({event_id:event_id,attendee_id:attendee_id}, {sort:{ created_at:-1}},{fields: {'attendee_id':1}}).fetch()
@@ -172,25 +198,42 @@ if (Meteor.isServer)
           return authenticate(code)
         },
         insert_attendee : function(data,event_id){
-          user_id = Accounts.createUser({
-                          username: data.name,
-                          email : data.email,
-                          password : "welcome",
-                          profile  : {
-                              firstname : data.name,
-                              skill : data.skill,
-                              experience:data.experience,
-                              lookingfor: data.lookingfor,
-                              created_at:new Date(),
-                              pic: data.pic
-                          }
+          user =  Meteor.users.findOne({"email":data.email});
+          if(user){
+            user_id = user._id
+          }else{
+            user_id = Accounts.createUser({
+              username: data.name,
+              email : data.email,
+              password : "welcome",
+              profile  : {
+                  firstname : data.name,
+                  skill : data.skill,
+                  experience:data.experience,
+                  lookingfor: data.lookingfor,
+                  created_at:new Date(),
+                  pic: data.pic
+              }
+            });
+          }
 
-          });
         //  attendee_id = Attendees.insert(data)
           event_id = event_id
           joined_on= new Date();
           EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:joined_on,created_at:new Date()})
+        },
+        insert_company : function(data,event_id){
+          company =  Company.findOne({"name":data.name});
+          if(company){
+            company_id = user._id
+          }else{
+            company_id = Company.insert(data);
+          }
+          event_id = event_id
+          joined_on= new Date();
+          EventCompany.insert({event_id:event_id,company_id:company_id,joined_on:new Date(),created_at:new Date()})
         }
+
 
     });
 }

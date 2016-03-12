@@ -1,0 +1,34 @@
+<template name="_companyNew">
+  {{#ionModal customTemplate=true id="companyNew"}}
+  <form id="attendees-new-form" novalidate="novalidate">
+    <div class="bar bar-header bar-stable">
+      <button data-dismiss="modal" type="button" class="button button-clear">Cancel</button>
+      <h2 class="title">Company</h2>
+      <button type="submit" class="button button-positive button-clear">Add</button>
+    </div>
+    <div class="content has-header overflow-scroll">
+  <label type="stacked" class="item item-input item-stacked-label">
+      <span class="input-label">Name</span>
+  <input type="text" label-type="stacked" placeholder="Name" name="name" id="name" data-schema-key="name">
+  </label>
+  <label type="stacked" class="item item-input item-stacked-label">
+      <span class="input-label">logo</span>
+      <input type="text" label-type="stacked" placeholder="logo" name="logo" id="logo" data-schema-key="logo">
+  </label>
+  <label type="stacked" class="item item-input item-stacked-label">
+      <span class="input-label">pic</span>
+  <input type="text" label-type="stacked" placeholder="Experience" name="pic" id="pic" data-schema-key="pic">
+  </label>
+  <label type="stacked" class="item item-input item-stacked-label">
+      <span class="input-label">desc</span>
+      <textarea rows="5" label-type="stacked" placeholder="desc" name="desc" id="desc" data-schema-key="desc"></textarea>
+
+  </label>
+  <label type="stacked" class="item item-input item-stacked-label">
+      <span class="input-label">city</span>
+      <input type="text" label-type="stacked" placeholder="city" name="city" id="city" data-schema-key="city">
+  </label>
+    </div>
+</form>
+  {{/ionModal}}
+</template>

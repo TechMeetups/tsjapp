@@ -1,0 +1,35 @@
+<template name="companyDetails">
+  {{#ionHeaderBar class="bar-positive"}}
+  <button class="buttons button button-clear back-button pull-left" onclick="window.history.back();return false;">
+    <i class="icon ion-ios-arrow-back"></i>
+      <span class="back-text">
+        Back
+      </span>
+  </button>
+    <h1 class="title align-title-center">company details</h1>
+  {{/ionHeaderBar}}
+
+  {{#ionView}}
+  {{#ionContent class="padding" }}
+    {{#ionList}}
+    <div class="list card">
+        <div class="item item-divider">
+        {{ name }}
+      </div>
+      <div class="item item-thumbnail-left item-avatar">
+
+          <img src="{{pic}}" width="" alt="{{name}}" height="20">
+           <p>{{name}}</p>
+           <p>{{desc}}</p>
+
+      </div>
+      <div class="item item-divider">
+        {{format_date created_at}} 
+      </div>
+    </div>
+    {{/ionList}}
+    <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-right ion-android-textsms">Get in touch</a>
+    {{/ionContent}}
+    {{> _tabs}}
+  {{/ionView}}
+</template>
