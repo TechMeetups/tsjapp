@@ -1,0 +1,26 @@
+<template name="_jobNew">
+  {{#ionModal customTemplate=true}}
+    <form id="job-new-form" novalidate="novalidate">
+      <div class="bar bar-header bar-stable">
+        <button data-dismiss="modal" type="button" class="button button-clear">Cancel</button>
+        <h2 class="title">Job</h2>
+        <button type="submit" class="button button-positive button-clear">Add</button>
+      </div>
+      <div class="content has-header overflow-scroll">
+	      <label type="stacked" class="item item-input item-stacked-label">
+        <span class="input-label">title</span>
+    <input type="text" label-type="stacked" placeholder="title" name="title" id="title" required="" data-schema-key="title">
+    </label>
+    <label type="stacked" class="item item-input item-stacked-label">
+        <span class="input-label">desc</span>
+    <textarea label-type="stacked" placeholder="desc" name="desc" rows="6" id="desc"  required="" data-schema-key="desc"></textarea>
+    </label>
+
+    <label type="stacked" class="item item-input item-stacked-label">
+        <span class="input-label">City</span>
+    <input type="text" label-type="stacked" placeholder="City" name="city" id="city"  required="" data-schema-key="city">
+    </label>
+      </div>
+  </form>
+  {{/ionModal}}
+</template>

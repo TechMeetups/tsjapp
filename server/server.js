@@ -35,6 +35,12 @@ if (Meteor.isServer)
           return Meteor.users.find({_id:{$in:user_ids}},{limit:limit});
         }
     });
+    Meteor.publish("jobs", function (limit,company_id)
+    {
+      if(!limit || limit < 1)
+          limit = 10 ;
+      return Job.find({company_id:company_id},{limit:limit});
+    });
     Meteor.publish('company_details', function(event_id,company_id) {
       company_ids=[]
       event_company =   EventCompany.find({event_id:event_id,company_id:company_id}, {sort:{ created_at:-1}},{fields: {'company_id':1}}).fetch()
@@ -70,6 +76,10 @@ if (Meteor.isServer)
       }
       return Meteor.users.find({_id:{$in:user_ids}});
     });
+    Meteor.publish('job_details', function(company_id,job_id) {
+      return Job.find({_id:job_id,company_id:company_id});
+    });
+
     Meteor.publish('event', function(_id) {
       return Events.find({_id: _id});
     });
@@ -233,7 +243,11 @@ if (Meteor.isServer)
           joined_on= new Date();
           EventCompany.insert({event_id:event_id,company_id:company_id,joined_on:new Date(),created_at:new Date()})
         }
-
+        ,
+        insert_Job: function(data){
+          console.log(data)
+          Job.insert(data)
+        }
 
     });
 }

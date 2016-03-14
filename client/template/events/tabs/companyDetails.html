@@ -7,9 +7,10 @@
       </span>
   </button>
     <h1 class="title align-title-center">company details</h1>
+    <button class="button button-clear" data-ion-modal="_jobNew">{{> ionIcon icon="ios-plus-empty"}}</button>
   {{/ionHeaderBar}}
-
   {{#ionView}}
+
   {{#ionContent class="padding" }}
     {{#ionList}}
     <div class="list card">
@@ -24,11 +25,28 @@
 
       </div>
       <div class="item item-divider">
-        {{format_date created_at}} 
+        {{format_date created_at}}
       </div>
     </div>
     {{/ionList}}
-    <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-right ion-android-textsms">Get in touch</a>
+    <h1>Jobs</h1>
+    {{#ionList}}
+    {{#each jobs_list}}
+      <a href="{{ build_path _id}}">
+        {{#ionItem }}
+              <h2>{{title}}</h2>
+               <p>{{city}}</p>
+         {{/ionItem}}
+       </a>
+    {{/each}}
+    {{/ionList}}
+    {{#if moreTasks}}
+         <div id="showMoreEvents" style="">
+           <button id="showMoreResults" type="button " class="button button-block button-positive">Load More...</button>
+             <!-- Loading ...
+             <span class="loading fa fa-cog fa-spin fa-2x"></span> -->
+         </div>
+     {{/if}}
     {{/ionContent}}
     {{> _tabs}}
   {{/ionView}}

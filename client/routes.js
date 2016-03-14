@@ -33,6 +33,16 @@ Router.map(function()
         return data;
       },
     layoutTemplate: 'tabsLayout'});
+    this.route('job.details',
+    {
+      path: '/tabs/company/:_id/:_company_id/:_job_id',
+      data:function(){
+        var id = this.params._job_id;
+        var data = Job.findOne({_id:id});
+        return data;
+      },
+    layoutTemplate: 'tabsLayout'});
+
     this.route('company.details',
     {
       path: '/tabs/company/:_id/:_company_id',
