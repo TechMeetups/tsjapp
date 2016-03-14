@@ -28,8 +28,7 @@
         {{format_date created_at}}
       </div>
     </div>
-    {{/ionList}}
-    <h1>Jobs</h1>
+    <h2>Jobs</h2>
     {{#ionList}}
     {{#each jobs_list}}
       <a href="{{ build_path _id}}">
@@ -40,6 +39,8 @@
        </a>
     {{/each}}
     {{/ionList}}
+    {{/ionList}}
+
     {{#if moreTasks}}
          <div id="showMoreEvents" style="">
            <button id="showMoreResults" type="button " class="button button-block button-positive">Load More...</button>
