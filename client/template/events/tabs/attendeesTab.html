@@ -23,16 +23,18 @@
    {{/ionItem}}
     {{#ionList}}
       {{#each attendees}}
-        <a href="{{build_path _id}}">
-          {{#ionItem avatar=true class="item-thumbnail-left"}}
-              {{#with profile}}
-                <img src="{{pic}}" width="" alt="{{firstname}}" height="20">
-                 <h2>{{firstname}}</h2>
-                 <p>{{skill}}</p>
-                 <p>Exp. {{experience}} years</p>
-               {{/with}}
-           {{/ionItem}}
-         </a>
+        {{#if validate_current_user _id }}
+          <a href="{{build_path _id}}">
+            {{#ionItem avatar=true class="item-thumbnail-left"}}
+                {{#with profile}}
+                  <img src="{{pic}}" width="" alt="{{firstname}}" height="20">
+                   <h2>{{firstname}}</h2>
+                   <p>{{skill}}</p>
+                   <p>Exp. {{experience}} years</p>
+                 {{/with}}
+             {{/ionItem}}
+           </a>
+        {{/if}}
       {{/each}}
     {{/ionList}}
     {{#if moreTasks}}

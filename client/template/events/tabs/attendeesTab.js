@@ -18,6 +18,21 @@ Template.attendeesTab.helpers({
     {
       return !(attendee_manager.getCount() < Session.get("attendee_limit"));
     }
+  },
+  validate_current_user: function(_id){
+    result_view = true
+    if(Meteor.userId() == _id){
+      current_user_envent_state = Session.get('current_user_envent_state');
+      if(current_user_envent_state.length > 0){
+        result_view = true
+      }else{
+        result_view = false
+      }
+    }else{
+      result_view =true
+    }
+    console.log(result_view);
+    return result_view;
   }
 });
 

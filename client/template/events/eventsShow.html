@@ -7,7 +7,7 @@
       </span>
   </button>
     <h1 class="title align-title-center">Event details</h1>
-    <button class="button button-clear" data-ion-modal="_attendeeNew"><i class="icon ion-ios-plus-empty"></i></button>  
+    <button class="button button-clear" data-ion-modal="_attendeeNew"><i class="icon ion-ios-plus-empty"></i></button>
   {{/ionHeaderBar}}
 
   {{#ionView}}
@@ -28,7 +28,20 @@
     </div>
 
         {{/ionList}}
-      <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-right ion-ios-cart">Jobseeker ticket</a>
+
+        {{#each current_user_envent_state}}
+        <div class="list card">
+            <div class="item item-divider">Ticket No : {{_id}}</div>
+            <div class="item item-body">
+                <div>
+                    <h3>You bought a ticket on {{format_date joined_on}}</h3>
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-right ion-ios-cart" id="jobseeker_ticket">Jobseeker ticket</a>
+        {{/each}}
+
 <!--       <a ui-sref="tabsController.companies" class="button button-stable button-block  icon-right ion-ios-arrow-right">Participating Companies</a>
  -->
       <a ui-sref="tabsController.pitchStandAndSponsor" class="button  button-block  icon-right ion-ios-arrow-right">Pitch, Stand &amp; Sponsor options</a>

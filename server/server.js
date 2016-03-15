@@ -125,7 +125,7 @@ if (Meteor.isServer)
             text: "Hi "+user.profile.firstname+",\nYour Email: "+user.emails[0].address+" has been registered."+
             "\nYour password is : "+pass+"\n\n"+
             "Thank you.\n"+
-            "The CCIntegration Team.\n"+Meteor.absoluteUrl()+"\n"
+            "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
         });
     }
@@ -142,11 +142,25 @@ if (Meteor.isServer)
             text: "Hi "+user.profile.firstname+",\nYour password has been reset."+
             "\nYour new password is : "+pass+"\n\n"+
             "Thank you.\n"+
-            "The CCIntegration Team.\n"+Meteor.absoluteUrl()+"\n"
+            "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
             // +"http://www.graphical.io/assets/img/Graphical-IO.png"
         });
     }
-
+    var request_for_join_event= function(user,event){
+      var fromEmail = "admin@techmeetups.com";
+      var toEmail = "marketing@techmeetups.com";
+      Email.send({
+          from: fromEmail,
+          to: toEmail,
+          replyTo: fromEmail ,
+          subject: "Request for join "+event.name+" event",
+          text: "Hi,\n"+user.profile.firstname+"("+user.emails[0].address+") has request to join "+event.name+" event."+
+          "\nPlease arrange pass for this event.\n\n"+
+          "Thank you.\n"+
+          "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
+          // +"http://www.graphical.io/assets/img/Graphical-IO.png"
+      });
+    }
     var sendMessage = function (user_email)
     {
         var fromEmail = "admin@techmeetups.com";
@@ -158,7 +172,7 @@ if (Meteor.isServer)
             subject: "TechStartupJobs Registration Request",
             text: "Hi SysAdmin,\nUser: "+user_email+" wants to register on TechStartupJobs App\n\n"+
             "Thank you.\n"+
-            "The CCIntegration Team.\n"+Meteor.absoluteUrl()+"\n"
+            "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
         });
    }
@@ -230,7 +244,7 @@ if (Meteor.isServer)
         //  attendee_id = Attendees.insert(data)
           event_id = event_id
           joined_on= new Date();
-          EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:joined_on,created_at:new Date()})
+          EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:joined_on,created_at:new Date()});
         },
         insert_company : function(data,event_id){
           company =  Company.findOne({"name":data.name});
@@ -247,7 +261,22 @@ if (Meteor.isServer)
         insert_Job: function(data){
           console.log(data)
           Job.insert(data)
+        },
+        current_user_envent_state : function(event_id,user_id){
+          console.log(user_id+" : "+event_id);
+          event_attendee = EventAttendee.find({attendee_id:user_id,event_id:event_id}).fetch()
+          console.log(event_attendee)
+          return event_attendee;
+        },
+        create_request_for_event_attendee : function(event_id,user_id){
+          console.log(user_id+" : "+event_id);
+          EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:new Date(),created_at:new Date()});
+          event = Events.findOne({_id:event_id});
+          user = Meteor.users.findOne({_id:user_id});
+          console.log(event)
+          console.log(user)
+          request_for_join_event(user,event);
+          return true;
         }
-
     });
 }
