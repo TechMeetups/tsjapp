@@ -169,7 +169,26 @@ if (Meteor.isServer)
           // +"http://www.graphical.io/assets/img/Graphical-IO.png"
       });
     }
-
+    var send_ticket_details = function(event,user,ticket_no){
+      var fromEmail = "admin@techmeetups.com";
+      var toEmail = "jayeshdalwadi2007@gmail.com"//user.emails[0].address;
+      var ccEmail = "marketing@techmeetups.com";
+      Email.send({
+          from: fromEmail,
+          to: toEmail,
+          replyTo: fromEmail ,
+          cc:ccEmail,
+          subject: event.name+" ticket details",
+          text: "Hi,\nEvent : "+event.name+
+                  "\nDate : "+event.start+
+                  "\nAddress : "+event.address+
+                  "\nTicket No : "+ticket_no+
+          "\n\n"+
+          "Thank you.\n"+
+          "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
+          // +"http://www.graphical.io/assets/img/Graphical-IO.png"
+      });
+    }
     var request_for_meet_candidate = function (user,attendee){
       var fromEmail = "admin@techmeetups.com";
       var toEmail = "marketing@techmeetups.com";
@@ -332,6 +351,7 @@ if (Meteor.isServer)
           event = Events.findOne({_id:event_id});
           user = Meteor.users.findOne({_id:user_id});
           request_for_join_event(user,event);
+          send_ticket_details(event,user,ticket_no)
           return true;
         },
         connect_request : function(data){
