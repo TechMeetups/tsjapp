@@ -16,6 +16,14 @@ if (Meteor.isServer)
           return Events.find({},{limit:limit});
         }
     });
+    Meteor.publish("connect_request_for_attendees", function (user_id, attendee_id)
+    {
+      return ConnectRequest.find({user_id:user_id,attendee_id:attendee_id,request_type:"meet_candidate"})
+    });
+    Meteor.publish("connect_request_for_job", function (user_id,job_id)
+    {
+      return ConnectRequest.find({user_id:user_id,job_id:job_id,request_type:{$in:["job_meet","job_apply"]}})
+    });
     Meteor.publish("attendees", function (limit, searchValue,event_id)
     {
       user_ids=[]

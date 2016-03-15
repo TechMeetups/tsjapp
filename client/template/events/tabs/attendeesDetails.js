@@ -1,6 +1,7 @@
 Template.attendeesDetails.created = function () {
   this.autorun(function () {
     this.subscription = Meteor.subscribe('attendees_details',Router.current().params._id,Router.current().params._attendee_id);
+    this.subscription1 = attendee_manager.default_connect_request(Router.current().params._attendee_id)
   }.bind(this));
 };
 Template.attendeesDetails.rendered = function () {
@@ -15,6 +16,34 @@ Template.attendeesDetails.rendered = function () {
 Template.attendeesDetails.helpers({
   format_date : function(date){
     return event_manager.format_data(date)
+  },
+  connect_request : function (){
+    return ConnectRequest.find({});
+  },
+  addIndex : function(obj){
+    obj = obj || [];
+   _.each(obj, function (object, index) {
+     obj[index]["index"] = index;
+   });
+   console.log(obj)
+   return obj;
+  },
+  add_comma : function(value){
+    console.log(value)
+    if(value > 1){
+      return true
+    }else{
+      return false
+    }
+  },
+  list_need_to_view: function(){
+    if(attendee_manager.get_connect_request_count() > 0){
+      return true
+      }
+      else
+      {
+        return false
+      }
   }
 });
 Template.attendeesDetails.events(

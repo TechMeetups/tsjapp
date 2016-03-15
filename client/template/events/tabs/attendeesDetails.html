@@ -29,6 +29,14 @@
     </div>
     {{/ionList}}
     <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-right ion-android-textsms" id="meet_candidate">Get in touch</a>
+    {{#if list_need_to_view }}
+    <div class="list card">
+            <div class="item item-divider">Previous contact requests</div>
+            <div class="item item-body">
+                <div>{{#each connect_request}} {{format_date created_at}} {{/each}}</div>
+            </div>
+    </div>
+    {{/if}}
     {{/ionContent}}
     {{> _tabs}}
   {{/ionView}}

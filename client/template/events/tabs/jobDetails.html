@@ -31,6 +31,20 @@
       </div>
     </div>
     {{/ionList}}
+    {{#if list_need_to_view }}
+     <div class="list card">
+            <div class="item item-divider">Your requests</div>
+            <div class="item item-body">
+                <div>
+
+                  <div>{{#each connect_request}}
+                    <p>
+                      {{format_date created_at}} - {{display_request_type  request_type}}
+                    </p>{{/each}}</div>
+                </div>
+            </div>
+        </div>
+      {{/if}}
     {{/ionContent}}
     {{> _tabs}}
   {{/ionView}}
