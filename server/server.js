@@ -171,7 +171,7 @@ if (Meteor.isServer)
     }
     var send_ticket_details = function(event,user,ticket_no){
       var fromEmail = "admin@techmeetups.com";
-      var toEmail = "jayeshdalwadi2007@gmail.com"//user.emails[0].address;
+      var toEmail = user.emails[0].address;
       var ccEmail = "marketing@techmeetups.com";
       Email.send({
           from: fromEmail,
