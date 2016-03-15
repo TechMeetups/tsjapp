@@ -17,3 +17,15 @@ Template.attendeesDetails.helpers({
     return event_manager.format_data(date)
   }
 });
+Template.attendeesDetails.events(
+{
+  'click #meet_candidate' : function(event, template)
+  {
+    attendee_id = Router.current().params._attendee_id;
+    user_id = Meteor.userId();
+    request_type = "meet_candidate"
+    request ={request_type:request_type,user_id:user_id,attendee_id:attendee_id}
+    console.log(request)
+    event_manager.meet_candidate(request);
+  }
+});

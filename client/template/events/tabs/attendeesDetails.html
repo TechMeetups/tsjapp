@@ -6,7 +6,7 @@
         Back
       </span>
   </button>
-    <h1 class="title align-title-center">Attendee details</h1>    
+    <h1 class="title align-title-center">Attendee details</h1>
   {{/ionHeaderBar}}
 
   {{#ionView}}
@@ -18,7 +18,7 @@
       </div>
       <div class="item item-thumbnail-left item-avatar">
         {{#with profile}}
-          <img src="{{pic}}" width="" alt="{{firstname}}" height="20">           
+          <img src="{{pic}}" width="" alt="{{firstname}}" height="20">
            <p>{{skill}}</p>
            <p>Looking for: {{lookingfor}}</p>
          {{/with}}
@@ -28,7 +28,7 @@
       </div>
     </div>
     {{/ionList}}
-    <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-right ion-android-textsms">Get in touch</a>
+    <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-right ion-android-textsms" id="meet_candidate">Get in touch</a>
     {{/ionContent}}
     {{> _tabs}}
   {{/ionView}}

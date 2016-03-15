@@ -146,6 +146,54 @@ if (Meteor.isServer)
             // +"http://www.graphical.io/assets/img/Graphical-IO.png"
         });
     }
+    var request_for_meet_job= function(user,company,job){
+      var fromEmail = "admin@techmeetups.com";
+      var toEmail = "marketing@techmeetups.com";
+      Email.send({
+          from: fromEmail,
+          to: toEmail,
+          replyTo: fromEmail ,
+          subject: "Request for meet "+company.name+" for Job "+job.title,
+          text: "Hi,\nCandidate "+user.profile.firstname+"("+user.emails[0].address+") wants to meet "+company.name+" for Job "+job.title+
+          "\n\n"+
+          "Thank you.\n"+
+          "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
+          // +"http://www.graphical.io/assets/img/Graphical-IO.png"
+      });
+    }
+
+    var request_for_meet_candidate = function (user,attendee){
+      var fromEmail = "admin@techmeetups.com";
+      var toEmail = "marketing@techmeetups.com";
+      var ccEmail = attendee.emails[0].address
+      Email.send({
+          from: fromEmail,
+          to: toEmail,
+          replyTo: fromEmail ,
+          cc:ccEmail,
+          subject: "Attendee wants to meet",
+          text: "Hi,\nAttendee "+user.profile.firstname+"("+user.emails[0].address+") wants to meet "+attendee.profile.firstname+"("+attendee.emails[0].address+")"+
+          "\n\n"+
+          "Thank you.\n"+
+          "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
+          // +"http://www.graphical.io/assets/img/Graphical-IO.png"
+      });
+    }
+    var request_for_apply_job= function(user,company,job){
+      var fromEmail = "admin@techmeetups.com";
+      var toEmail = "marketing@techmeetups.com";
+      Email.send({
+          from: fromEmail,
+          to: toEmail,
+          replyTo: fromEmail ,
+          subject: "Request for apply "+company.name+" for Job "+job.title,
+          text: "Hi,\nCandidate "+user.profile.firstname+"("+user.emails[0].address+") wants to apply "+company.name+" for Job "+job.title+
+          "\n\n"+
+          "Thank you.\n"+
+          "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
+          // +"http://www.graphical.io/assets/img/Graphical-IO.png"
+      });
+    }
     var request_for_join_event= function(user,event){
       var fromEmail = "admin@techmeetups.com";
       var toEmail = "marketing@techmeetups.com";
@@ -277,6 +325,34 @@ if (Meteor.isServer)
           user = Meteor.users.findOne({_id:user_id});
           request_for_join_event(user,event);
           return true;
+        },
+        connect_request : function(data){
+
+          ConnectRequest.insert({request_type:data.request_type,user_id:data.user_id,requested_on: new Date(),
+            created_at:new Date(),company_id:data.company_id,job_id:data.job_id,event_id:data.event_id,attendee_id:""});
+            event = Events.findOne({_id:data.event_id});
+            user = Meteor.users.findOne({_id:data.user_id});
+            company = Company.findOne({_id:data.company_id});
+            job = Job.findOne({_id:data.job_id})
+            if(data.request_type =="job_apply"){
+              request_for_apply_job(user,company,job)
+              console.log("request is send")
+            }
+            if(data.request_type =="job_meet"){
+              request_for_meet_job(user,company,job)
+              console.log("request is send")
+            }
+          console.log("request is send")
+        },
+        connect_request_candidate: function(data){
+          ConnectRequest.insert({request_type:data.request_type,user_id:data.user_id,requested_on: new Date(),
+            created_at:new Date(),company_id:"",job_id:"",event_id:"",attendee_id:data.attendee_id});
+            user = Meteor.users.findOne({_id:data.user_id});
+            attendee = Meteor.users.findOne({_id:data.attendee_id});
+            if(data.request_type =="meet_candidate"){
+              request_for_meet_candidate(user,attendee)
+              console.log("request is send")
+            }
         }
     });
 }
