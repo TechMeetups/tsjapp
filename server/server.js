@@ -244,7 +244,8 @@ if (Meteor.isServer)
         //  attendee_id = Attendees.insert(data)
           event_id = event_id
           joined_on= new Date();
-          EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:joined_on,created_at:new Date()});
+          ticket_no = guid();
+          EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:joined_on,ticket_no:ticket_no,created_at:new Date()});
         },
         insert_company : function(data,event_id){
           company =  Company.findOne({"name":data.name});
@@ -270,11 +271,10 @@ if (Meteor.isServer)
         },
         create_request_for_event_attendee : function(event_id,user_id){
           console.log(user_id+" : "+event_id);
-          EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:new Date(),created_at:new Date()});
+          ticket_no = guid();
+          EventAttendee.insert({attendee_id:user_id,event_id:event_id,ticket_no:ticket_no,joined_on:new Date(),created_at:new Date()});
           event = Events.findOne({_id:event_id});
           user = Meteor.users.findOne({_id:user_id});
-          console.log(event)
-          console.log(user)
           request_for_join_event(user,event);
           return true;
         }
