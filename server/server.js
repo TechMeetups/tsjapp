@@ -107,7 +107,10 @@ if (Meteor.isServer)
             return 'click on the following link to verify your email address: ' + url;
         };
         user = Meteor.users.findOne({ "emails.address" : 'jayeshdalwadi2007@gmail.com' });
-        Roles.addUsersToRoles(user._id, ['admin'])
+        if(user){
+          Roles.addUsersToRoles(user._id, ['admin'])
+        }
+        
     });
     Accounts.onCreateUser(function(options, user) {
       console.log("on account create");
