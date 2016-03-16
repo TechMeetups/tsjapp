@@ -18,6 +18,9 @@ Meteor.startup(function()
 // Client specific code *******************************************************************************
 if (Meteor.isClient)
 {
+  Template.registerHelper('is_admin', function(){
+
+  })
   Template.layout.events(
   {
     "click .logout": function(event, template)

@@ -1,4 +1,12 @@
 <template name="eventsShow">
+  <style media="screen">
+    .image_disply {
+      background: url({{pic}}) no-repeat;
+      background-size: cover;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+    }
+  </style>
   {{#ionHeaderBar class="bar-positive"}}
   <button class="buttons button button-clear back-button pull-left" onclick="window.history.back();return false;">
     <i class="icon ion-ios-arrow-back"></i>
@@ -7,11 +15,14 @@
       </span>
   </button>
     <h1 class="title align-title-center">Event details</h1>
-    <button class="button button-clear" data-ion-modal="_attendeeNew"><i class="icon ion-ios-plus-empty"></i></button>
+    {{#if isInRole 'admin'}}
+      <button class="button button-clear" data-ion-modal="_attendeeNew"><i class="icon ion-ios-plus-empty"></i></button>
+    {{/if}}
+
   {{/ionHeaderBar}}
 
   {{#ionView}}
-  {{#ionContent class="padding" }}
+  {{#ionContent class="padding image_disply"}}
     {{#ionList}}
 
 

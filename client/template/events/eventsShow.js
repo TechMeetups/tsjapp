@@ -30,8 +30,9 @@ Template.eventsShow.events(
 {
   'click #jobseeker_ticket': function (event, template)
   {
+    IonLoading.show();
     event_id = Router.current().params._id
-    user_id = Meteor.userId()  
+    user_id = Meteor.userId()
     event_manager.create_request_for_event_attendee(event_id,user_id)
   }
 });

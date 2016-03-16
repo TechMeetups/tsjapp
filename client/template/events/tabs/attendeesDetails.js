@@ -6,7 +6,7 @@ Template.attendeesDetails.created = function () {
 };
 Template.attendeesDetails.rendered = function () {
   this.autorun(function () {
-    if (!this.subscription.ready()) {
+    if (!this.subscription.ready() || !this.subscription1.ready()) {
       IonLoading.show();
     } else {
       IonLoading.hide();

@@ -8,7 +8,7 @@ Template.companyDetails.created = function () {
 };
 Template.companyDetails.rendered = function () {
   this.autorun(function () {
-    if (!this.subscription.ready()) {
+    if (!this.subscription.ready() || !this.subscription_job.ready()) {
       IonLoading.show();
     } else {
       IonLoading.hide();

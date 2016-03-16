@@ -8,11 +8,14 @@
       </span>
   </button>
     <h1 class="title align-title-center">Attendees</h1>
-    <button class="button button-clear" data-ion-modal="_attendeeNew"><i class="icon ion-ios-plus-empty"></i></button>
+    {{#if isInRole 'admin'}}
+    <div class="pull-right">
+      <button class="button button-clear" data-ion-modal="_attendeeNew"><i class="icon ion-ios-plus-empty"></i></button>
+      <button class="button button-clear" data-ion-modal="_importAttendee">Import</button>
+    </div>
+    {{/if}}
   {{/ionHeaderBar}}
-  {{#contentFor "headerButtonRight"}}
-    <button class="button button-clear" data-ion-modal="_attendeeNew">{{> ionIcon icon="ios-plus-empty"}}</button>
-   {{/contentFor}}
+
   {{#ionContent class="padding"}}
   <div id="overflow-scroll">
   {{#ionItem}}

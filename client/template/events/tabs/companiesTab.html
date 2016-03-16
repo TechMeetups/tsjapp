@@ -7,7 +7,9 @@
       </span>
   </button>
     <h1 class="title align-title-center">Companies</h1>
+    {{#if isInRole 'admin'}}
     <button class="button button-clear" data-ion-modal="_companyNew">{{> ionIcon icon="ios-plus-empty"}}</button>
+    {{/if}}
   {{/ionHeaderBar}}
 
   {{#ionView}}

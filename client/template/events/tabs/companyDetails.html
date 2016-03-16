@@ -7,7 +7,9 @@
       </span>
   </button>
     <h1 class="title align-title-center">company details</h1>
+    {{#if isInRole 'admin'}}
     <button class="button button-clear" data-ion-modal="_jobNew">{{> ionIcon icon="ios-plus-empty"}}</button>
+    {{/if}}
   {{/ionHeaderBar}}
   {{#ionView}}
 
@@ -17,7 +19,7 @@
         <div class="item item-divider">
         {{ name }}
       </div>
-      <div class="item item-thumbnail-left item-avatar">
+      <div class="item item-thumbnail-left">
 
           <img src="{{pic}}" width="" alt="{{name}}" height="20">
            <p>{{name}}</p>

@@ -4,7 +4,9 @@
     <h1 class="title align-title-center">Events</h1>
   {{/contentFor}}
   {{#contentFor "headerButtonRight"}}
+    {{#if isInRole 'admin'}}
     <button class="button button-clear" data-ion-modal="_eventsNew">{{> ionIcon icon="ios-plus-empty"}}</button>
+    {{/if}}
    {{/contentFor}}
   {{#ionView}}
     {{#ionContent on-infinite="showMoreVisible()" }}

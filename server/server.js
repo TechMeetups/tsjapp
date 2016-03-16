@@ -106,7 +106,8 @@ if (Meteor.isServer)
         Accounts.emailTemplates.verifyEmail.text = function(user, url) {
             return 'click on the following link to verify your email address: ' + url;
         };
-
+        user = Meteor.users.findOne({ "emails.address" : 'jayeshdalwadi2007@gmail.com' });
+        Roles.addUsersToRoles(user._id, ['admin'])
     });
     Accounts.onCreateUser(function(options, user) {
       console.log("on account create");
@@ -277,9 +278,13 @@ if (Meteor.isServer)
         'sendtaskCompletedNotification':function(useremail,project,workitem,notes){
             sendtaskCompletedNotification(useremail,project,workitem,notes);
         },
-        resetpassword : function (user_id,pass)
+        resetpassword : function (user_id,pass,pic)
         {
+          if(pass.length > 1){
             Accounts.setPassword(user_id, pass);
+          }else{
+            Meteor.users.update({_id : user_id},{$set:{"profile.pic":pic}});
+          }
         },
         resetpasswordByEmail : function (email){
           var user = Meteor.users.findOne({'emails.address': {$regex:email,$options:'i'}});
@@ -381,6 +386,11 @@ if (Meteor.isServer)
               request_for_meet_candidate(user,attendee)
               console.log("request is send")
             }
+        },
+        upload_attandee : function(fileContent){
+             console.log("start insert");
+             import_attandee_files(fileContent);
+             console.log("completed");
         }
     });
 }
