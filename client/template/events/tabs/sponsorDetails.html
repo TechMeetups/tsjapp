@@ -1,0 +1,36 @@
+<template name="sponsorDetails">
+  {{#ionHeaderBar class="bar-positive"}}
+  <button class="buttons button button-clear back-button pull-left" onclick="window.history.back();return false;">
+    <i class="icon ion-ios-arrow-back"></i>
+      <span class="back-text">
+        Back
+      </span>
+  </button>
+    <h1 class="title align-title-center">{{name}} Sponsor</h1>
+  {{/ionHeaderBar}}
+  {{#ionView}}
+
+  {{#ionContent class="padding" }}
+    {{#ionList}}
+    <div class="list card">
+        <div class="item item-divider">
+        {{ name }}
+      </div>
+      <div class="item item-thumbnail-left">
+          <img src="{{pic}}" width="" alt="{{name}}" height="20">
+          <p>EUR {{amount}}</p>
+      </div>
+    </div>
+    {{#ionList}}
+    {{#each description_list description}}
+        {{#ionItem }}
+              <h2>{{this}}</h2>
+         {{/ionItem}}
+    {{/each}}
+    {{/ionList}}
+    {{/ionList}}
+    <a ui-sref="" class="button button-dark button-block icon-left ion-ios-cart active" id="jobseeker_ticket">Buy (EUR {{amount}})</a>
+    {{/ionContent}}
+    {{> _tabs}}
+  {{/ionView}}
+</template>

@@ -16,6 +16,11 @@ if (Meteor.isServer)
           return Events.find({},{limit:limit});
         }
     });
+
+    Meteor.publish("sponsor_list", function (user_id, attendee_id)
+    {
+      return Sponsor.find({});
+    });
     Meteor.publish("connect_request_for_attendees", function (user_id, attendee_id)
     {
       return ConnectRequest.find({user_id:user_id,attendee_id:attendee_id,request_type:"meet_candidate"})
@@ -110,7 +115,7 @@ if (Meteor.isServer)
         if(user){
           Roles.addUsersToRoles(user._id, ['admin'])
         }
-        
+
     });
     Accounts.onCreateUser(function(options, user) {
       console.log("on account create");
@@ -255,7 +260,45 @@ if (Meteor.isServer)
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
         });
    }
-
+  var import_attandee_files = function(file) {
+    console.log("enter function import_file_orders")
+     var lines = file.split(/\r\n|\n/);
+     var l = lines.length - 1;
+     for (var i=1; i < l; i++) {
+     var line = lines[i];
+     var line_parts = line.split(new RegExp(',(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))'));
+     dataObj = new Date(moment(line_parts[3].split("-")[1]).format("YYYY, MM , DD"));
+     name_arr = line_parts[3].split("-");
+     console.log(typeof name_arr)
+     console.log(typeof "Barcelona")
+     var event_name = name_arr[0]
+     console.log(event_name)
+     event_list = Events.find({"name":event_name}).fetch();
+     console.log(event_list)
+     if(event){
+       event_id = event._id
+     }else{
+       event_id = Events.insert({name:name,start:dataObj,end:dataObj,desc:" ",address:" ",created_at: new Date()})
+     }
+     console.log(event_id)
+     // EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:joined_on,ticket_no:ticket_no,created_at:new Date()});
+     // user_id = Accounts.createUser({
+     //       username: data.name,
+     //       email : data.email,
+     //       password : "welcome",
+     //       profile  : {
+     //           firstname : data.name,
+     //           skill : data.skill,
+     //           experience:data.experience,
+     //           lookingfor: data.lookingfor,
+     //           created_at:new Date(),
+     //           pic: data.pic
+     //     }
+     // });
+    //  console.log("submitted At: "+moment(line_parts[0]).format("MM/DD/YYYY"));
+     console.log("event At : "+moment(line_parts[3].split("-")[1]).format("MM/DD/YYYY"));
+     }
+    };
       Meteor.methods(
       {
         'sendMessage': function (toId)

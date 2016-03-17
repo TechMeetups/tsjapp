@@ -17,7 +17,22 @@ Router.map(function()
             return data;
         },layoutTemplate: 'tabsLayout'
     });
+    this.route('sponsor.tab',
+      {
+        path: '/tabs/sponsor/:_id',
+        layoutTemplate: 'tabsLayout'
+      }
+    );
 
+    this.route('sponsor.details',
+    {
+      path: '/tabs/sponsor/:_id/:_sponsor_id',
+      data:function(){
+        var id = this.params._sponsor_id;
+        var data = Sponsor.findOne({_id:id});
+        return data;
+      },
+    layoutTemplate: 'tabsLayout'});
     this.route('attendees.tab',
     {
       path: '/tabs/attendees/:_id',

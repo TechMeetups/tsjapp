@@ -1,0 +1,34 @@
+<template name="sponsorTab">
+  {{#ionHeaderBar class="bar-positive"}}
+  <button class="buttons button button-clear back-button pull-left" onclick="window.history.back();return false;">
+    <i class="icon ion-ios-arrow-back"></i>
+      <span class="back-text">
+        Back
+      </span>
+  </button>
+    <h1 class="title align-title-center">Pitch, Stand &amp; Sponsor</h1>
+    {{#if isInRole 'admin'}}
+    <button class="button button-clear" data-ion-modal="_sponsorNew">{{> ionIcon icon="ios-plus-empty"}}</button>
+    {{/if}}
+  {{/ionHeaderBar}}
+
+  {{#ionView}}
+  {{#ionContent class="padding"}}
+  <div id="overflow-scroll">
+    {{#ionList}}
+    {{#each sponsor_list}}
+      <a href="{{build_path _id}}">
+        {{#ionItem class="item-thumbnail-left"}}
+               <img src="{{pic}}" width="" alt="{{name}}" height="20">
+               <h2>EUR {{amount}}</h2>
+               <h2>{{name}}</h2>
+               <p>{{description}}</p>
+         {{/ionItem}}
+       </a>
+    {{/each}}
+    {{/ionList}}
+  </div>
+  {{/ionContent}}
+  {{> _tabs}}
+  {{/ionView}}
+</template>
