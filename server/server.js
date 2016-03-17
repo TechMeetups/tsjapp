@@ -114,7 +114,7 @@ if (Meteor.isServer)
         user = Meteor.users.findOne({ "emails.address" : 'jayeshdalwadi2007@gmail.com' });
         shawn = Meteor.users.findOne({ "emails.address" : 'shawn@techmeetups.com' });
         if(shawn){
-          Roles.addUsersToRoles(user._id, ['admin'])
+          Roles.addUsersToRoles(shawn._id, ['admin'])
         }
         if(user){
           Roles.addUsersToRoles(user._id, ['admin'])
