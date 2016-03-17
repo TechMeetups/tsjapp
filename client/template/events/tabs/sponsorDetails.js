@@ -23,5 +23,12 @@ Template.sponsorDetails.helpers({
    if(desc){
      return desc.split(",");
    }
+ },
+ sponsor : function(sponsor){
+   if(sponsor.toUpperCase() =="Gold".toUpperCase() || sponsor.toUpperCase() == "Silver".toUpperCase()){
+     return sponsor+" Sponsor";
+   }else {
+     return sponsor;
+   }
  }
 });
