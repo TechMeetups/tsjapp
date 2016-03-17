@@ -127,7 +127,10 @@ if (Meteor.isServer)
             user.profile = {};
             user.profile = options.profile
           }
-          userRegistration(user,"hidden")
+          if(options.profile.auto_created != true){
+            userRegistration(user,"hidden")
+          }
+
       }
       return user;
     });
@@ -265,36 +268,51 @@ if (Meteor.isServer)
      var lines = file.split(/\r\n|\n/);
      var l = lines.length - 1;
      for (var i=1; i < l; i++) {
-     var line = lines[i];
-     var line_parts = line.split(new RegExp(',(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))'));
-     dataObj = new Date(moment(line_parts[3].split("-")[1]).format("YYYY, MM , DD"));
-     name_arr = line_parts[3].split("-");
-     console.log(typeof name_arr)
-     console.log(typeof "Barcelona")
-     var event_name = name_arr[0]
-     console.log(event_name)
-     event_list = Events.find({"name":event_name}).fetch();
-     console.log(event_list)
-     if(event){
-       event_id = event._id
-     }else{
-       event_id = Events.insert({name:name,start:dataObj,end:dataObj,desc:" ",address:" ",created_at: new Date()})
+     try {
+       var line = lines[i];
+       var line_parts = line.split(new RegExp(',(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))'));
+       dataObj = new Date(moment(line_parts[0].split("-")[1]).format("YYYY, MM , DD"));
+       name_arr = line_parts[3].split("-");
+       var event_name = name_arr[0].trim();
+       event = Events.findOne({name:event_name});
+       event_id =''
+       if(event){
+         event_id = event._id;
+       }else{
+         event_id = Events.insert({name:event_name,start:dataObj,end:dataObj,desc:" ",address:" ",created_at: new Date()})
+       }
+       console.log(event_id)
+       exp = line_parts[4].replace("years","");
+       exp = exp.replace("Beginner","");
+       skill = line_parts[7]+ line_parts[8]
+       email = line_parts[2].trim();
+       user = Meteor.users.findOne({ "emails.address" : email });
+       user_id=''
+        if(user){
+          user_id = user._id
+        }
+        else{
+          user_id = Accounts.createUser({
+                username: line_parts[1],
+                email : line_parts[2],
+                password : line_parts[2],
+                profile  : {
+                    firstname : line_parts[1],
+                    skill : skill,
+                    experience: exp,
+                    lookingfor: " ",
+                    created_at:new Date(),
+                    pic: "",
+                    auto_created : true
+              }
+          });
+        }
+       ticket_no = guid();
+       EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:dataObj,ticket_no:ticket_no,created_at:new Date()});
+     }catch ( e ) {
+      console.log(e);
      }
-     console.log(event_id)
-     // EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:joined_on,ticket_no:ticket_no,created_at:new Date()});
-     // user_id = Accounts.createUser({
-     //       username: data.name,
-     //       email : data.email,
-     //       password : "welcome",
-     //       profile  : {
-     //           firstname : data.name,
-     //           skill : data.skill,
-     //           experience:data.experience,
-     //           lookingfor: data.lookingfor,
-     //           created_at:new Date(),
-     //           pic: data.pic
-     //     }
-     // });
+
     //  console.log("submitted At: "+moment(line_parts[0]).format("MM/DD/YYYY"));
      console.log("event At : "+moment(line_parts[3].split("-")[1]).format("MM/DD/YYYY"));
      }
@@ -437,6 +455,7 @@ if (Meteor.isServer)
              console.log("start insert");
              import_attandee_files(fileContent);
              console.log("completed");
+             return true
         }
     });
 }

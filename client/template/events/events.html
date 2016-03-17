@@ -5,7 +5,10 @@
   {{/contentFor}}
   {{#contentFor "headerButtonRight"}}
     {{#if isInRole 'admin'}}
-    <button class="button button-clear" data-ion-modal="_eventsNew">{{> ionIcon icon="ios-plus-empty"}}</button>
+    <div class="buttons">
+    <button class="button" data-ion-modal="_eventsNew">{{> ionIcon icon="ios-plus-empty"}}</button>
+    <button class="button" data-ion-modal="_importAttendee">Import</button>
+    </div>
     {{/if}}
    {{/contentFor}}
   {{#ionView}}

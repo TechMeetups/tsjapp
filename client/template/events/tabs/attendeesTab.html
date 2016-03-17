@@ -9,10 +9,7 @@
   </button>
     <h1 class="title align-title-center">Attendees</h1>
     {{#if isInRole 'admin'}}
-    <div class="pull-right">
-      <button class="button button-clear" data-ion-modal="_attendeeNew"><i class="icon ion-ios-plus-empty"></i></button>
-      <button class="button button-clear" data-ion-modal="_importAttendee">Import</button>
-    </div>
+      <button class="button button-clear pull-right" data-ion-modal="_attendeeNew"><i class="icon ion-ios-plus-empty"></i></button>
     {{/if}}
   {{/ionHeaderBar}}
 
