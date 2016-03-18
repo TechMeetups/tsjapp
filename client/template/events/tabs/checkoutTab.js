@@ -30,6 +30,22 @@ Template.checkoutTab.helpers({
    }else{
      return false;
    }
- }
+ },
+ total_amount: function(){
+   return checkout_manager.getTotal();
+ },
+ breaklines:function(text) {
+  text = text.replace(/(\r\n|\n|\r)/gm, '<br/>');
+  return text;
+}
+});
 
+
+Template.checkoutTab.events(
+{
+  'click .remove_item' : function(event, template)
+  {
+    var item_id = $(event.currentTarget).attr('data');
+    checkout_manager.remove_checkout_item(item_id)
+  }
 });

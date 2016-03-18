@@ -421,14 +421,17 @@ if (Meteor.isServer)
           console.log(event_attendee)
           return event_attendee;
         },
-        create_request_for_event_attendee : function(event_id,user_id){
+        create_request_for_event_attendee : function(event_id,user_id,checkout_item){
           console.log(user_id+" : "+event_id);
           ticket_no = guid();
+          checkout_item.desc = checkout_item.desc +"\nTicket_no : "+ticket_no;
+          Checkout.insert(checkout_item);
           EventAttendee.insert({attendee_id:user_id,event_id:event_id,ticket_no:ticket_no,joined_on:new Date(),created_at:new Date()});
           event = Events.findOne({_id:event_id});
           user = Meteor.users.findOne({_id:user_id});
           request_for_join_event(user,event);
           send_ticket_details(event,user,ticket_no)
+
           return true;
         },
         connect_request : function(data){
@@ -467,6 +470,14 @@ if (Meteor.isServer)
         },
         checkout_item:function(data){
           Checkout.insert(data);
+        },
+        remove_checkout_item:function(item_id){
+          cart_item = Checkout.findOne({_id:item_id})
+          if(cart_item.item_type == "ticket"){
+            EventAttendee.remove({attendee_id:cart_item.user_id,event_id:cart_item.item_id});
+          }
+          Checkout.remove({_id:item_id});
+          return true;
         }
     });
 }
