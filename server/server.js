@@ -54,6 +54,10 @@ if (Meteor.isServer)
           limit = 10 ;
       return Job.find({company_id:company_id},{limit:limit});
     });
+    Meteor.publish("checkout_item", function (user_id)
+    {
+      return Checkout.find({user_id:user_id,paid:"unpaid"});
+    });
     Meteor.publish('company_details', function(event_id,company_id) {
       company_ids=[]
       event_company =   EventCompany.find({event_id:event_id,company_id:company_id}, {sort:{ created_at:-1}},{fields: {'company_id':1}}).fetch()
@@ -460,6 +464,9 @@ if (Meteor.isServer)
              import_attandee_files(fileContent);
              console.log("completed");
              return true
+        },
+        checkout_item:function(data){
+          Checkout.insert(data);
         }
     });
 }

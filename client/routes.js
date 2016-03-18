@@ -23,6 +23,12 @@ Router.map(function()
         layoutTemplate: 'tabsLayout'
       }
     );
+    this.route('checkout.tab',
+      {
+        path: '/tabs/checkout/:_id',
+        layoutTemplate: 'tabsLayout'
+      }
+    );
 
     this.route('sponsor.details',
     {

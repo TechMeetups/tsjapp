@@ -1,0 +1,33 @@
+<template name="checkoutTab">
+  {{#ionHeaderBar class="bar-positive"}}
+  <button class="buttons button button-clear back-button pull-left" onclick="window.history.back();return false;">
+    <i class="icon ion-ios-arrow-back"></i>
+      <span class="back-text">
+        Back
+      </span>
+  </button>
+    <h1 class="title align-title-center">checkout</h1>
+  {{/ionHeaderBar}}
+  {{#ionView}}
+
+  {{#ionContent class="padding" }}
+
+    {{#ionList}}
+    {{#each item_list}}
+      <div class="item item-thumbnail-left">
+          <img src="{{pic}}" width="" alt="{{desc}}" height="20">
+          <p>{{desc}}</p>
+          <p>EUR {{amount}}</p>
+      </div>
+    {{/each}}
+    {{/ionList}}
+    {{#if disabled_btn}}
+    <a ui-sref="" class="button button-dark button-block icon-left ion-ios-cart active" id="pay_now">Pay Now</a>
+    {{else}}
+    <a ui-sref="" class="button button-dark button-block icon-left ion-ios-cart active" id="pay_now" disabled=true >Pay Now</a>
+    {{/if}}
+
+    {{/ionContent}}
+    {{> _tabs}}
+  {{/ionView}}
+</template>
