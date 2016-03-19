@@ -6,7 +6,7 @@
         Back
       </span>
   </button>
-    <h1 class="title align-title-center">company details</h1>
+    <h1 class="title align-title-center">{{ name }}</h1>
     {{#if isInRole 'admin'}}
     <button class="button button-clear" data-ion-modal="_jobNew">{{> ionIcon icon="ios-plus-empty"}}</button>
     {{/if}}
@@ -16,21 +16,19 @@
   {{#ionContent class="padding" }}
     {{#ionList}}
     <div class="list card">
-        <div class="item item-divider">
-        {{ name }}
-      </div>
+
       <div class="item item-thumbnail-left">
 
           <img src="{{pic}}" width="" alt="{{name}}" height="20">
-           <p>{{name}}</p>
-           <p>{{desc}}</p>
+           
+           <div class="item-text-wrap">
+            <p>{{desc}}</p>
+          </div>
 
       </div>
-      <div class="item item-divider">
-        {{format_date created_at}}
-      </div>
+
     </div>
-    <h2>Jobs</h2>
+    <h4>Jobs</h4>
     {{#ionList}}
     {{#each jobs_list}}
       <a href="{{ build_path _id}}">

@@ -6,7 +6,7 @@
         Back
       </span>
   </button>
-    <h1 class="title align-title-center">Job details</h1>
+    <h1 class="title align-title-center">{{ title }}</h1>
   {{/ionHeaderBar}}
 
   {{#ionView}}
@@ -14,29 +14,26 @@
     {{#ionList}}
     <div class="list card">
         <div class="item item-divider">
-        {{ title }}- {{format_date created_at}}
+           <h3>{{city}} (posted {{format_date created_at}})</h3>
       </div>
       <div class="item">
-
-
-           <p>{{title}}</p>
            <p>{{desc}}</p>
-           <p>{{city}}</p>
-      </div>
-
-
-      <div class="button-bar">
-            <button class="button button-stable button-block icon ion-ios-email" id="job_apply">Apply</button>
-            <button class="button button-stable button-block  icon ion-android-people" id="job_meet">Meet</button>
       </div>
     </div>
+    
+      <div class="button-bar">
+        <button class="button button-stable button-block icon ion-ios-email" id="job_apply">&nbsp;Apply</button>
+        <button class="button button-stable button-block  icon ion-android-people" id="job_meet">&nbsp;Meet</button>
+      </div>  
+    
+
     {{/ionList}}
+      
     {{#if list_need_to_view }}
      <div class="list card">
             <div class="item item-divider">Your requests</div>
             <div class="item item-body">
                 <div>
-
                   <div>{{#each connect_request}}
                     <p>
                       {{format_date created_at}} - {{display_request_type  request_type}}

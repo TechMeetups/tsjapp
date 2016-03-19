@@ -30,7 +30,12 @@ Template.eventsShow.events(
 {
   'click #jobseeker_ticket': function (event, template)
   {
-    //IonLoading.show();
+    
+    IonLoading.show({
+      customTemplate: "Generating Ticket...",
+      duration: 2000
+    });
+
     event_id = Router.current().params._id
     user_id = Meteor.userId()
     event = Events.findOne({_id:event_id});

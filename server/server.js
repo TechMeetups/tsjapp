@@ -103,9 +103,9 @@ if (Meteor.isServer)
     Meteor.startup(function () {
 
         // By default, the email is sent from no-reply@meteor.com. If you wish to receive email from users asking for help with their account, be sure to set this to an email address that you can receive email at.
-        Accounts.emailTemplates.from = 'admin <no-reply@CCIntegration.com>';
+        Accounts.emailTemplates.from = 'admin <no-reply@TechStartupJobs.com>';
         // The public name of your application. Defaults to the DNS name of the application (eg: awesome.meteor.com).
-        Accounts.emailTemplates.siteName = 'Graphical.IO';
+        Accounts.emailTemplates.siteName = 'TechStartupJobs.com';
         // A Function that takes a user object and returns a String for the subject line of the email.
         Accounts.emailTemplates.verifyEmail.subject = function(user) {
             return 'Confirm Your Email Address';
@@ -149,11 +149,13 @@ if (Meteor.isServer)
             from: fromEmail,
             to: toEmail,
             replyTo: fromEmail ,
-            subject: "CCIntegration Registration",
+            subject: "TechStartupJobs App Registration",
             text: "Hi "+user.profile.firstname+",\nYour Email: "+user.emails[0].address+" has been registered."+
             "\nYour password is : "+pass+"\n\n"+
-            "Thank you.\n"+
-            "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
+          "Thank you.\n"+
+          "The TechStartupJobs Team.\n"+
+          "http://techstartupjobs.com\n"+
+          "Join.Connect.Meet.Apply"
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
         });
     }
@@ -166,78 +168,109 @@ if (Meteor.isServer)
             from: fromEmail,
             to: toEmail,
             replyTo: fromEmail ,
-            subject: "CCIntegration Password Reset",
+            subject: "TechStartupJobs Password Reset",
             text: "Hi "+user.profile.firstname+",\nYour password has been reset."+
             "\nYour new password is : "+pass+"\n\n"+
-            "Thank you.\n"+
-            "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
+          "Thank you.\n"+
+          "The TechStartupJobs Team.\n"+
+          "http://techstartupjobs.com\n"+
+          "Join.Connect.Meet.Apply"
             // +"http://www.graphical.io/assets/img/Graphical-IO.png"
         });
     }
-    var request_for_meet_job= function(user,company,job){
+    var request_for_meet_job= function(user,company,job)
+    {
       var fromEmail = "admin@techmeetups.com";
       var toEmail = "marketing@techmeetups.com";
+      var ccEmail = "shawn@techmeetups.com";
+
+      Email.send({
+          from: fromEmail,
+          to: toEmail,
+          cc: ccEmail, 
+          replyTo: fromEmail ,
+          subject: "TechStartupJobs App - " + "Meeting Request to "+company.name+" for Job "+job.title,
+          text: "Hi,\nCandidate "+user.profile.firstname+" ("+user.emails[0].address+") wants to meet "+company.name+" for Job "+job.title+
+          "\n\n"+
+          "Thank you.\n"+
+          "The TechStartupJobs Team.\n"+
+          "http://techstartupjobs.com\n"+
+          "Join.Connect.Meet.Apply"
+          // +"http://www.graphical.io/assets/img/Graphical-IO.png"
+      });
+    }
+    
+    var send_ticket_details = function(event,user,ticket_no)
+    {
+      var fromEmail = "admin@techmeetups.com";
+      var toEmail = user.emails[0].address;
+      var ccEmail = "marketing@techmeetups.com";
+      var dt = moment(event.start).format("DD/MM/YYYY");
+
       Email.send({
           from: fromEmail,
           to: toEmail,
           replyTo: fromEmail ,
-          subject: "Request for meet "+company.name+" for Job "+job.title,
-          text: "Hi,\nCandidate "+user.profile.firstname+"("+user.emails[0].address+") wants to meet "+company.name+" for Job "+job.title+
-          "\n\n"+
+          cc:ccEmail,
+          subject: "TechStartupJobs App - " + "Ticket Details for " + event.name ,
+          text: "Hi "+user.profile.firstname+'\n'+
+                  "\nYou have purchased a ticket for\n"+
+                  "\nEvent : "+event.name+
+                  "\nDate : "+dt+
+                  "\nAddress : "+event.address+
+                  "\nTicket No : "+ticket_no+
+                 "\n\n"+
+                 "Please show your ticket on the TechStartupJobs App to gain access to the event.\n\n"+
           "Thank you.\n"+
-          "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
+          "The TechStartupJobs Team.\n"+
+          "http://techstartupjobs.com\n"+
+          "Join.Connect.Meet.Apply"
           // +"http://www.graphical.io/assets/img/Graphical-IO.png"
       });
     }
-    var send_ticket_details = function(event,user,ticket_no){
+
+    var request_for_meet_candidate = function (user,attendee)
+    {
       var fromEmail = "admin@techmeetups.com";
-      var toEmail = user.emails[0].address;
+      var toEmail = attendee.emails[0].address ; 
       var ccEmail = "marketing@techmeetups.com";
       Email.send({
           from: fromEmail,
           to: toEmail,
           replyTo: fromEmail ,
           cc:ccEmail,
-          subject: event.name+" ticket details",
-          text: "Hi,\nEvent : "+event.name+
-                  "\nDate : "+event.start+
-                  "\nAddress : "+event.address+
-                  "\nTicket No : "+ticket_no+
+          subject: 'TechStartupJobs App - ' + user.profile.firstname+ " would like to connect with you",
+          text: "Hi "+attendee.profile.firstname+"\n\n" + 
+          "A User '"+user.profile.firstname+"'  ("+user.emails[0].address+") would like to connect with you.\n"+
+          "Please check his profile and email him directly if interested."+
           "\n\n"+
           "Thank you.\n"+
-          "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
+          "The TechStartupJobs Team.\n"+
+          "http://techstartupjobs.com\n"+
+          "Join.Connect.Meet.Apply"
           // +"http://www.graphical.io/assets/img/Graphical-IO.png"
       });
     }
-    var request_for_meet_candidate = function (user,attendee){
+
+    var request_for_apply_job= function(user,company,job)
+    {
       var fromEmail = "admin@techmeetups.com";
       var toEmail = "marketing@techmeetups.com";
-      var ccEmail = attendee.emails[0].address
-      Email.send({
+      var ccEmail = "shawn@techmeetups.com";
+
+      Email.send(
+      {
           from: fromEmail,
           to: toEmail,
+          cc:ccEmail, 
           replyTo: fromEmail ,
-          cc:ccEmail,
-          subject: "Attendee wants to meet",
-          text: "Hi,\nAttendee "+user.profile.firstname+"("+user.emails[0].address+") wants to meet "+attendee.profile.firstname+"("+attendee.emails[0].address+")"+
-          "\n\n"+
+          subject: "TechStartupJobs App - " + "Job Application to "+company.name+" for Job "+job.title,
+          text: "Hi,\nCandidate "+user.profile.firstname+" ("+user.emails[0].address+") wants to apply to "+company.name+
+          " for the Job '"+job.title+"'"+"\n\n"+
           "Thank you.\n"+
-          "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
-          // +"http://www.graphical.io/assets/img/Graphical-IO.png"
-      });
-    }
-    var request_for_apply_job= function(user,company,job){
-      var fromEmail = "admin@techmeetups.com";
-      var toEmail = "marketing@techmeetups.com";
-      Email.send({
-          from: fromEmail,
-          to: toEmail,
-          replyTo: fromEmail ,
-          subject: "Request for apply "+company.name+" for Job "+job.title,
-          text: "Hi,\nCandidate "+user.profile.firstname+"("+user.emails[0].address+") wants to apply "+company.name+" for Job "+job.title+
-          "\n\n"+
-          "Thank you.\n"+
-          "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
+          "The TechStartupJobs Team.\n"+
+          "http://techstartupjobs.com\n"+
+          "Join.Connect.Meet.Apply"
           // +"http://www.graphical.io/assets/img/Graphical-IO.png"
       });
     }
@@ -248,11 +281,13 @@ if (Meteor.isServer)
           from: fromEmail,
           to: toEmail,
           replyTo: fromEmail ,
-          subject: "Request for join "+event.name+" event",
+          subject: "TechStartupJobs App " + "Request to join "+event.name+" event",
           text: "Hi,\n"+user.profile.firstname+"("+user.emails[0].address+") has request to join "+event.name+" event."+
           "\nPlease arrange pass for this event.\n\n"+
           "Thank you.\n"+
-          "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
+          "The TechStartupJobs Team.\n"+
+          "http://techstartupjobs.com\n"+
+          "Join.Connect.Meet.Apply"
           // +"http://www.graphical.io/assets/img/Graphical-IO.png"
       });
     }
@@ -264,10 +299,12 @@ if (Meteor.isServer)
             from: fromEmail,
             to: toEmail,
             replyTo: fromEmail ,
-            subject: "TechStartupJobs Registration Request",
+            subject: "TechStartupJobs App " +  "Registration Request",
             text: "Hi SysAdmin,\nUser: "+user_email+" wants to register on TechStartupJobs App\n\n"+
-            "Thank you.\n"+
-            "The Techmeetups Team.\n"+Meteor.absoluteUrl()+"\n"
+          "Thank you.\n"+
+          "The TechStartupJobs Team.\n"+
+          "http://techstartupjobs.com\n"+
+          "Join.Connect.Meet.Apply"
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
         });
    }
@@ -424,7 +461,7 @@ if (Meteor.isServer)
         create_request_for_event_attendee : function(event_id,user_id,checkout_item){
           console.log(user_id+" : "+event_id);
           ticket_no = guid();
-          checkout_item.desc = checkout_item.desc +"\nTicket_no : "+ticket_no;
+          checkout_item.desc = checkout_item.desc +"\n"+ticket_no;
           Checkout.insert(checkout_item);
           EventAttendee.insert({attendee_id:user_id,event_id:event_id,ticket_no:ticket_no,joined_on:new Date(),created_at:new Date()});
           event = Events.findOne({_id:event_id});
@@ -442,11 +479,14 @@ if (Meteor.isServer)
             user = Meteor.users.findOne({_id:data.user_id});
             company = Company.findOne({_id:data.company_id});
             job = Job.findOne({_id:data.job_id})
-            if(data.request_type =="job_apply"){
+
+            if(data.request_type =="job_apply")
+            {
               request_for_apply_job(user,company,job)
               console.log("request is send")
             }
-            if(data.request_type =="job_meet"){
+            if(data.request_type =="job_meet")
+            {
               request_for_meet_job(user,company,job)
               console.log("request is send")
             }

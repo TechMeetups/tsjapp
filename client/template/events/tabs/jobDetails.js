@@ -31,10 +31,13 @@ Template.jobDetails.helpers({
       }
   },
   display_request_type:function(connect_type){
-    if(connect_type == "job_meet"){
-      return "Applied"
-    }else{
+    if(connect_type == "job_meet")
+    {
       return "Meeting Request";
+    }
+    else
+    {
+      return "Applied"  ;
     }
 
   }
