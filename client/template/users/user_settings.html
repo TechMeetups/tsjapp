@@ -1,0 +1,97 @@
+<template name="usersettings">
+  {{#contentFor "headerButtonLeft"}}
+    {{>ionNavBackButton path="events"}}
+  {{/contentFor}}
+
+  {{#contentFor "headerTitle"}}
+    <h1 class="title">User Settings</h1>
+  {{/contentFor}}
+  {{#ionView}}
+    {{#ionContent}}
+
+    
+    <div class="list">
+      {{#with profile}}
+
+
+      <label class="item item-input">
+        <span class="input-label">Name</span>
+        <input type="text" placeholder="Name" id="firstname" value="{{firstname}}">
+      </label>
+
+      <label class="item item-input">
+        <span class="input-label">City</span>
+        <input type="text" placeholder="City" id="city" value="{{city}}">
+      </label>
+
+      <label class="item item-input">
+        <span class="input-label">Profession</span>
+        <input type="text" placeholder="Developer, Designer, Product Manager,..." id="profession" value="{{profession}}">
+      </label>
+<!--       
+         <label class="item item-input item-select">
+          <div class="input-label">
+            City 
+          </div>
+          <select>
+            <option>Amsterdam</option>
+            <option>Barcelona</option>
+            <option>Berlin</option>
+            <option>Copenhagen</option>
+            <option>Lisbon</option>
+            <option>London</option>
+            <option>Paris</option>
+            <option>Stockholm</option>
+            <option>Other</option>
+          </select>
+        </label> -->
+      
+
+<!--       
+         <label class="item item-input item-select">
+          <div class="input-label">
+            Profession 
+          </div>
+          <select>
+            <option>Business Analyst</option>
+            <option>Designer</option>
+            <option>Developer</option>
+            <option>Product Management</option>
+            <option>Project Management</option>
+            <option>QA</option>
+          </select>
+        </label> -->
+      
+      
+      
+      <label class="item item-input">
+        <span class="input-label">Experience</span>
+        <input type="number" name="volume" min="0" max="20" id="experience" placeholder="In years" value="{{experience}}">
+        <span class="input-label">(years)</span>
+      </label>
+    
+      <label class="item item-input">
+        <span class="input-label">Skills</span>
+        <textarea placeholder="Comma separated" rows="2" id="skill" value="{{skill}}"></textarea>
+      </label>
+
+      <label class="item item-input">
+        <span class="input-label">Looking for?</span>
+        <textarea placeholder="Job, Co-Founder, Team, MVP, Product Dev,..." id="lookingfor" value="{{lookingfor}}"></textarea>
+      </label>
+
+      <label class="item item-input">
+        <textarea placeholder="URL of your picture" id="pic" value="{{pic}}"></textarea>
+      </label>
+      
+      {{/with}}
+
+    </div>
+
+      <div class="padding">
+      <button type="button" class="button button-dark button-block" id="update_settings">Update</button>
+    </div>
+      {{/ionContent}}
+  {{/ionView}}
+</template>
+

@@ -4,6 +4,7 @@ Router.configure({
 Router.map(function()
 {
     this.route('userprofile', {path: '/user_profile'});
+    this.route('usersettings', {path: '/user_settings'});
     this.route('events', {path:"/events"} );
     this.route('register', {path: '/register'});
     this.route('accountsetup', {path: '/accountsetup'});

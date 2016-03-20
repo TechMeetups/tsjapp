@@ -387,15 +387,37 @@ if (Meteor.isServer)
         'sendtaskCompletedNotification':function(useremail,project,workitem,notes){
             sendtaskCompletedNotification(useremail,project,workitem,notes);
         },
-        resetpassword : function (user_id,pass,pic)
+        resetpassword : function (user_id,pass)
         {
-          if(pass.length > 1){
+          if(pass.length > 1)
+          {
             Accounts.setPassword(user_id, pass);
-          }else{
-            Meteor.users.update({_id : user_id},{$set:{"profile.pic":pic}});
           }
+          // else
+          // {
+          //   Meteor.users.update({_id : user_id},{$set:{"profile.pic":pic}});
+          // }
         },
-        resetpasswordByEmail : function (email){
+        update_attendee : function (user_id,data)
+        {
+          console.log('update_attendee:'+user_id) ; 
+          console.log('update_attendee.data:'+data) ; 
+          Meteor.users.update(
+          {_id : user_id},
+          {$set: {
+                  "profile.firstname":data.firstname,  
+                  "profile.city":data.city,
+                  "profile.profession":data.profession,  
+                  "profile.experience":data.experience, 
+                  "profile.skill":data.skill, 
+                  "profile.lookingfor":data.lookingfor, 
+                  "profile.pic":data.pic
+                  }
+          });
+
+        },
+        resetpasswordByEmail : function (email)
+        {
           var user = Meteor.users.findOne({'emails.address': {$regex:email,$options:'i'}});
           if(user){
             pass = guid()
@@ -406,20 +428,28 @@ if (Meteor.isServer)
             return "User not available with provided email"
           }
         },
-        authenticate : function(code){
+        authenticate : function(code)
+        {
           this.unblock();
           return authenticate(code)
         },
-        insert_attendee : function(data,event_id){
+        insert_attendee : function(data,event_id)
+        {
           user =  Meteor.users.findOne({"email":data.email});
-          if(user){
+          
+          if(user)
+          {
             user_id = user._id
-          }else{
-            user_id = Accounts.createUser({
+          }
+          else
+          {
+            user_id = Accounts.createUser(
+            {
               username: data.name,
               email : data.email,
               password : "welcome",
-              profile  : {
+              profile  : 
+              {
                   firstname : data.name,
                   skill : data.skill,
                   experience:data.experience,
@@ -436,7 +466,8 @@ if (Meteor.isServer)
           ticket_no = guid();
           EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:joined_on,ticket_no:ticket_no,created_at:new Date()});
         },
-        insert_company : function(data,event_id){
+        insert_company : function(data,event_id)
+        {
           company =  Company.findOne({"name":data.name});
           if(company){
             company_id = user._id

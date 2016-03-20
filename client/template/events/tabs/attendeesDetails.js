@@ -1,18 +1,27 @@
-Template.attendeesDetails.created = function () {
-  this.autorun(function () {
+Template.attendeesDetails.created = function () 
+{
+  this.autorun(function () 
+  {
     this.subscription = Meteor.subscribe('attendees_details',Router.current().params._id,Router.current().params._attendee_id);
     this.subscription1 = attendee_manager.default_connect_request(Router.current().params._attendee_id)
   }.bind(this));
 };
-Template.attendeesDetails.rendered = function () {
-  this.autorun(function () {
-    if (!this.subscription.ready() || !this.subscription1.ready()) {
+
+Template.attendeesDetails.rendered = function () 
+{
+  this.autorun(function () 
+  {
+    if (!this.subscription.ready() || !this.subscription1.ready()) 
+    {
       IonLoading.show();
-    } else {
+    } 
+    else 
+    {
       IonLoading.hide();
     }
   }.bind(this));
 };
+
 Template.attendeesDetails.helpers({
   format_date : function(date){
     return event_manager.format_data(date)
