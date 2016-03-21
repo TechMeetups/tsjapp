@@ -65,5 +65,9 @@ Template.attendeesDetails.events(
     request ={request_type:request_type,user_id:user_id,attendee_id:attendee_id}
     console.log(request)
     event_manager.meet_candidate(request);
+  }, 
+  'click .jump2Linkedin' : function(URL) 
+  {
+      OpenInNewTab(url) ; 
   }
 });

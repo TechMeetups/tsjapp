@@ -16,27 +16,39 @@
         Back
       </span>
   </button>
-    <h1 class="title align-title-center">Attendee details</h1>
+    <h1 class="title align-title-center">{{ profile.firstname }}</h1>
   {{/ionHeaderBar}}
 
   {{#ionView}}
   {{#ionContent class="padding image_disply" }}
     {{#ionList}}
+    {{#with profile}}
     <div class="list card">
         <div class="item item-divider">
-        {{ profile.firstname }}
+        <p>Looking for: <strong>{{lookingfor}}</strong></p>
       </div>
-      <div class="item item-thumbnail-left item-avatar">
-        {{#with profile}}
+      <div class="item item-thumbnail-left item-avatar item-button-right">
+        
           <img src="{{pic}}" width="" alt="{{firstname}}" height="20">
+
+           <div class="item-text-wrap">
            <p>{{skill}}</p>
-           <p>Looking for: {{lookingfor}}</p>
-         {{/with}}
-      </div>
+          </div>
+
+          {{ #if linkedin }}
+
+            <a class="item-icon-right" href="{{linkedin}}" target='_blank'>
+              <i class="icon ion-social-linkedin"></i>
+            </a>
+
+          {{/if}}
+
+     </div>
       <div class="item item-divider">
-        {{profile.experience}} years exp.
+        <h3>{{experience}} years exp.</h3>
       </div>
     </div>
+    {{/with}}
     {{/ionList}}
     <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-right ion-android-textsms" id="meet_candidate">Get in touch</a>
     {{#if list_need_to_view }}

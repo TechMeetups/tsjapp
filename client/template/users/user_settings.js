@@ -16,6 +16,7 @@ Template.usersettings.events(
     'click #update_settings': function(event, template)
     {
             event.preventDefault();
+
             var firstname = template.find('#firstname').value;
             var city = template.find('#city').value;
             var profession = template.find('#profession').value;
@@ -23,12 +24,13 @@ Template.usersettings.events(
             var skill = template.find('#skill').value;
             var lookingfor = template.find('#lookingfor').value;
             var pic = template.find('#pic').value;
+            var cv = template.find('#cv').value;
+            var linkedin = template.find('#linkedin').value;
 
             data = {firstname:firstname, city:city, profession:profession, experience:experience, skill:skill,
-                lookingfor:lookingfor,pic:pic}
-            console.log(data) ;
+                lookingfor:lookingfor,pic:pic, cv:cv, linkedin:linkedin }
             
-             attendee_manager.update(Meteor.user()._id,data) ; 
+            attendee_manager.update(Meteor.user()._id,data) ; 
             
             history.back() ;                 
              

@@ -440,7 +440,7 @@ if (Meteor.isServer)
         update_attendee : function (user_id,data)
         {
           console.log('update_attendee:'+user_id) ;
-          console.log('update_attendee.data:'+data) ;
+          
           Meteor.users.update(
           {_id : user_id},
           {$set: {
