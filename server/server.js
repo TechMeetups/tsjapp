@@ -344,10 +344,14 @@ if (Meteor.isServer)
             var profile  =  
             {
                     firstname : line_parts[0],
-                    skill : skill,
                     experience: exp,
-                    lookingfor: "",
-                    pic: ""
+                    skill : skill,
+                    lookingfor: line_parts[5],
+                    profession: line_parts[6],
+                    pic: line_parts[7],
+                    cv: line_parts[8],
+                    linkedin : line_parts[9], 
+                    city : line_parts[10]
             } ; 
 
             attendee_manager.update(user_id,profile) ; 
@@ -359,13 +363,18 @@ if (Meteor.isServer)
                 username: line_parts[0],
                 email : line_parts[1],
                 password : line_parts[1],
-                profile  : {
+                profile  : 
+                {
                     firstname : line_parts[0],
-                    skill : skill,
                     experience: exp,
-                    lookingfor: "",
+                    skill : skill,
+                    lookingfor: line_parts[5],
+                    profession: line_parts[6],
+                    pic: line_parts[7],
+                    cv: line_parts[8],
+                    linkedin : line_parts[9], 
+                    city : line_parts[10], 
                     created_at:new Date(),
-                    pic: "",
                     auto_created : true
               }
             });
@@ -436,15 +445,16 @@ if (Meteor.isServer)
           {_id : user_id},
           {$set: {
                   "profile.firstname":data.firstname,
-                  "profile.city":data.city,
-                  "profile.profession":data.profession,
                   "profile.experience":data.experience,
                   "profile.skill":data.skill,
                   "profile.lookingfor":data.lookingfor,
-                  "profile.pic":data.pic
+                  "profile.profession":data.profession,
+                  "profile.pic":data.pic, 
+                  "profile.cv":data.cv, 
+                  "profile.linkedin":data.linkedin, 
+                  "profile.city":data.city
                   }
           });
-
         },
         resetpasswordByEmail : function (email)
         {
