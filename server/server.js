@@ -187,7 +187,7 @@ if (Meteor.isServer)
       Email.send({
           from: fromEmail,
           to: toEmail,
-          cc: ccEmail, 
+          cc: ccEmail,
           replyTo: fromEmail ,
           subject: "TechStartupJobs App - " + "Meeting Request to "+company.name+" for Job "+job.title,
           text: "Hi,\nCandidate "+user.profile.firstname+" ("+user.emails[0].address+") wants to meet "+company.name+" for Job "+job.title+
@@ -199,7 +199,7 @@ if (Meteor.isServer)
           // +"http://www.graphical.io/assets/img/Graphical-IO.png"
       });
     }
-    
+
     var send_ticket_details = function(event,user,ticket_no)
     {
       var fromEmail = "admin@techmeetups.com";
@@ -232,7 +232,7 @@ if (Meteor.isServer)
     var request_for_meet_candidate = function (user,attendee)
     {
       var fromEmail = "admin@techmeetups.com";
-      var toEmail = attendee.emails[0].address ; 
+      var toEmail = attendee.emails[0].address ;
       var ccEmail = "marketing@techmeetups.com";
       Email.send({
           from: fromEmail,
@@ -240,7 +240,7 @@ if (Meteor.isServer)
           replyTo: fromEmail ,
           cc:ccEmail,
           subject: 'TechStartupJobs App - ' + user.profile.firstname+ " would like to connect with you",
-          text: "Hi "+attendee.profile.firstname+"\n\n" + 
+          text: "Hi "+attendee.profile.firstname+"\n\n" +
           "A User '"+user.profile.firstname+"'  ("+user.emails[0].address+") would like to connect with you.\n"+
           "Please check his profile and email him directly if interested."+
           "\n\n"+
@@ -262,7 +262,7 @@ if (Meteor.isServer)
       {
           from: fromEmail,
           to: toEmail,
-          cc:ccEmail, 
+          cc:ccEmail,
           replyTo: fromEmail ,
           subject: "TechStartupJobs App - " + "Job Application to "+company.name+" for Job "+job.title,
           text: "Hi,\nCandidate "+user.profile.firstname+" ("+user.emails[0].address+") wants to apply to "+company.name+
@@ -308,7 +308,7 @@ if (Meteor.isServer)
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
         });
    }
-  var import_attandee_files = function(file) {
+  var import_attandee_files = function(file,event_id) {
     console.log("enter function import_file_orders")
      var lines = file.split(/\r\n|\n/);
      var l = lines.length - 1;
@@ -316,50 +316,52 @@ if (Meteor.isServer)
      try {
        var line = lines[i];
        var line_parts = line.split(new RegExp(',(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))'));
-       dataObj = new Date(moment(line_parts[0].split("-")[1]).format("YYYY, MM , DD"));
-       name_arr = line_parts[3].split("-");
-       var event_name = name_arr[0].trim();
-       event = Events.findOne({name:event_name});
-       event_id =''
+       dataObj = new Date(moment(line_parts[4]));
+       event = Events.findOne({_id:event_id});
        if(event){
          event_id = event._id;
-       }else{
-         event_id = Events.insert({name:event_name,start:dataObj,end:dataObj,desc:" ",address:" ",created_at: new Date()})
+
        }
        console.log(event_id)
-       exp = line_parts[4].replace("years","");
-       exp = exp.replace("Beginner","");
-       skill = line_parts[7]+ line_parts[8]
-       email = line_parts[2].trim();
-       user = Meteor.users.findOne({ "emails.address" : email });
+       exp = line_parts[2];
+       skill = line_parts[3].replace(/["']/g, "");
+       email = line_parts[1].trim();
+       user = Meteor.users.findOne({"emails.address" : email});
        user_id=''
         if(user){
           user_id = user._id
+          console.log("Users Already Registered In System : "+ line_parts[1])
         }
         else{
           user_id = Accounts.createUser({
-                username: line_parts[1],
-                email : line_parts[2],
-                password : line_parts[2],
+                username: line_parts[0],
+                email : line_parts[1],
+                password : line_parts[1],
                 profile  : {
-                    firstname : line_parts[1],
+                    firstname : line_parts[0],
                     skill : skill,
                     experience: exp,
-                    lookingfor: " ",
+                    lookingfor: "",
                     created_at:new Date(),
                     pic: "",
                     auto_created : true
               }
           });
+          console.log("Users created In System : "+ line_parts[1])
         }
        ticket_no = guid();
-       EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:dataObj,ticket_no:ticket_no,created_at:new Date()});
+       event_attendee = EventAttendee.findOne({attendee_id:user_id,event_id:event_id});
+       if(event_attendee){
+         console.log("Users Already Registered In An Event : "+ line_parts[1])
+       }else{
+         EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:dataObj,ticket_no:ticket_no,created_at:new Date()});
+         console.log("Users Registered In An Event : "+ line_parts[1])
+       }
      }catch ( e ) {
       console.log(e);
      }
 
-    //  console.log("submitted At: "+moment(line_parts[0]).format("MM/DD/YYYY"));
-     console.log("event At : "+moment(line_parts[3].split("-")[1]).format("MM/DD/YYYY"));
+
      }
     };
       Meteor.methods(
@@ -400,17 +402,17 @@ if (Meteor.isServer)
         },
         update_attendee : function (user_id,data)
         {
-          console.log('update_attendee:'+user_id) ; 
-          console.log('update_attendee.data:'+data) ; 
+          console.log('update_attendee:'+user_id) ;
+          console.log('update_attendee.data:'+data) ;
           Meteor.users.update(
           {_id : user_id},
           {$set: {
-                  "profile.firstname":data.firstname,  
+                  "profile.firstname":data.firstname,
                   "profile.city":data.city,
-                  "profile.profession":data.profession,  
-                  "profile.experience":data.experience, 
-                  "profile.skill":data.skill, 
-                  "profile.lookingfor":data.lookingfor, 
+                  "profile.profession":data.profession,
+                  "profile.experience":data.experience,
+                  "profile.skill":data.skill,
+                  "profile.lookingfor":data.lookingfor,
                   "profile.pic":data.pic
                   }
           });
@@ -436,7 +438,7 @@ if (Meteor.isServer)
         insert_attendee : function(data,event_id)
         {
           user =  Meteor.users.findOne({"email":data.email});
-          
+
           if(user)
           {
             user_id = user._id
@@ -448,7 +450,7 @@ if (Meteor.isServer)
               username: data.name,
               email : data.email,
               password : "welcome",
-              profile  : 
+              profile  :
               {
                   firstname : data.name,
                   skill : data.skill,
@@ -533,9 +535,9 @@ if (Meteor.isServer)
               console.log("request is send")
             }
         },
-        upload_attandee : function(fileContent){
+        upload_attandee : function(fileContent,event_id){
              console.log("start insert");
-             import_attandee_files(fileContent);
+             import_attandee_files(fileContent,event_id);
              console.log("completed");
              return true
         },
