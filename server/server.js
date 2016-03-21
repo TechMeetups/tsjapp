@@ -308,32 +308,54 @@ if (Meteor.isServer)
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
         });
    }
-  var import_attandee_files = function(file,event_id) {
+  
+  var import_attandee_files = function(file,event_id) 
+  {
     console.log("enter function import_file_orders")
      var lines = file.split(/\r\n|\n/);
      var l = lines.length - 1;
-     for (var i=1; i < l; i++) {
-     try {
-       var line = lines[i];
-       var line_parts = line.split(new RegExp(',(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))'));
-       dataObj = new Date(moment(line_parts[4]));
-       event = Events.findOne({_id:event_id});
-       if(event){
-         event_id = event._id;
 
-       }
-       console.log(event_id)
-       exp = line_parts[2];
-       skill = line_parts[3].replace(/["']/g, "");
-       email = line_parts[1].trim();
-       user = Meteor.users.findOne({"emails.address" : email});
-       user_id=''
-        if(user){
-          user_id = user._id
-          console.log("Users Already Registered In System : "+ line_parts[1])
-        }
-        else{
-          user_id = Accounts.createUser({
+    event = Events.findOne({_id:event_id});
+    if(event)
+    {
+       event_id = event._id;
+    }
+    console.log('import_attandee_files.event_id'+event_id)
+
+     for (var i=1; i < l; i++) 
+     {
+        try 
+        {
+           var line = lines[i];
+           var line_parts = line.split(new RegExp(',(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))'));
+           dataObj = new Date(moment(line_parts[4]));
+
+           exp = line_parts[2];
+           skill = line_parts[3].replace(/["']/g, "");
+           email = line_parts[1].trim();
+           user = Meteor.users.findOne({"emails.address" : email});
+           user_id=''
+
+          if(user)
+          {
+            user_id = user._id
+            console.log("User Already Registered In System : "+ line_parts[1])+' Updating'
+
+            var profile  =  
+            {
+                    firstname : line_parts[0],
+                    skill : skill,
+                    experience: exp,
+                    lookingfor: "",
+                    pic: ""
+            } ; 
+
+            attendee_manager.update(user_id,profile) ; 
+          }
+          else
+          {
+            user_id = Accounts.createUser(
+            {
                 username: line_parts[0],
                 email : line_parts[1],
                 password : line_parts[1],
@@ -346,24 +368,30 @@ if (Meteor.isServer)
                     pic: "",
                     auto_created : true
               }
-          });
-          console.log("Users created In System : "+ line_parts[1])
+            });
+            console.log("User created In System : "+ line_parts[1])
+          }
+
+          ticket_no = guid();
+          event_attendee = EventAttendee.findOne({attendee_id:user_id,event_id:event_id});
+       
+          if(event_attendee)
+          {
+            console.log("Users Already Registered In An Event : "+ line_parts[1])
+          }
+          else
+          {
+             EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:dataObj,ticket_no:ticket_no,created_at:new Date()});
+             console.log("Users Registered In An Event : "+ line_parts[1])
+          }
+        
+        }catch ( e ) 
+        {
+          console.log(e);
         }
-       ticket_no = guid();
-       event_attendee = EventAttendee.findOne({attendee_id:user_id,event_id:event_id});
-       if(event_attendee){
-         console.log("Users Already Registered In An Event : "+ line_parts[1])
-       }else{
-         EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:dataObj,ticket_no:ticket_no,created_at:new Date()});
-         console.log("Users Registered In An Event : "+ line_parts[1])
-       }
-     }catch ( e ) {
-      console.log(e);
-     }
-
-
      }
     };
+
       Meteor.methods(
       {
         'sendMessage': function (toId)
