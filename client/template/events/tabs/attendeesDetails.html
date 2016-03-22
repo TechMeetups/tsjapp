@@ -25,7 +25,7 @@
     {{#with profile}}
     <div class="list card">
         <div class="item item-divider">
-        <p>Looking for: <strong>{{lookingfor}}</strong></p>
+        <p><strong>{{profession}}</strong></p>
       </div>
       <div class="item item-thumbnail-left item-avatar item-button-right">
         
@@ -35,11 +35,12 @@
                        <img src="/assets/img/profile.png" width="" alt="{{firstname}}" height="30"> 
                   {{ / if }}
 
-
+           
            <div class="item-text-wrap">
            <p>{{skill}}</p>
           </div>
-
+          <p>Looking for: <strong>{{lookingfor}}</strong></p>       
+          
           {{ #if linkedin }}
 
             <a class="item-icon-right" href="{{linkedin}}" target='_blank'>
