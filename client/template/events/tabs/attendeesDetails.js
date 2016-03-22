@@ -22,7 +22,17 @@ Template.attendeesDetails.rendered = function ()
   }.bind(this));
 };
 
-Template.attendeesDetails.helpers({
+Template.attendeesDetails.helpers(
+{
+    pic_exists : function(pic_url)
+  {
+      console.log("attendeesTab'"+pic_url+"'") ; 
+      if (!pic_url.trim() || pic_url === '') 
+        return false ;
+      else
+        return true ; 
+
+  },     
   format_date : function(date){
     return event_manager.format_data(date)
   },

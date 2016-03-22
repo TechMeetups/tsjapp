@@ -29,7 +29,12 @@
       </div>
       <div class="item item-thumbnail-left item-avatar item-button-right">
         
-          <img src="{{pic}}" width="" alt="{{firstname}}" height="20">
+          {{ #if pic_exists pic }}
+                    <img src="{{pic}}" width="" alt="{{firstname}}" height="30">
+                  {{else}}
+                       <img src="/assets/img/profile.png" width="" alt="{{firstname}}" height="30"> 
+                  {{ / if }}
+
 
            <div class="item-text-wrap">
            <p>{{skill}}</p>
