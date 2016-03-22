@@ -1,5 +1,16 @@
-Template.attendeesTab.helpers({
-  build_path: function(_id){
+Template.attendeesTab.helpers(
+{
+  pic_exists : function(pic_url)
+  {
+      console.log("attendeesTab'"+pic_url+"'") ; 
+      if (!pic_url.trim() || pic_url === '') 
+        return false ;
+      else
+        return true ; 
+
+  },   
+  build_path: function(_id)
+  {
     return "/tabs/attendees/"+Router.current().params._id+"/"+_id;
   },
   format_date: function(date){

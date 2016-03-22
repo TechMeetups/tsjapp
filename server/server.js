@@ -8,12 +8,15 @@ if (Meteor.isServer)
       console.log(limit)
       if(!limit || limit < 1)
           limit = 10 ;
-        if( searchValue &&  searchValue.length > 1){
-          console.log(Events.find({'name': {'$regex': new RegExp(searchValue, "i")}}, {sort:{ created_at:-1},limit:limit}).count());
-          return Events.find({'name': {'$regex': new RegExp(searchValue, "i")}}, {sort:{ created_at:-1},limit:limit});
-        }else{
-          console.log(Events.find({},{limit:limit}).count());
-          return Events.find({},{limit:limit});
+        if( searchValue &&  searchValue.length > 1)
+        {
+          console.log(Events.find({'name': {'$regex': new RegExp(searchValue, "i")}}, {sort:{ start:1},limit:limit}).count());
+          return Events.find({'name': {'$regex': new RegExp(searchValue, "i")}}, {sort:{ start:1},limit:limit});
+        }
+        else
+        {
+          console.log(Events.find({},{sort:{ start:1},limit:limit}).count());
+          return Events.find({},{sort:{ start:1},limit:limit});
         }
     });
 

@@ -27,7 +27,12 @@
           <a href="{{build_path _id}}">
             {{#ionItem avatar=true class="item-thumbnail-left"}}
                 {{#with profile}}
-                  <img src="{{pic}}" width="" alt="{{firstname}}" height="20">
+                  {{ #if pic_exists pic }}
+                    <img src="{{pic}}" width="" alt="{{firstname}}" height="20">
+                  {{else}}
+                       <img src="/assets/img/profile.png" width="" alt="{{firstname}}" height="20"> 
+                  {{ / if }}
+
                    <h2>{{firstname}}</h2>
                    <p>{{skill}}</p>
                    <p>Exp. {{experience}} years</p>
