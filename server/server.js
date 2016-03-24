@@ -311,6 +311,38 @@ if (Meteor.isServer)
             // + "http://www.graphical.io/assets/img/Graphical-IO.png"
         });
    }
+
+    var request_2pay_now = function(user,cart)
+    {
+      var fromEmail = "admin@techmeetups.com";
+      var toEmail = "marketing@techmeetups.com";
+      var ccEmail = "shawn@techmeetups.com";
+
+      var products  ; 
+      for(i=0;i<cart.length;i++)
+      {
+        products += cart[i].item_type + ' ' + cart[i].amount + '\n' ;  
+      } 
+
+      Email.send(
+      {
+          from: fromEmail,
+          to: toEmail,
+          cc:ccEmail,
+          replyTo: fromEmail ,
+          subject: "TechStartupJobs App - " + "Request to Pay ",
+          text: "Hi,\n"+user.profile.firstname+" ("+user.emails[0].address+") wants to pay for purchases"+"\n\n"+
+          "Purchased Items : \n"+
+          products+ "\n"+
+          "Thank you.\n"+
+          "The TechStartupJobs Team.\n"+
+          "http://techstartupjobs.com\n"+
+          "Join.Connect.Meet.Apply"
+          // +"http://www.graphical.io/assets/img/Graphical-IO.png"
+      });
+
+      return true ; 
+    }
   
   var import_attandee_files = function(file,event_id) 
   {
@@ -545,8 +577,8 @@ if (Meteor.isServer)
 
           return true;
         },
-        connect_request : function(data){
-
+        connect_request : function(data)
+        {
           ConnectRequest.insert({request_type:data.request_type,user_id:data.user_id,requested_on: new Date(),
             created_at:new Date(),company_id:data.company_id,job_id:data.job_id,event_id:data.event_id,attendee_id:""});
             event = Events.findOne({_id:data.event_id});
@@ -592,6 +624,15 @@ if (Meteor.isServer)
           }
           Checkout.remove({_id:item_id});
           return true;
-        }
+        },
+        pay_now_email : function(user_id,cart)
+        {
+            user = Meteor.users.findOne({_id:user_id});
+
+            var res = request_2pay_now(user,cart) ; 
+
+           console.log("pay now request is send")
+           return res ;
+        },
     });
 }

@@ -47,5 +47,10 @@ Template.checkoutTab.events(
   {
     var item_id = $(event.currentTarget).attr('data');
     checkout_manager.remove_checkout_item(item_id)
+  }, 
+  'click #pay_now' : function(event, template)
+  {
+    var item_id = $(event.currentTarget).attr('data');
+    checkout_manager.pay_now() ; 
   }
 });
