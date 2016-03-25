@@ -10,12 +10,7 @@
 </style>
 -->
   {{#ionHeaderBar class="bar-positive"}}
-  <button class="buttons button button-clear back-button pull-left" onclick="window.history.back();return false;">
-    <i class="icon ion-ios-arrow-back"></i>
-      <span class="back-text">
-        Back
-      </span>
-  </button>
+  {{ > backtoolbar}}
     <h1 class="title align-title-center">{{ profile.firstname }}</h1>
   {{/ionHeaderBar}}
 
@@ -56,10 +51,10 @@
     </div>
     {{/with}}
     {{/ionList}}
-    <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-right ion-android-textsms" id="meet_candidate">Get in touch</a>
+    <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-right ion-ios-email-outline" id="meet_candidate">Get in touch</a>
     {{#if list_need_to_view }}
     <div class="list card">
-            <div class="item item-divider">Previous contact requests</div>
+            <div class="item item-divider">Your previous contact requests</div>
             <div class="item item-body">
                 <div>{{#each connect_request}} {{format_date created_at}} {{/each}}</div>
             </div>

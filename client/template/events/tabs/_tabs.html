@@ -3,18 +3,29 @@
     <a class="tab-item active" href="/events" data-ion-tab="">
       <i class="icon ion-android-bar"></i>
       Events
+     <!-- <span class="badge badge-assertive">{{helperEventCount}}</span> -->
     </a>
     <a class="tab-item" href="/tabs/attendees/{{ build_tab_url }}" data-ion-tab="">
         <i class="icon ion-ios-people"></i>
         Attendees
+       <!-- <span class="badge badge-assertive">{{helperAttendeeCount}}</span> -->
     </a>
+
     <a class="tab-item" href="/tabs/companies/{{ build_tab_url }}" data-ion-tab="">
         <i class="icon ion-ios-briefcase"></i>
         Companies
+       <!-- <span class="badge badge-assertive">{{helperCompanyCount}}</span> -->
+    </a>
+    
+    <a class="tab-item" href="/tabs/jobs/{{ build_tab_url }}" data-ion-tab="">
+        <i class="icon ion-archive"></i>
+        Jobs
+       <!-- <span class="badge badge-assertive">{{helperJobCount}}</span> -->
     </a>
     <a class="tab-item" href="/tabs/checkout/{{ build_tab_url }}" data-ion-tab="">
       <i class="icon ion-ios-cart"></i>
        Checkout
+       <!-- <span ng-if="{{helperCheckCount}}" class="badge badge-assertive">{{helperCheckCount}}</span> -->
     </a>
     {{/ionTabs}}
 </template>

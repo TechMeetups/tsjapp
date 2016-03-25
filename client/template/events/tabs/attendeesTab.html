@@ -1,12 +1,7 @@
 <template name="attendeesTab">
   {{#ionView}}
   {{#ionHeaderBar class="bar-positive"}}
-  <button class="buttons button button-clear back-button pull-left" onclick="window.history.back();return false;">
-    <i class="icon ion-ios-arrow-back"></i>
-      <span class="back-text">
-        Back
-      </span>
-  </button>
+  {{ > backtoolbar }}
     <h1 class="title align-title-center">Attendees</h1>
     {{#if isInRole 'admin'}}
       <button class="button button-clear pull-right" data-ion-modal="_attendeeNew"><i class="icon ion-ios-plus-empty"></i></button>

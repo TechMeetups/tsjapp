@@ -53,7 +53,7 @@ Template.sponsorDetails.events(
       created_at:new Date()
     }
     console.log(data)
-    checkout_manager.checkout_item(data)
-
+    checkout_manager.checkout_item(data) ; 
+    Router.go('checkout.tab', {_id: event_id});
   }
 });

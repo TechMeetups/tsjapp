@@ -1,11 +1,6 @@
 <template name="sponsorDetails">
   {{#ionHeaderBar class="bar-positive"}}
-  <button class="buttons button button-clear back-button pull-left" onclick="window.history.back();return false;">
-    <i class="icon ion-ios-arrow-back"></i>
-      <span class="back-text">
-        Back
-      </span>
-  </button>
+{{ > backtoolbar}}
     <h1 class="title align-title-center">{{sponsor name}}</h1>
   {{/ionHeaderBar}}
   {{#ionView}}
@@ -18,7 +13,10 @@
       </div>
       <div class="item item-thumbnail-left">
           <img src="{{pic}}" width="" alt="{{name}}" height="20">
-          <p>EUR {{amount}}</p>
+           <div class="item-text-wrap">
+            <p>{{type}}</p>
+          </div>
+          <h2>EUR {{amount}}</h2>
       </div>
     </div>
     {{#ionList}}

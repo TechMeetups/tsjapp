@@ -318,11 +318,15 @@ if (Meteor.isServer)
       var toEmail = "marketing@techmeetups.com";
       var ccEmail = "shawn@techmeetups.com";
 
-      var products  ; 
+      var products, tot = 0   ;
+
       for(i=0;i<cart.length;i++)
       {
-        products += cart[i].item_type + ' ' + cart[i].amount + '\n' ;  
+        products += cart[i].desc + ' ' + cart[i].amount + '\n' ; 
+        tot =  tot + eval( isNumber(cart[i].amount)) ; 
       } 
+
+      products += '\nTotal : '+tot+'\n' ; 
 
       Email.send(
       {
