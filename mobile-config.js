@@ -10,27 +10,27 @@ App.info({
 
 App.launchScreens({
 // iOS
-  'iphone': 'public/assets/img/Happy-Team.jpg',
-  'iphone_2x': 'public/assets/img/Happy-Team.jpg',
-  'iphone5': 'public/assets/img/Happy-Team.jpg',
-  'iphone6': 'public/assets/img/Happy-Team.jpg',
-  'iphone6p_portrait': 'public/assets/img/Happy-Team.jpg',
-  'iphone6p_landscape': 'public/assets/img/Happy-Team.jpg',
+  'iphone': 'public/assets/img/tsjapp-splash.png',
+  'iphone_2x': 'public/assets/img/tsjapp-splash.png',
+  'iphone5': 'public/assets/img/tsjapp-splash.png',
+  'iphone6': 'public/assets/img/tsjapp-splash.png',
+  'iphone6p_portrait': 'public/assets/img/tsjapp-splash.png',
+  'iphone6p_landscape': 'public/assets/img/tsjapp-splash.png',
 
-  'ipad_portrait': 'public/assets/img/Happy-Team.jpg',
-  'ipad_portrait_2x': 'public/assets/img/Happy-Team.jpg',
-  'ipad_landscape': 'public/assets/img/Happy-Team.jpg',
-  'ipad_landscape_2x': 'public/assets/img/Happy-Team.jpg',
+  'ipad_portrait': 'public/assets/img/tsjapp-splash.png',
+  'ipad_portrait_2x': 'public/assets/img/tsjapp-splash.png',
+  'ipad_landscape': 'public/assets/img/tsjapp-splash.png',
+  'ipad_landscape_2x': 'public/assets/img/tsjapp-splash.png',
 
   // Android
-  'android_ldpi_portrait': 'public/assets/img/Happy-Team.jpg',
-  'android_ldpi_landscape': 'public/assets/img/Happy-Team.jpg',
-  'android_mdpi_portrait': 'public/assets/img/Happy-Team.jpg',
-  'android_mdpi_landscape': 'public/assets/img/Happy-Team.jpg',
-  'android_hdpi_portrait': 'public/assets/img/Happy-Team.jpg',
-  'android_hdpi_landscape': 'public/assets/img/Happy-Team.jpg',
-  'android_xhdpi_portrait': 'public/assets/img/Happy-Team.jpg',
-  'android_xhdpi_landscape': 'public/assets/img/Happy-Team.jpg'
+  'android_ldpi_portrait': 'public/assets/img/tsjapp-splash.png',
+  'android_ldpi_landscape': 'public/assets/img/tsjapp-splash.png',
+  'android_mdpi_portrait': 'public/assets/img/tsjapp-splash.png',
+  'android_mdpi_landscape': 'public/assets/img/tsjapp-splash.png',
+  'android_hdpi_portrait': 'public/assets/img/tsjapp-splash.png',
+  'android_hdpi_landscape': 'public/assets/img/tsjapp-splash.png',
+  'android_xhdpi_portrait': 'public/assets/img/tsjapp-splash.png',
+  'android_xhdpi_landscape': 'public/assets/img/tsjapp-splash.jpg'
 });
 
 App.icons({
