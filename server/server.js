@@ -24,14 +24,17 @@ if (Meteor.isServer)
     {
       return Sponsor.find({});
     });
+
     Meteor.publish("connect_request_for_attendees", function (user_id, attendee_id)
     {
       return ConnectRequest.find({user_id:user_id,attendee_id:attendee_id,request_type:"meet_candidate"})
     });
+
     Meteor.publish("connect_request_for_job", function (user_id,job_id)
     {
       return ConnectRequest.find({user_id:user_id,job_id:job_id,request_type:{$in:["job_meet","job_apply"]}})
     });
+
     Meteor.publish("attendees", function (limit, searchValue,event_id)
     {
       user_ids=[]
@@ -51,17 +54,30 @@ if (Meteor.isServer)
           return Meteor.users.find({_id:{$in:user_ids}},{limit:limit});
         }
     });
-    Meteor.publish("jobs", function (limit,company_id)
+
+    Meteor.publish("jobs", function (limit,event_id,company_id)
     {
+      $set = {} ; 
+      
+      if(event_id)
+        $set['event_id'] = event_id ; 
+
+      if(company_id)
+        $set['company_id'] = company_id ; 
+
       if(!limit || limit < 1)
           limit = 10 ;
-      return Job.find({company_id:company_id},{limit:limit});
+            
+      return Job.find($set,{limit:limit});
     });
+
     Meteor.publish("checkout_item", function (user_id)
     {
       return Checkout.find({user_id:user_id,paid:"unpaid"});
     });
-    Meteor.publish('company_details', function(event_id,company_id) {
+
+    Meteor.publish('company_details', function(event_id,company_id) 
+    {
       company_ids=[]
       event_company =   EventCompany.find({event_id:event_id,company_id:company_id}, {sort:{ created_at:-1}},{fields: {'company_id':1}}).fetch()
       for(i =0; i< event_company.length ;i++){
@@ -69,6 +85,7 @@ if (Meteor.isServer)
       }
       return Company.find({_id:{$in:company_ids}});
     });
+
     Meteor.publish("company", function (limit, searchValue,event_id)
     {
       company_ids=[]
@@ -88,7 +105,9 @@ if (Meteor.isServer)
           return Company.find({_id:{$in:company_ids}},{limit:limit});
         }
     });
-    Meteor.publish('attendees_details', function(event_id,attendee_id) {
+
+    Meteor.publish('attendees_details', function(event_id,attendee_id) 
+    {
       user_ids=[]
       event_attendees =   EventAttendee.find({event_id:event_id,attendee_id:attendee_id}, {sort:{ created_at:-1}},{fields: {'attendee_id':1}}).fetch()
       for(i =0; i< event_attendees.length ;i++){
@@ -96,21 +115,26 @@ if (Meteor.isServer)
       }
       return Meteor.users.find({_id:{$in:user_ids}});
     });
+
     Meteor.publish('job_details', function(company_id,job_id) {
       return Job.find({_id:job_id,company_id:company_id});
     });
 
-    Meteor.publish('event', function(_id) {
+    Meteor.publish('event', function(_id) 
+    {
       return Events.find({_id: _id});
     });
-    Meteor.startup(function () {
+
+    Meteor.startup(function () 
+    {
 
         // By default, the email is sent from no-reply@meteor.com. If you wish to receive email from users asking for help with their account, be sure to set this to an email address that you can receive email at.
         Accounts.emailTemplates.from = 'admin <no-reply@TechStartupJobs.com>';
         // The public name of your application. Defaults to the DNS name of the application (eg: awesome.meteor.com).
         Accounts.emailTemplates.siteName = 'TechStartupJobs.com';
         // A Function that takes a user object and returns a String for the subject line of the email.
-        Accounts.emailTemplates.verifyEmail.subject = function(user) {
+        Accounts.emailTemplates.verifyEmail.subject = function(user) 
+        {
             return 'Confirm Your Email Address';
         };
         // A Function that takes a user object and a url, and returns the body text for the email.
@@ -128,6 +152,7 @@ if (Meteor.isServer)
         }
 
     });
+
     Accounts.onCreateUser(function(options, user) {
       console.log("on account create");
       if(options.autocreate){

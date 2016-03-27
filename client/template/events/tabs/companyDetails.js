@@ -26,8 +26,9 @@ Template.companyDetails.helpers({
   {
      return !(job_manager.getCount() < Session.get("job_limit"));
   },
-  build_path: function(_id){
-    return "/tabs/company/"+Router.current().params._id+"/"+Router.current().params._company_id+"/"+_id;
+  build_path: function(_id)
+  {
+    return "/tabs/job/"+Router.current().params._company_id+"/"+_id;
   },
 });
 Template.companyDetails.events(

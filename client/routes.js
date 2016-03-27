@@ -4,10 +4,15 @@ Router.configure({
 Router.map(function()
 {
     this.route('userprofile', {path: '/user_profile'});
+
     this.route('usersettings', {path: '/user_settings'});
+    
     this.route('events', {path:"/events"} );
+    
     this.route('register', {path: '/register'});
+    
     this.route('accountsetup', {path: '/accountsetup'});
+    
     this.route('events.show',
     {
         path: '/event/:_id',
@@ -18,15 +23,17 @@ Router.map(function()
             return data;
         },layoutTemplate: 'tabsLayout'
     });
+
     this.route('sponsor.tab',
       {
         path: '/tabs/sponsor/:_id',
         layoutTemplate: 'tabsLayout'
       }
     );
+
     this.route('checkout.tab',
       {
-        path: '/tabs/checkout/:_id',
+        path: '/tabs/checkout',
         layoutTemplate: 'tabsLayout'
       }
     );
@@ -39,11 +46,15 @@ Router.map(function()
         var data = Sponsor.findOne({_id:id});
         return data;
       },
-    layoutTemplate: 'tabsLayout'});
+    layoutTemplate: 'tabsLayout'
+  });
+
+
     this.route('attendees.tab',
     {
       path: '/tabs/attendees/:_id',
-      layoutTemplate: 'tabsLayout'});
+      layoutTemplate: 'tabsLayout'
+    });
 
 
     this.route('attendees.details',
@@ -54,16 +65,20 @@ Router.map(function()
         var data = Meteor.users.findOne({_id:id});
         return data;
       },
-    layoutTemplate: 'tabsLayout'});
+      layoutTemplate: 'tabsLayout'}
+    );
+
     this.route('job.details',
     {
-      path: '/tabs/company/:_id/:_company_id/:_job_id',
-      data:function(){
+      path: '/tabs/job/:_company_id/:_job_id',
+      data:function()
+      {
         var id = this.params._job_id;
         var data = Job.findOne({_id:id});
         return data;
       },
-    layoutTemplate: 'tabsLayout'});
+    layoutTemplate: 'tabsLayout'
+  });
 
     this.route('company.details',
     {
@@ -80,6 +95,19 @@ Router.map(function()
       path: '/tabs/companies/:_id',
      layoutTemplate: 'tabsLayout'
     });
+
+    this.route('jobs.tab',
+    {
+      path: '/tabs/jobs/:_id',
+     layoutTemplate: 'tabsLayout'
+    });
+
+    this.route('jobsTab',
+    {
+      path: '/tabs/jobsTab',
+     layoutTemplate: 'tabsLayout'
+    });
+
     // this.route('tabs.one',
     // {
     //   path: '/tabs/one/:_id',

@@ -1,0 +1,49 @@
+<template name="jobsTab">
+  {{#ionHeaderBar class="bar-positive"}}
+{{ > backtoolbar}}
+    <h1 class="title align-title-center">Jobs</h1>
+    {{#if isInRole 'admin'}}
+    <button class="button button-clear" data-ion-modal="_companyNew">{{> ionIcon icon="ios-plus-empty"}}</button>
+    {{/if}}
+  {{/ionHeaderBar}}
+
+  {{#ionView}}
+  {{#ionContent class="padding"}}
+  <div id="overflow-scroll">
+  {{#ionItem}}
+  <label class="item item-input">
+      <i class="icon ion-search placeholder-icon"></i>
+      <input type="search" placeholder="Filter name" id="search">
+  </label>
+   {{/ionItem}}
+    {{#ionList}}
+
+    {{#each job}}
+      <a href="{{build_path company_id _id}}">
+        {{#ionItem avatar=true class="item-thumbnail-left"}}
+                {{ #if pic_exists pic }}
+                  <img src="{{pic}}" width="" alt="" height="20">
+                {{else}}
+                     <img src="/assets/img/job.png" width="" alt="" height="20"> 
+                {{ /if }}
+
+               <h2>{{title}}</h2>
+               <p>{{desc}}</p>
+               <h3>{{city}}</h3>
+         {{/ionItem}}
+       </a>
+    {{/each}}
+    
+    {{/ionList}}
+    {{#if moreTasks}}
+         <div id="showMoreEvents" style="">
+           <button id="showMoreResults" type="button " class="button button-block button-stable">Load More...</button>
+             <!-- Loading ...
+             <span class="loading fa fa-cog fa-spin fa-2x"></span> -->
+         </div>
+     {{/if}}
+  </div>
+  {{/ionContent}}
+  {{> main_tabs}}
+  {{/ionView}}
+</template>

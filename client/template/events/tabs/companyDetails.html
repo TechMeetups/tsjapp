@@ -8,7 +8,7 @@
   </button>
     <h1 class="title align-title-center">{{ name }}</h1>
     {{#if isInRole 'admin'}}
-    <button class="button button-clear" data-ion-modal="_jobNew">{{> ionIcon icon="ios-plus-empty"}}</button>
+    <button class="button button-clear" data-ion-modal="_jobNew">{{> ionIcon icon="ios-plus-empty"}}{{> ionIcon icon="ios-archive"}}</button>
     {{/if}}
   {{/ionHeaderBar}}
   {{#ionView}}

@@ -1,0 +1,17 @@
+<template name="main_tabs">
+    {{#ionTabs style="ios"}}
+    <a class="tab-item" href="/events" data-ion-tab="">
+      <i class="icon ion-android-bar"></i>
+      Events
+    </a>    
+    <a class="tab-item" href="/tabs/jobsTab" data-ion-tab="">
+        <i class="icon ion-archive"></i>
+        Jobs
+    </a>
+    <a class="tab-item" href="/tabs/checkout/{{ build_tab_url }}" data-ion-tab="">
+      <i class="icon ion-ios-cart"></i>
+       Checkout
+       <!-- <span ng-if="{{helperCheckCount}}" class="badge badge-assertive">{{helperCheckCount}}</span> -->
+    </a>
+    {{/ionTabs}}
+</template>
