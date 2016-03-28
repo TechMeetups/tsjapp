@@ -56,10 +56,15 @@ Router.map(function()
       layoutTemplate: 'tabsLayout'
     });
 
+    this.route('messages.tab',
+    {
+      path: '/tabs/messages',
+      layoutTemplate: 'tabsLayout'
+    });
 
     this.route('attendees.details',
     {
-      path: '/tabs/attendees/:_id/:_attendee_id',
+      path: '/tabs/attendees/:_event_id/:_attendee_id',
       data:function(){
         var id = this.params._attendee_id;
         var data = Meteor.users.findOne({_id:id});

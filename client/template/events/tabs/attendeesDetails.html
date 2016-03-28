@@ -24,7 +24,7 @@
       </div>
       <div class="item item-thumbnail-left item-avatar item-button-right">
         
-          {{ #if pic_exists pic }}
+                  {{ #if pic }}
                     <img src="{{pic}}" width="" alt="{{firstname}}" height="30">
                   {{else}}
                        <img src="/assets/img/profile.png" width="" alt="{{firstname}}" height="30"> 
@@ -51,15 +51,38 @@
     </div>
     {{/with}}
     {{/ionList}}
-    <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-right ion-ios-email-outline" id="meet_candidate">Get in touch</a>
+
     {{#if list_need_to_view }}
-    <div class="list card">
-            <div class="item item-divider">Your previous contact requests</div>
-            <div class="item item-body">
-                <div>{{#each connect_request}} {{format_date created_at}} {{/each}}</div>
-            </div>
+    <div class="list">
+        {{#each connect_request}} 
+            <div class="item item-button-right">
+                <p><strong>{{format_date created_at}} </strong>
+                {{message}} </p>
+              
+              <button class="button button-clear button-light remove_item" data="{{_id}}">
+              <i class="icon ion-ios-trash-outline"></i>
+             </button>
+            </div>    
+        {{/each}}
     </div>
     {{/if}}
+
+
+  <div class="item item-input-inset">
+    <label class="item-input-wrapper">
+      <input type="text" id="message" placeholder="Enter your message">
+    </label>
+  </div>
+<!-- 
+    <div class="list list-inset">
+      <label class="item item-input-inset">
+        <i class="icon ion-chatboxes placeholder-icon"></i>
+        <input type="text" id="message" placeholder="Enter your message">
+      </label>
+    </div> -->
+
+    <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-right ion-chatboxes" id="meet_candidate">Submit</a>
+
     {{/ionContent}}
     {{> _tabs}}
   {{/ionView}}

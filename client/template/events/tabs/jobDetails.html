@@ -20,28 +20,45 @@
         <h4>(Posted on {{format_date created_at}})</h4>
       </div>
     </div>
-    
-      <div class="button-bar">
-        <button class="button button-stable button-block icon ion-ios-email" id="job_apply">&nbsp;Apply</button>
-        <button class="button button-stable button-block  icon ion-android-people" id="job_meet">&nbsp;Meet</button>
-      </div>  
-    
-
+        
     {{/ionList}}
-      
+
+
     {{#if list_need_to_view }}
      <div class="list card">
-            <div class="item item-divider">Your requests</div>
-            <div class="item item-body">
-                <div>
-                  <div>{{#each connect_request}}
+            <div class="item item-divider">Your previous requests</div>
+            
+                {{#each connect_request}}
+                  <div class="item item-button-right">
                     <p>
-                      {{format_date created_at}} - {{display_request_type  request_type}}
-                    </p>{{/each}}</div>
-                </div>
-            </div>
+                      <i class="{{display_request_type request_type}}"></i>
+                    
+                      <strong>{{format_date created_at}} </strong> {{ message }}
+                    </p>  
+
+                    <button class="button button-clear button-light remove_item" data="{{_id}}">
+                    <i class="icon ion-ios-trash-outline"></i>
+                   </button>  
+
+                    
+                  </div>  
+                {{/each}}
+                
         </div>
       {{/if}}
+
+      <div class="item item-input-inset">
+        <label class="item-input-wrapper">
+          <input type="text" id="message" placeholder="Message to Company">
+        </label>
+
+      </div>
+
+      <div class="button-bar">
+        <button class="button button-dark button-block icon ion-ios-email" id="job_apply">&nbsp;Apply</button>
+        <button class="button button-dark button-block  icon ion-android-people" id="job_meet">&nbsp;Meet</button>
+      </div>  
+
     {{/ionContent}}
     {{> _tabs}}
   {{/ionView}}

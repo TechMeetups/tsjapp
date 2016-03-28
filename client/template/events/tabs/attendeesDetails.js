@@ -70,14 +70,24 @@ Template.attendeesDetails.events(
   'click #meet_candidate' : function(event, template)
   {
     attendee_id = Router.current().params._attendee_id;
+    event_id = Router.current().params._event_id;
+
     user_id = Meteor.userId();
     request_type = "meet_candidate"
-    request ={request_type:request_type,user_id:user_id,attendee_id:attendee_id}
+    var message = template.find('#message').value;
+    template.find('#message').value = "" ;
+
+    request ={request_type:request_type,message:message,user_id:user_id,event_id:event_id,attendee_id:attendee_id}
     console.log(request)
     event_manager.meet_candidate(request);
   }, 
   'click .jump2Linkedin' : function(URL) 
   {
       OpenInNewTab(url) ; 
+  },
+  'click .remove_item' : function(event, template)
+  {
+    var item_id = $(event.currentTarget).attr('data');
+    connect_manager.remove_connect_item(item_id)
   }
 });

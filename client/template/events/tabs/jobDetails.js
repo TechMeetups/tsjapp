@@ -30,14 +30,15 @@ Template.jobDetails.helpers({
         return false
       }
   },
-  display_request_type:function(connect_type){
-    if(connect_type == "job_meet")
+  display_request_type:function(connect_type)
+  {
+    if(connect_type === "job_apply")
     {
-      return "Meeting Request";
+      return "icon ion-email";
     }
     else
     {
-      return "Applied"  ;
+      return "icon ion-android-people"  ;
     }
 
   }
@@ -51,7 +52,10 @@ Template.jobDetails.events(
     event_id = Router.current().params._id;
     user_id = Meteor.userId();
     request_type = "job_meet"
-    request ={request_type:request_type,user_id:user_id,company_id:company_id,job_id:job_id,event_id:event_id}
+    var message = template.find('#message').value;
+    template.find('#message').value = "" ;
+
+    request ={request_type:request_type,message:message,user_id:user_id,company_id:company_id,job_id:job_id,event_id:event_id}
     console.log(request)
     job_manager.meet_for_job(request);
   },
@@ -62,7 +66,15 @@ Template.jobDetails.events(
     event_id = Router.current().params._id;
     user_id = Meteor.userId();
     request_type = "job_apply"
-    request ={request_type:request_type,user_id:user_id,company_id:company_id,job_id:job_id,event_id:event_id}
+    var message = template.find('#message').value;
+    template.find('#message').value = "" ;
+
+    request ={request_type:request_type,message:message,user_id:user_id,company_id:company_id,job_id:job_id,event_id:event_id}
     job_manager.apply_to_job(request);
+  },
+  'click .remove_item' : function(event, template)
+  {
+    var item_id = $(event.currentTarget).attr('data');
+    connect_manager.remove_connect_item(item_id)
   }
 });

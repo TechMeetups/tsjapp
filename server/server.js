@@ -25,7 +25,13 @@ if (Meteor.isServer)
       return Sponsor.find({});
     });
 
-    Meteor.publish("connect_request_for_attendees", function (user_id, attendee_id)
+    Meteor.publish("connect_request_for_user", function (user_id)
+    {
+        console.log('connect_request_for_user:'+user_id);
+      return ConnectRequest.find({user_id:user_id})
+    });
+
+     Meteor.publish("connect_request_for_attendees", function (user_id, attendee_id)
     {
       return ConnectRequest.find({user_id:user_id,attendee_id:attendee_id,request_type:"meet_candidate"})
     });
@@ -69,6 +75,26 @@ if (Meteor.isServer)
           limit = 10 ;
             
       return Job.find($set,{limit:limit});
+    });
+
+
+    Meteor.publish("messages", function (user_id,attendee_id,event_id,limit)
+    {
+      $set = {} ; 
+      
+      if(user_id)
+        $set['user_id'] = user_id ; 
+
+      if(attendee_id)
+        $set['attendee_id'] = attendee_id ; 
+
+      if(event_id)
+        $set['event_id'] = event_id ; 
+
+      if(!limit || limit < 1)
+          limit = 10 ;
+            
+      return Messages.find($set,{limit:limit});
     });
 
     Meteor.publish("checkout_item", function (user_id)
@@ -257,7 +283,7 @@ if (Meteor.isServer)
       });
     }
 
-    var request_for_meet_candidate = function (user,attendee)
+    var request_for_meet_candidate = function (user,attendee,message)
     {
       var fromEmail = "admin@techmeetups.com";
       var toEmail = attendee.emails[0].address ;
@@ -269,8 +295,9 @@ if (Meteor.isServer)
           cc:ccEmail,
           subject: 'TechStartupJobs App - ' + user.profile.firstname+ " would like to connect with you",
           text: "Hi "+attendee.profile.firstname+"\n\n" +
-          "A User '"+user.profile.firstname+"'  ("+user.emails[0].address+") would like to connect with you.\n"+
-          "Please check his profile and email him directly if interested."+
+          "A User '"+user.profile.firstname+"'  ("+user.emails[0].address+") would like to connect with you.\n\n"+
+          "Message : "+message+"\n\n"+ 
+          "Please check his profile and message or email him if interested."+
           "\n\n"+
           "Thank you.\n"+
           "The TechStartupJobs Team.\n"+
@@ -608,7 +635,7 @@ if (Meteor.isServer)
         },
         connect_request : function(data)
         {
-          ConnectRequest.insert({request_type:data.request_type,user_id:data.user_id,requested_on: new Date(),
+          ConnectRequest.insert({request_type:data.request_type, message:data.message, user_id:data.user_id,requested_on: new Date(),
             created_at:new Date(),company_id:data.company_id,job_id:data.job_id,event_id:data.event_id,attendee_id:""});
             event = Events.findOne({_id:data.event_id});
             user = Meteor.users.findOne({_id:data.user_id});
@@ -627,13 +654,18 @@ if (Meteor.isServer)
             }
           console.log("request is send")
         },
-        connect_request_candidate: function(data){
-          ConnectRequest.insert({request_type:data.request_type,user_id:data.user_id,requested_on: new Date(),
-            created_at:new Date(),company_id:"",job_id:"",event_id:"",attendee_id:data.attendee_id});
+        connect_request_candidate: function(data)
+        {
+          ConnectRequest.insert(
+            { request_type:data.request_type, message:data.message,user_id:data.user_id,requested_on: new Date(),
+            created_at:new Date(),company_id:"",job_id:"",event_id:data.event_id,attendee_id:data.attendee_id});
+
             user = Meteor.users.findOne({_id:data.user_id});
             attendee = Meteor.users.findOne({_id:data.attendee_id});
-            if(data.request_type =="meet_candidate"){
-              request_for_meet_candidate(user,attendee)
+
+            if(data.request_type =="meet_candidate")
+            {
+              request_for_meet_candidate(user,attendee,data.message)
               console.log("request is send")
             }
         },
@@ -646,12 +678,18 @@ if (Meteor.isServer)
         checkout_item:function(data){
           Checkout.insert(data);
         },
-        remove_checkout_item:function(item_id){
+        remove_checkout_item:function(item_id)
+        {
           cart_item = Checkout.findOne({_id:item_id})
           if(cart_item.item_type == "ticket"){
             EventAttendee.remove({attendee_id:cart_item.user_id,event_id:cart_item.item_id});
           }
           Checkout.remove({_id:item_id});
+          return true;
+        },
+        remove_connect_item:function(item_id)
+        {
+          ConnectRequest.remove({_id:item_id});
           return true;
         },
         pay_now_email : function(user_id,cart)

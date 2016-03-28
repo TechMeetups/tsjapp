@@ -34,9 +34,9 @@ if (Meteor.isClient)
   EVENT_INCREMENT = 10;
   function showMoreVisible()
     {
-          console.log("Scrolling logs");
+          
           var threshold, target = $("#showMoreEvents");
-          console.log(target.length)
+          
           if (!target.length)
             return;
 
