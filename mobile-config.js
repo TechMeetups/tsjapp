@@ -1,8 +1,8 @@
 App.info({
-	id: 'com.TechStartupJobs',		
+	id: 'com.TechStartupJobs',
     name: 'TechStartupJobs',
     description: 'TechStartupJobs - Join.Connect.Meet.Apply',
-    version: '0.0.1', 
+    version: '0.0.1',
     author: 'TechStartupJobs.com',
     email: 'admin@techstartupjobs.com',
     website: 'http://techstartupjobs.com'
@@ -30,13 +30,13 @@ App.launchScreens({
   'android_hdpi_portrait': 'public/assets/img/tsjapp-splash.png',
   'android_hdpi_landscape': 'public/assets/img/tsjapp-splash.png',
   'android_xhdpi_portrait': 'public/assets/img/tsjapp-splash.png',
-  'android_xhdpi_landscape': 'public/assets/img/tsjapp-splash.jpg'
+  'android_xhdpi_landscape': 'public/assets/img/tsjapp-splash.png'
 });
 
 App.icons({
     'android_ldpi': 'public/assets/img/tsjfair_logo.png',
     'android_mdpi': 'public/assets/img/tsjfair_logo.png',
     'android_hdpi': 'public/assets/img/tsjfair_logo.png',
-    'android_xhdpi': 'public/assets/img/tsjfair_logo.png'
+    'android_xhdpi':'public/assets/img/tsjfair_logo.png'
 });
 App.accessRule("*");
