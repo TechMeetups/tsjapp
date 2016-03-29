@@ -19,7 +19,7 @@ Template.jobDetails.helpers({
     return company_manager.format_data(date)
   },
   connect_request: function(){
-    return ConnectRequest.find({});
+    return ConnectRequest.find({},{sort:{created_at : -1 }});
   },
   list_need_to_view: function(){
     if(job_manager.get_connect_request_count() > 0){
@@ -54,8 +54,10 @@ Template.jobDetails.events(
     request_type = "job_meet"
     var message = template.find('#message').value;
     template.find('#message').value = "" ;
+    var pic = $('#job_pic').attr('src') ; 
 
-    request ={request_type:request_type,message:message,user_id:user_id,company_id:company_id,job_id:job_id,event_id:event_id}
+    request ={request_type:request_type,message:message,user_id:user_id,company_id:company_id,job_id:
+      job_id,event_id:event_id,pic:pic}
     console.log(request)
     job_manager.meet_for_job(request);
   },
@@ -68,8 +70,10 @@ Template.jobDetails.events(
     request_type = "job_apply"
     var message = template.find('#message').value;
     template.find('#message').value = "" ;
+    var pic = $('#job_pic').attr('src') ; 
 
-    request ={request_type:request_type,message:message,user_id:user_id,company_id:company_id,job_id:job_id,event_id:event_id}
+    request ={request_type:request_type,message:message,user_id:user_id,company_id:company_id,job_id:job_id,
+      event_id:event_id,pic:pic}
     job_manager.apply_to_job(request);
   },
   'click .remove_item' : function(event, template)

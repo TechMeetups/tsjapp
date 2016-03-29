@@ -37,7 +37,7 @@ Template.attendeesDetails.helpers(
     return event_manager.format_data(date)
   },
   connect_request : function (){
-    return ConnectRequest.find({});
+    return ConnectRequest.find({},{sort:{created_at : -1 }});
   },
   addIndex : function(obj){
     obj = obj || [];
@@ -70,14 +70,18 @@ Template.attendeesDetails.events(
   'click #meet_candidate' : function(event, template)
   {
     attendee_id = Router.current().params._attendee_id;
-    event_id = Router.current().params._event_id;
+    event_id = Router.current().params._id;
 
     user_id = Meteor.userId();
     request_type = "meet_candidate"
     var message = template.find('#message').value;
     template.find('#message').value = "" ;
 
-    request ={request_type:request_type,message:message,user_id:user_id,event_id:event_id,attendee_id:attendee_id}
+    var pic = $('#attendee_pic').attr('src')
+
+    request ={request_type:request_type,message:message,user_id:user_id,event_id:event_id,
+      attendee_id:attendee_id,pic:pic} ; 
+
     console.log(request)
     event_manager.meet_candidate(request);
   }, 

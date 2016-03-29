@@ -57,11 +57,11 @@ Template.messagesTab.helpers(
 
     if(request_type === "job_apply")
     {
-      return "/tabs/jobs/"+company_id+"/"+job_id;
+      return "/tabs/job/"+company_id+"/"+job_id;
     }
     else if(request_type === "job_meet")
     {
-      return "/tabs/jobs/"+company_id+"/"+job_id;
+      return "/tabs/job/"+company_id+"/"+job_id;
     }
     else
     {

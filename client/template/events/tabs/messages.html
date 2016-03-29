@@ -24,15 +24,14 @@
             <a class="item item-avatar item-button-right" href="{{build_path request_type event_id company_id job_id attendee_id }}">
 
 <!--                 <a href="{{build_path request_type event_id company_id job_id attendee_id }}">
- -->                  <img src="{{build_pic}}">
+ -->                  <img src="{{build_pic pic}}">
 <!--                 </a>  
  -->                    
 
-                <i class="{{display_request_type request_type}}"></i>
                 
-                <strong>{{format_date created_at}} </strong> 
+                <h4><i class="{{display_request_type request_type}}"></i> {{format_date created_at}} </h4> 
                 <p>                                      
-                {{ message }}
+                <i>{{ message }}</i>
                 </p>
               <!-- <button class="button button-clear button-light remove_item" data="{{_id}}">
               <i class="icon ion-ios-trash-outline"></i>
@@ -51,6 +50,6 @@
      {{/if}}
   </div>
   {{/ionContent}}
-  {{> _tabs}}
+  {{> main_tabs}}
   {{/ionView}}
 </template>

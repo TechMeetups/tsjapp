@@ -635,8 +635,9 @@ if (Meteor.isServer)
         },
         connect_request : function(data)
         {
-          ConnectRequest.insert({request_type:data.request_type, message:data.message, user_id:data.user_id,requested_on: new Date(),
-            created_at:new Date(),company_id:data.company_id,job_id:data.job_id,event_id:data.event_id,attendee_id:""});
+          ConnectRequest.insert({request_type:data.request_type, message:data.message, user_id:data.user_id,
+            requested_on: new Date(), created_at:new Date(),company_id:data.company_id,job_id:data.job_id,
+            event_id:data.event_id,attendee_id:"",pic:data.pic});
             event = Events.findOne({_id:data.event_id});
             user = Meteor.users.findOne({_id:data.user_id});
             company = Company.findOne({_id:data.company_id});
@@ -656,9 +657,11 @@ if (Meteor.isServer)
         },
         connect_request_candidate: function(data)
         {
+          console.log('')
           ConnectRequest.insert(
             { request_type:data.request_type, message:data.message,user_id:data.user_id,requested_on: new Date(),
-            created_at:new Date(),company_id:"",job_id:"",event_id:data.event_id,attendee_id:data.attendee_id});
+            created_at:new Date(),company_id:"",job_id:"",event_id:data.event_id,attendee_id:data.attendee_id,
+            pic:data.pic});
 
             user = Meteor.users.findOne({_id:data.user_id});
             attendee = Meteor.users.findOne({_id:data.attendee_id});
