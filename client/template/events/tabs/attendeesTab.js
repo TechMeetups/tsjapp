@@ -27,7 +27,8 @@ Template.attendeesTab.helpers(
   },
   moreTasks:function(){
     {
-      return !(attendee_manager.getCount() < Session.get("attendee_limit"));
+      return false ;
+      //return !(attendee_manager.getCount() < Session.get("attendee_limit"));
     }
   },
   validate_current_user: function(_id){
@@ -63,7 +64,7 @@ EVENT_INCREMENT = 10;
 Template.attendeesTab.created = function ()
 {
   Session.set('attendee_terms','')
-  Session.set("attendee_limit",EVENT_INCREMENT)
+  Session.set("attendee_limit",0)
   this.autorun(function () {
     this.subscription = attendee_manager.default_subscribe(Router.current().params._id);
   }.bind(this));
