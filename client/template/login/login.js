@@ -20,7 +20,8 @@ function resetLoginDetails()
   	localStorage.setItem("fa_token_type","");
   }
 }
-Template.register.events({
+Template.register.events(
+{
   'click #user_register': function(event, template)
   {
       event.preventDefault();
@@ -57,9 +58,11 @@ Template.register.events({
                    Router.go('events');
               }
           });
-  }
+  }  
 });
-Template.login.events({
+
+Template.login.events(
+{
         'click .login' : function(event, template){
             $('#loginModel').modal('show');
             $('#register_Model').modal('hide');
@@ -76,7 +79,8 @@ Template.login.events({
             $('#password-reset').modal('show');
 
         },
-        'submit #forgotPasswordForm': function(e, t) {
+        'submit #forgotPasswordForm': function(e, t) 
+        {
           e.preventDefault();
           var forgotPasswordForm = $(e.currentTarget),
               email = trimInput(forgotPasswordForm.find('#forgotPasswordEmail').val().toLowerCase());

@@ -50,14 +50,21 @@ if (Meteor.isServer)
         user_ids.push(event_attendees[i].attendee_id)
       }
       console.log(searchValue);
-      if(!limit || limit < 1)
-          limit = 10 ;
-        if( searchValue &&  searchValue.length > 1){
-          console.log(Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},{limit:limit}).count())
-          return Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},{limit:limit});
+      // if(!limit || limit < 1)
+      //     limit = 10 ;
+        if( searchValue &&  searchValue.length > 1)
+        {
+          console.log(Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}}).count())
+          return Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}});
+
+          // console.log(Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},{limit:limit}).count())
+          // return Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},{limit:limit});
           //return Attendees.find({_id:{$in:user_ids},'name':{'$regex': new RegExp(searchValue, "i")}},{sort:{ created_at:-1},limit:limit});
-        }else{
-          return Meteor.users.find({_id:{$in:user_ids}},{limit:limit});
+        }
+        else
+        {
+//          return Meteor.users.find({_id:{$in:user_ids}},{limit:limit});
+             return Meteor.users.find({_id:{$in:user_ids}});
         }
     });
 

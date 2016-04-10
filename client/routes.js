@@ -10,6 +10,7 @@ Router.map(function()
     this.route('events', {path:"/events"} );
     
     this.route('register', {path: '/register'});
+    this.route('ResetPassword', {path: '/ResetPassword'});
     
     this.route('accountsetup', {path: '/accountsetup'});
     
