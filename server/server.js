@@ -78,13 +78,12 @@ if (Meteor.isServer)
       if(company_id)
         $set['company_id'] = company_id ;
 
+      if (searchValue)
+        $set['$text']  = {$search: searchValue} ; 
 
       if(!limit || limit < 1)
           limit = 10 ;
 
-      if (searchValue)
-      return Job.find($set,$text:{$search: searchValue}},{limit:limit});
-      else
       return Job.find($set,{limit:limit});
     });
 
@@ -166,7 +165,7 @@ if (Meteor.isServer)
     {
 
         // By default, the email is sent from no-reply@meteor.com. If you wish to receive email from users asking for help with their account, be sure to set this to an email address that you can receive email at.
-        Accounts.emailTemplates.from = 'admin <no-reply@TechStartupJobs.com>';
+        Accounts.emailTemplates.from = 'admin@techmeetups.com';
         // The public name of your application. Defaults to the DNS name of the application (eg: awesome.meteor.com).
         Accounts.emailTemplates.siteName = 'TechStartupJobs.com';
         // A Function that takes a user object and returns a String for the subject line of the email.
@@ -187,7 +186,7 @@ if (Meteor.isServer)
         if(user){
           Roles.addUsersToRoles(user._id, ['admin'])
         }
-        Jobs._ensureIndex(
+        Job._ensureIndex(
            {
              title: "text",
              desc: "text",
@@ -566,15 +565,20 @@ if (Meteor.isServer)
         },
         resetpasswordByEmail : function (email)
         {
+          console.log('resetpasswordByEmail:'+email) ; 
+
           var user = Meteor.users.findOne({'emails.address': {$regex:email,$options:'i'}});
-          if(user){
+          if(user)
+          {
+              console.log('user found:'+user._id) ;             
             pass = guid()
             Accounts.setPassword(user._id, pass);
             userPasswordReset(user,pass)
-            return "Password Reset successfully Please check your email for new password."
-          }else{
-            return "User not available with provided email"
+            return false ; 
           }
+
+          return true ; 
+
         },
         authenticate : function(code)
         {

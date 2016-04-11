@@ -196,36 +196,29 @@ Template.login.events(
      }
     });
 
-    Template.forgotpassword.events({
-      'click #forgotPasswordForm': function(e, t) {
-          e.preventDefault();
+    Template.forgotpassword.events(
+    {
+      'click #forgotPasswordForm': function(e, t) 
+      {
           var email = $('#forgotPasswordEmail').val();
-            Accounts.forgotPassword({email: email}, function(err)
+
+//            var email = $('#forgotPasswordForm').find('#forgotPasswordEmail').val();
+ 
+            Meteor.call('resetpasswordByEmail',email,function(error,ret)
             {
-              if (err)
+                  console.log('ret='+ret);
+              if(ret)
               {
-                if (err.message === 'User not found [403]')
-                {
-                  console.log('This email does not exist.');
-                  IonLoading.show({
+                  console.log('Error reseting password'+ret);
+                  IonLoading.show(
+                  {
                     customTemplate: "Please enter a valid email to Reset your Password",
                     duration: 3000
                   });
-
-                }
-                else
-                {
-                  console.log('We are sorry but something went wrong.'+err);
-                  IonLoading.show({
-                    customTemplate: "We are sorry but something went wrong.",
-                    duration: 3000
-                  });
-
-
-                }
               }
               else
               {
+                  console.log('Error reseting password'+ret);
                 IonLoading.show({
                   customTemplate: "Email Sent. Check your mailbox.",
                   duration: 3000
@@ -234,7 +227,48 @@ Template.login.events(
                 console.log('Email Sent. Check your mailbox.');
                 Router.go('/login') ;
               }
-            }) ;
+            });
+
+
+          // e.preventDefault();
+          // var email = $('#forgotPasswordEmail').val();
+
+          // console.log('forgotPasswordForm:'+email) ; 
+          //   Accounts.forgotPassword({email: email}, function(err)
+          //   {
+          //     if (err)
+          //     {
+          //       if (err.message === 'User not found [403]')
+          //       {
+          //         console.log('This email does not exist.');
+          //         IonLoading.show({
+          //           customTemplate: "Please enter a valid email to Reset your Password",
+          //           duration: 3000
+          //         });
+
+          //       }
+          //       else
+          //       {
+          //         console.log('We are sorry but something went wrong.'+err);
+          //         IonLoading.show({
+          //           customTemplate: "We are sorry but something went wrong.",
+          //           duration: 3000
+          //         });
+
+
+          //       }
+          //     }
+          //     else
+          //     {
+          //       IonLoading.show({
+          //         customTemplate: "Email Sent. Check your mailbox.",
+          //         duration: 3000
+          //       });
+
+          //       console.log('Email Sent. Check your mailbox.');
+          //       Router.go('/login') ;
+          //     }
+          //   }) ;
 
 
       }
