@@ -68,39 +68,43 @@ if (Meteor.isServer)
         }
     });
 
-    Meteor.publish("jobs", function (limit,event_id,company_id)
+    Meteor.publish("jobs", function (limit,event_id,company_id,searchValue)
     {
-      $set = {} ; 
-      
+      $set = {} ;
+
       if(event_id)
-        $set['event_id'] = event_id ; 
+        $set['event_id'] = event_id ;
 
       if(company_id)
-        $set['company_id'] = company_id ; 
+        $set['company_id'] = company_id ;
+
 
       if(!limit || limit < 1)
           limit = 10 ;
-            
+
+      if (searchValue)
+      return Job.find($set,$text:{$search: searchValue}},{limit:limit});
+      else
       return Job.find($set,{limit:limit});
     });
 
 
     Meteor.publish("messages", function (user_id,attendee_id,event_id,limit)
     {
-      $set = {} ; 
-      
+      $set = {} ;
+
       if(user_id)
-        $set['user_id'] = user_id ; 
+        $set['user_id'] = user_id ;
 
       if(attendee_id)
-        $set['attendee_id'] = attendee_id ; 
+        $set['attendee_id'] = attendee_id ;
 
       if(event_id)
-        $set['event_id'] = event_id ; 
+        $set['event_id'] = event_id ;
 
       if(!limit || limit < 1)
           limit = 10 ;
-            
+
       return Messages.find($set,{limit:limit});
     });
 
@@ -109,7 +113,7 @@ if (Meteor.isServer)
       return Checkout.find({user_id:user_id,paid:"unpaid"});
     });
 
-    Meteor.publish('company_details', function(event_id,company_id) 
+    Meteor.publish('company_details', function(event_id,company_id)
     {
       company_ids=[]
       event_company =   EventCompany.find({event_id:event_id,company_id:company_id}, {sort:{ created_at:-1}},{fields: {'company_id':1}}).fetch()
@@ -139,7 +143,7 @@ if (Meteor.isServer)
         }
     });
 
-    Meteor.publish('attendees_details', function(event_id,attendee_id) 
+    Meteor.publish('attendees_details', function(event_id,attendee_id)
     {
       user_ids=[]
       event_attendees =   EventAttendee.find({event_id:event_id,attendee_id:attendee_id}, {sort:{ created_at:-1}},{fields: {'attendee_id':1}}).fetch()
@@ -153,12 +157,12 @@ if (Meteor.isServer)
       return Job.find({_id:job_id,company_id:company_id});
     });
 
-    Meteor.publish('event', function(_id) 
+    Meteor.publish('event', function(_id)
     {
       return Events.find({_id: _id});
     });
 
-    Meteor.startup(function () 
+    Meteor.startup(function ()
     {
 
         // By default, the email is sent from no-reply@meteor.com. If you wish to receive email from users asking for help with their account, be sure to set this to an email address that you can receive email at.
@@ -166,7 +170,7 @@ if (Meteor.isServer)
         // The public name of your application. Defaults to the DNS name of the application (eg: awesome.meteor.com).
         Accounts.emailTemplates.siteName = 'TechStartupJobs.com';
         // A Function that takes a user object and returns a String for the subject line of the email.
-        Accounts.emailTemplates.verifyEmail.subject = function(user) 
+        Accounts.emailTemplates.verifyEmail.subject = function(user)
         {
             return 'Confirm Your Email Address';
         };
@@ -183,7 +187,13 @@ if (Meteor.isServer)
         if(user){
           Roles.addUsersToRoles(user._id, ['admin'])
         }
+        Jobs._ensureIndex(
+           {
+             title: "text",
+             desc: "text",
+             city:"text"
 
+           }) ;
     });
 
     Accounts.onCreateUser(function(options, user) {
@@ -303,7 +313,7 @@ if (Meteor.isServer)
           subject: 'TechStartupJobs App - ' + user.profile.firstname+ " would like to connect with you",
           text: "Hi "+attendee.profile.firstname+"\n\n" +
           "A User '"+user.profile.firstname+"'  ("+user.emails[0].address+") would like to connect with you.\n\n"+
-          "Message : "+message+"\n\n"+ 
+          "Message : "+message+"\n\n"+
           "Please check his profile and message or email him if interested."+
           "\n\n"+
           "Thank you.\n"+
@@ -381,11 +391,11 @@ if (Meteor.isServer)
 
       for(i=0;i<cart.length;i++)
       {
-        products += cart[i].desc + ' ' + cart[i].amount + '\n' ; 
-        tot =  tot + eval( isNumber(cart[i].amount)) ; 
-      } 
+        products += cart[i].desc + ' ' + cart[i].amount + '\n' ;
+        tot =  tot + eval( isNumber(cart[i].amount)) ;
+      }
 
-      products += '\nTotal : '+tot+'\n' ; 
+      products += '\nTotal : '+tot+'\n' ;
 
       Email.send(
       {
@@ -404,10 +414,10 @@ if (Meteor.isServer)
           // +"http://www.graphical.io/assets/img/Graphical-IO.png"
       });
 
-      return true ; 
+      return true ;
     }
-  
-  var import_attandee_files = function(file,event_id) 
+
+  var import_attandee_files = function(file,event_id)
   {
     console.log("enter function import_file_orders")
      var lines = file.split(/\r\n|\n/);
@@ -420,9 +430,9 @@ if (Meteor.isServer)
     }
     console.log('import_attandee_files.event_id'+event_id)
 
-     for (var i=1; i < l; i++) 
+     for (var i=1; i < l; i++)
      {
-        try 
+        try
         {
            var line = lines[i];
            var line_parts = line.split(new RegExp(',(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))'));
@@ -439,7 +449,7 @@ if (Meteor.isServer)
             user_id = user._id
             console.log("User Already Registered In System : "+ line_parts[1])+' Updating'
 
-            var profile  =  
+            var profile  =
             {
                     firstname : line_parts[0],
                     experience: exp,
@@ -448,11 +458,11 @@ if (Meteor.isServer)
                     profession: line_parts[6],
                     pic: line_parts[7],
                     cv: line_parts[8],
-                    linkedin : line_parts[9], 
+                    linkedin : line_parts[9],
                     city : line_parts[10]
-            } ; 
+            } ;
 
-            attendee_manager.update(user_id,profile) ; 
+            attendee_manager.update(user_id,profile) ;
           }
           else
           {
@@ -461,7 +471,7 @@ if (Meteor.isServer)
                 username: line_parts[0],
                 email : line_parts[1],
                 password : line_parts[1],
-                profile  : 
+                profile  :
                 {
                     firstname : line_parts[0],
                     experience: exp,
@@ -470,8 +480,8 @@ if (Meteor.isServer)
                     profession: line_parts[6],
                     pic: line_parts[7],
                     cv: line_parts[8],
-                    linkedin : line_parts[9], 
-                    city : line_parts[10], 
+                    linkedin : line_parts[9],
+                    city : line_parts[10],
                     created_at:new Date(),
                     auto_created : true
               }
@@ -481,7 +491,7 @@ if (Meteor.isServer)
 
           ticket_no = guid();
           event_attendee = EventAttendee.findOne({attendee_id:user_id,event_id:event_id});
-       
+
           if(event_attendee)
           {
             console.log("Users Already Registered In An Event : "+ line_parts[1])
@@ -491,8 +501,8 @@ if (Meteor.isServer)
              EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:dataObj,ticket_no:ticket_no,created_at:new Date()});
              console.log("Users Registered In An Event : "+ line_parts[1])
           }
-        
-        }catch ( e ) 
+
+        }catch ( e )
         {
           console.log(e);
         }
@@ -538,7 +548,7 @@ if (Meteor.isServer)
         update_attendee : function (user_id,data)
         {
           console.log('update_attendee:'+user_id) ;
-          
+
           Meteor.users.update(
           {_id : user_id},
           {$set: {
@@ -547,9 +557,9 @@ if (Meteor.isServer)
                   "profile.skill":data.skill,
                   "profile.lookingfor":data.lookingfor,
                   "profile.profession":data.profession,
-                  "profile.pic":data.pic, 
-                  "profile.cv":data.cv, 
-                  "profile.linkedin":data.linkedin, 
+                  "profile.pic":data.pic,
+                  "profile.cv":data.cv,
+                  "profile.linkedin":data.linkedin,
                   "profile.city":data.city
                   }
           });
@@ -706,7 +716,7 @@ if (Meteor.isServer)
         {
             user = Meteor.users.findOne({_id:user_id});
 
-            var res = request_2pay_now(user,cart) ; 
+            var res = request_2pay_now(user,cart) ;
 
            console.log("pay now request is send")
            return res ;

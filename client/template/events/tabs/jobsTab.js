@@ -18,12 +18,12 @@ Template.jobsTab.helpers(
   },
   pic_exists : function(pic_url)
   {
-      if (!pic_url.trim() || pic_url === '') 
+      if (!pic_url.trim() || pic_url === '')
         return false ;
       else
-        return true ; 
+        return true ;
 
-  },  
+  },
 });
 
 Template.jobsTab.events(
@@ -32,9 +32,9 @@ Template.jobsTab.events(
   {
     Session.set("job_limit",Session.get("job_limit") + EVENT_INCREMENT);
   },
-  'keyup #search': function (event, template)
+  'click #btn_search': function (event, template)
   {
-    search_terms = $(event.currentTarget).val();
+    search_terms = $('#search_terms').val();
     //Session.get('search_terms')
     job_manager.search(search_terms)
   }
@@ -45,7 +45,7 @@ Template.jobsTab.created = function ()
 {
   Session.set('job_terms','')
   Session.set("job_limit",EVENT_INCREMENT)
-  this.autorun(function () 
+  this.autorun(function ()
   {
     this.subscription = job_manager.default_subscribe(Router.current().params._id);
   }.bind(this));

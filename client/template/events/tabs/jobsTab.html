@@ -11,10 +11,19 @@
   {{#ionContent class="padding"}}
   <div id="overflow-scroll">
   {{#ionItem}}
-  <label class="item item-input">
+
+  <div class="item item-input-inset">
+    <label class="item-input-wrapper">
+      <input type="search" placeholder="Filter name" id="search_terms">
+    </label>
+    <button class="button button-small" id="btn_search">
+      Search
+    </button>
+  </div>
+  <!-- <label class="item item-input">
       <i class="icon ion-search placeholder-icon"></i>
       <input type="search" placeholder="Filter name" id="search">
-  </label>
+  </label> -->
    {{/ionItem}}
     {{#ionList}}
 
@@ -24,7 +33,7 @@
                 {{ #if pic_exists pic }}
                   <img src="{{pic}}" width="" alt="" height="20">
                 {{else}}
-                     <img src="/assets/img/job.png" width="" alt="" height="20"> 
+                     <img src="/assets/img/job.png" width="" alt="" height="20">
                 {{ /if }}
 
                <h2>{{title}}</h2>
@@ -33,7 +42,7 @@
          {{/ionItem}}
        </a>
     {{/each}}
-    
+
     {{/ionList}}
     {{#if moreTasks}}
          <div id="showMoreEvents" style="">

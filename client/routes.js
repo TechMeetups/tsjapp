@@ -6,14 +6,15 @@ Router.map(function()
     this.route('userprofile', {path: '/user_profile'});
 
     this.route('usersettings', {path: '/user_settings'});
-    
+
     this.route('events', {path:"/events"} );
-    
+
     this.route('register', {path: '/register'});
     this.route('ResetPassword', {path: '/ResetPassword'});
-    
+
     this.route('accountsetup', {path: '/accountsetup'});
-    
+    this.route('forgotpassword', {path: '/forgotpassword'});
+
     this.route('events.show',
     {
         path: '/event/:_id',

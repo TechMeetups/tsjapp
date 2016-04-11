@@ -58,7 +58,7 @@ Template.register.events(
                    Router.go('events');
               }
           });
-  }  
+  }
 });
 
 Template.login.events(
@@ -79,7 +79,7 @@ Template.login.events(
             $('#password-reset').modal('show');
 
         },
-        'submit #forgotPasswordForm': function(e, t) 
+        'submit #forgotPasswordForm': function(e, t)
         {
           e.preventDefault();
           var forgotPasswordForm = $(e.currentTarget),
@@ -182,23 +182,8 @@ Template.login.events(
                          Router.go('events');
                     }
                 });
-        },
-        'submit #forgotPasswordForm': function(e, t) {
-            e.preventDefault();
-            var eamil = $('#forgotPasswordForm').find('#forgotPasswordEmail').val();
-            Meteor.call('resetpasswordByEmail',eamil,function(error){
-              if(error){
-                $('#error-message').html(error.reason);
-                $('#main-error-box').css("display","block");
-                setTimeout(function () {
-                    $('#main-error-box').css("display","none");
-                },2000);
-              }else{
-                $('#password-reset').modal('hide');
-                bootbox.alert("Password Reset successfully Please check your email for new password.", function() {});
-              }
-            });
         }
+
 
     });
     if (Accounts._resetPasswordToken) {
@@ -211,6 +196,50 @@ Template.login.events(
      }
     });
 
+    Template.forgotpassword.events({
+      'click #forgotPasswordForm': function(e, t) {
+          e.preventDefault();
+          var email = $('#forgotPasswordEmail').val();
+            Accounts.forgotPassword({email: email}, function(err)
+            {
+              if (err)
+              {
+                if (err.message === 'User not found [403]')
+                {
+                  console.log('This email does not exist.');
+                  IonLoading.show({
+                    customTemplate: "Please enter a valid email to Reset your Password",
+                    duration: 3000
+                  });
+
+                }
+                else
+                {
+                  console.log('We are sorry but something went wrong.'+err);
+                  IonLoading.show({
+                    customTemplate: "We are sorry but something went wrong.",
+                    duration: 3000
+                  });
+
+
+                }
+              }
+              else
+              {
+                IonLoading.show({
+                  customTemplate: "Email Sent. Check your mailbox.",
+                  duration: 3000
+                });
+
+                console.log('Email Sent. Check your mailbox.');
+                Router.go('/login') ;
+              }
+            }) ;
+
+
+      }
+
+    });
     Template.ResetPassword.events({
       'submit #resetPasswordForm': function(e, t) {
         e.preventDefault();

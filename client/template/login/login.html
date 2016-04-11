@@ -17,9 +17,9 @@
       <div class="list at-form">
 
  <!--        <div class="item item-divider">
-    
+
   </div>
-  -->       
+  -->
   <div class="at-pwd-form">
     <form role="form" id="at-pwd-form" novalidate="" action="#" method="GET">
     <div class="at-input item item-input item-text-wrap item-stacked-label">
@@ -51,7 +51,7 @@
     </p>
      <p>
       Forgot your password?
-      <a href="/ResetPassword" class="at-link at-signup positive">Click here</a>
+      <a href="/forgotpassword" class="at-link at-signup positive">Click here</a>
     </p>
   </div>
 
@@ -126,4 +126,34 @@
     </form>
 
     {{/if}}
+</template>
+<template name="forgotpassword">
+  {{#contentFor "headerButtonLeft"}}
+    {{>ionNavBackButton path="login"}}
+  {{/contentFor}}
+
+  {{#contentFor "headerTitle"}}
+    <h1 class="title">Forgot Password</h1>
+  {{/contentFor}}
+  {{#ionView}}
+    {{#ionContent}}
+
+    <label type="stacked" class="item item-input item-stacked-label">
+        <span class="input-label">Enter Email </span>
+        <input id="forgotPasswordEmail" name="email" placeholder="Email" type="text" >
+
+    </label>
+
+
+
+    <!-- <label type="stacked" class="item item-input item-stacked-label">
+        <span class="input-label">Enter Pic URL</span>
+        <input type="text" name="pic" required="" data-schema-key="pic" placeholder="pic" id="pic">
+    </label> -->
+      <div class="padding">
+      <button type="button" class="button button-positive button-block" id="forgotPasswordForm">Update</button>
+    </div>
+      {{/ionContent}}
+  {{/ionView}}
+
 </template>
