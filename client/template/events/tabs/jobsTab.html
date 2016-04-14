@@ -29,7 +29,8 @@
 
     {{#each job}}
       <a href="{{build_path company_id _id}}">
-        {{#ionItem avatar=true class="item-thumbnail-left"}}
+        {{#ionItem class="item-thumbnail-left"}}
+         
                 {{ #if pic_exists pic }}
                   <img src="{{pic}}" width="" alt="" height="20">
                 {{else}}
