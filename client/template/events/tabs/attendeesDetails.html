@@ -49,13 +49,12 @@
         <h3>{{experience}} years exp.</h3>
       </div>
     </div>
-    {{/with}}
-    {{/ionList}}
 
     {{#if list_need_to_view }}
     <div class="list">
         {{#each connect_request}} 
-            <div class="item item-button-right">
+            <div class="item item-avatar item-button-right">
+                <img src="{{build_pic pic}}">
                 <p><strong>{{format_date created_at}} </strong>
                 {{message}} </p>
               
@@ -68,20 +67,27 @@
     {{/if}}
 
 
-  <div class="item item-input-inset">
-    <label class="item-input-wrapper">
-      <input type="text" id="message" placeholder="Enter your message">
-    </label>
-  </div>
-<!-- 
-    <div class="list list-inset">
-      <label class="item item-input-inset">
-        <i class="icon ion-chatboxes placeholder-icon"></i>
-        <input type="text" id="message" placeholder="Enter your message">
-      </label>
-    </div> -->
+      {{#if not_me }}
 
-    <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-right ion-chatboxes" id="meet_candidate">Submit</a>
+        <div class="item item-input-inset">
+          <label class="item-input-wrapper">
+            <input type="text" id="message" placeholder="Enter your message">
+          </label>
+        </div>
+  <!-- 
+      <div class="list list-inset">
+        <label class="item item-input-inset">
+          <i class="icon ion-chatboxes placeholder-icon"></i>
+          <input type="text" id="message" placeholder="Enter your message">
+        </label>
+      </div> -->
+
+        <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-right ion-chatboxes" id="meet_candidate">Send your message</a>
+      {{ /if }}
+
+      {{/with}}
+    {{/ionList}}
+
 
     {{/ionContent}}
     {{> _tabs}}

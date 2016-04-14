@@ -24,7 +24,18 @@ Template.attendeesDetails.rendered = function ()
 
 Template.attendeesDetails.helpers(
 {
-    pic_exists : function(pic_url)
+  not_me : function()
+  {
+      var curr_user_id = Router.current().params._attendee_id ; 
+
+      console.log('Logged in user:'+Meteor.userId()+' curr_user_id:'+curr_user_id) ; 
+
+      if(curr_user_id !== Meteor.userId()) 
+        return true ;
+      else
+        return false ; 
+  }, 
+  pic_exists : function(pic_url)
   {
       console.log("attendeesTab'"+pic_url+"'") ; 
       if (!pic_url.trim() || pic_url === '') 
@@ -33,10 +44,19 @@ Template.attendeesDetails.helpers(
         return true ; 
 
   },     
+  build_pic : function(pic)
+  {
+      if(pic)
+        return pic ;
+      else
+        return "/assets/img/profile.png" ; 
+                  
+  },
   format_date : function(date){
     return event_manager.format_data(date)
   },
-  connect_request : function (){
+  connect_request : function ()
+  {
     return ConnectRequest.find({},{sort:{created_at : -1 }});
   },
   addIndex : function(obj){
@@ -77,10 +97,16 @@ Template.attendeesDetails.events(
     var message = template.find('#message').value;
     template.find('#message').value = "" ;
 
-    var pic = $('#attendee_pic').attr('src')
+    // var pic = $('#attendee_pic').attr('src') ; 
+  
+    var upic = Meteor.user().profile.pic ; 
+    if(!upic)
+      pic = "/assets/img/profile.png" ; 
+    else
+      pic = upic ; 
 
     request ={request_type:request_type,message:message,user_id:user_id,event_id:event_id,
-      attendee_id:attendee_id,pic:pic} ; 
+      attendee_id:attendee_id,pic:upic} ; 
 
     console.log(request)
     event_manager.meet_candidate(request);

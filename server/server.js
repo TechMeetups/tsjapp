@@ -28,12 +28,32 @@ if (Meteor.isServer)
     Meteor.publish("connect_request_for_user", function (user_id)
     {
         console.log('connect_request_for_user:'+user_id);
-      return ConnectRequest.find({user_id:user_id})
+        return ConnectRequest.find(
+                { $or :  
+                  [  
+                    { user_id : user_id } ,  
+                    { attendee_id : user_id }  
+                  ] 
+                }) ; 
+
     });
 
      Meteor.publish("connect_request_for_attendees", function (user_id, attendee_id)
     {
-      return ConnectRequest.find({user_id:user_id,attendee_id:attendee_id,request_type:"meet_candidate"})
+        return ConnectRequest.find(
+        {
+          // user_id:user_id,attendee_id:attendee_id,request_type:"meet_candidate" 
+              request_type:"meet_candidate", 
+                 $or :  
+                  [  
+                    { user_id : user_id ,     attendee_id : attendee_id } ,  
+                    { user_id : attendee_id , attendee_id : user_id }  
+                  ] ,
+
+              
+        } ) ;
+
+
     });
 
     Meteor.publish("connect_request_for_job", function (user_id,job_id)

@@ -201,9 +201,17 @@ Template.login.events(
       'click #forgotPasswordForm': function(e, t) 
       {
           var email = $('#forgotPasswordEmail').val();
+          var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
 
-//            var email = $('#forgotPasswordForm').find('#forgotPasswordEmail').val();
- 
+          if(!email || !emailReg.test(email))
+          {
+              IonLoading.show({
+                customTemplate: 'Please enter a valid Email Address',
+                duration: 3000
+              });
+              return false;
+          }
+
             Meteor.call('resetpasswordByEmail',email,function(error,ret)
             {
                   console.log('ret='+ret);
