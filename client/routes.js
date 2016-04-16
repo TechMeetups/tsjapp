@@ -14,6 +14,7 @@ Router.map(function()
 
     this.route('accountsetup', {path: '/accountsetup'});
     this.route('forgotpassword', {path: '/forgotpassword'});
+    this.route('userImport', {path: '/user_import'});
 
     this.route('events.show',
     {
