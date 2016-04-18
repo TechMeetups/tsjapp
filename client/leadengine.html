@@ -39,6 +39,11 @@
             <a class="item item-icon-right pointer"  href="/user_settings" data-ion-menu-close>
               User Settings {{> ionIcon icon="ios-arrow-right"}}
             </a>
+            {{#if isInRole 'admin'}}
+              <a class="item item-icon-right pointer"  href="/user_import" data-ion-menu-close>
+                User Import {{> ionIcon icon="ios-arrow-right"}}
+              </a>
+            {{/if}}
             <a class="item item-icon-right pointer"  href="/user_profile" data-ion-menu-close>
               Change Password {{> ionIcon icon="ios-arrow-right"}}
             </a>

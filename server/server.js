@@ -29,12 +29,12 @@ if (Meteor.isServer)
     {
         console.log('connect_request_for_user:'+user_id);
         return ConnectRequest.find(
-                { $or :  
-                  [  
-                    { user_id : user_id } ,  
-                    { attendee_id : user_id }  
-                  ] 
-                }) ; 
+                { $or :
+                  [
+                    { user_id : user_id } ,
+                    { attendee_id : user_id }
+                  ]
+                }) ;
 
     });
 
@@ -42,15 +42,15 @@ if (Meteor.isServer)
     {
         return ConnectRequest.find(
         {
-          // user_id:user_id,attendee_id:attendee_id,request_type:"meet_candidate" 
-              request_type:"meet_candidate", 
-                 $or :  
-                  [  
-                    { user_id : user_id ,     attendee_id : attendee_id } ,  
-                    { user_id : attendee_id , attendee_id : user_id }  
+          // user_id:user_id,attendee_id:attendee_id,request_type:"meet_candidate"
+              request_type:"meet_candidate",
+                 $or :
+                  [
+                    { user_id : user_id ,     attendee_id : attendee_id } ,
+                    { user_id : attendee_id , attendee_id : user_id }
                   ] ,
 
-              
+
         } ) ;
 
 
@@ -135,7 +135,7 @@ if (Meteor.isServer)
         $set['company_id'] = company_id ;
 
       if (searchValue)
-        $set['$text']  = {$search: searchValue} ; 
+        $set['$text']  = {$search: searchValue} ;
 
       if(!limit || limit < 1)
           limit = 10 ;
@@ -639,7 +639,115 @@ if (Meteor.isServer)
         }
      }
     };
+    var import_all_attandee_files = function(file)
+    {
+      console.log("enter function import_all_file_orders")
+       var lines = file.split(/\r\n|\n/);
+       var l = lines.length - 1;
 
+
+
+       for (var i=1; i < l; i++)
+       {
+          try
+          {
+             var line = lines[i];
+             var line_parts = line.split(new RegExp(',(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))'));
+             join_date = line_parts[4].trim();
+             if(join_date.length < 1){
+               join_date = new Date()
+             }
+             dataObj = new Date(moment(join_date));
+             eventbright_id= line_parts[12]
+             event_name = line_parts[11]
+             event = Events.findOne({eventbright_id:eventbright_id});
+             if(event)
+             {
+                event_id = event._id;
+             }else{
+               event_id =  Events.insert({name:event_name,eventbright_id:eventbright_id,created_at:new Date()});
+             }
+             console.log('import_attandee_files.event_id'+event_id)
+            // need to process exp column because its in string with 1-2 years as string
+            // and when we proces with regx its give array of number ["1","2"] so we take second array item.
+             exp = line_parts[2].trim();
+             exp_array = exp.match(/\d+/g)
+             if(exp_array && exp_array.length > 1){
+               exp =exp_array[1]
+             }else if(exp_array && exp_array.length == 1){
+               exp =exp_array[0]
+             }else{
+               exp='';
+             }
+             skill = line_parts[3].replace(/["']/g, "");
+             email = line_parts[1].trim();
+             user = Meteor.users.findOne({"emails.address" : email});
+             user_id=''
+
+            if(user)
+            {
+              user_id = user._id
+              console.log("User Already Registered In System : "+ line_parts[1])+' Updating'
+
+              var profile  =
+              {
+                      firstname : line_parts[0],
+                      experience: exp,
+                      skill : skill.trim(),
+                      lookingfor: line_parts[5],
+                      profession: line_parts[6],
+                      pic: line_parts[7],
+                      cv: line_parts[8],
+                      linkedin : line_parts[9],
+                      city : line_parts[10]
+              } ;
+
+              attendee_manager.update(user_id,profile) ;
+            }
+            else
+            {
+              user_id = Accounts.createUser(
+              {
+                  username: line_parts[0],
+                  email : line_parts[1],
+                  password : line_parts[1],
+                  profile  :
+                  {
+                      firstname : line_parts[0],
+                      experience: exp,
+                      skill : skill,
+                      lookingfor: line_parts[5],
+                      profession: line_parts[6],
+                      pic: line_parts[7],
+                      cv: line_parts[8],
+                      linkedin : line_parts[9],
+                      city : line_parts[10],
+                      created_at:new Date(),
+                      auto_created : true
+                }
+              });
+              console.log("User created In System : "+ line_parts[1])
+            }
+
+            ticket_no = guid();
+            event_attendee = EventAttendee.findOne({attendee_id:user_id,event_id:event_id});
+
+            if(event_attendee)
+            {
+              console.log("Users Already Registered In An Event : "+ line_parts[1])
+            }
+            else
+            {
+               EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:dataObj,ticket_no:ticket_no,created_at:new Date()});
+               console.log("Users Registered In An Event : "+ line_parts[1])
+            }
+
+          }catch ( e )
+          {
+            console.log(e);
+          }
+       }
+      };
       Meteor.methods(
       {
         'sendMessage': function (toId)
@@ -697,19 +805,19 @@ if (Meteor.isServer)
         },
         resetpasswordByEmail : function (email)
         {
-          console.log('resetpasswordByEmail:'+email) ; 
+          console.log('resetpasswordByEmail:'+email) ;
 
           var user = Meteor.users.findOne({'emails.address': {$regex:email,$options:'i'}});
           if(user)
           {
-              console.log('user found:'+user._id) ;             
+              console.log('user found:'+user._id) ;
             pass = guid()
             Accounts.setPassword(user._id, pass);
             userPasswordReset(user,pass)
-            return false ; 
+            return false ;
           }
 
-          return true ; 
+          return true ;
 
         },
         authenticate : function(code)
@@ -830,6 +938,12 @@ if (Meteor.isServer)
              import_attandee_files(fileContent,event_id);
              console.log("completed");
              return true
+        },
+        upload_all_attandee: function(fileContent){
+          console.log("start insert");
+          import_all_attandee_files(fileContent);
+          console.log("completed");
+          return true
         },
         checkout_item:function(data){
           Checkout.insert(data);
