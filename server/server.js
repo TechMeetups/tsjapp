@@ -188,13 +188,14 @@ if (Meteor.isServer)
         company_ids.push(event_company[i].company_id)
       }
       
-      if(!limit || limit < 1)
-          limit = 10 ;
+      // if(!limit || limit < 1)
+      //     limit = 10 ;
         if( searchValue &&  searchValue.length > 1)
         {
-          console.log(Company.find({_id:{$in:company_ids},'name':{'$regex': new RegExp(searchValue, "i")}},{limit:limit}).count())
           return Company.find({_id:{$in:company_ids},'name':{'$regex': new RegExp(searchValue, "i")}},{limit:limit});
-        }else{
+        }
+        else
+        {
           return Company.find({_id:{$in:company_ids}},{limit:limit});
         }
     });
