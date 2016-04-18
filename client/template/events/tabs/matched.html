@@ -1,0 +1,59 @@
+<template name="matchedTab">
+  {{#ionView}}
+  {{#ionHeaderBar class="bar-balanced"}}
+  {{ > backtoolbar }}
+    <h1 class="title align-title-center">
+      <i class="icon ion-person"></i>&nbsp;
+      <i class="icon ion-android-checkmark-circle"></i>&nbsp;
+      Matched candidates
+    </h1>
+    {{#if isInRole 'admin'}}
+      <button class="button button-clear pull-right" data-ion-modal="_attendeeNew"><i class="icon ion-ios-plus-empty"></i></button>
+    {{/if}}
+  {{/ionHeaderBar}}
+
+  {{#ionContent class="padding"}}
+  <div id="overflow-scroll">
+  {{#ionItem}}
+  <label class="item item-input">
+      <i class="icon ion-search placeholder-icon"></i>
+      <input type="search" placeholder="Filter name" id="search">
+  </label>
+   {{/ionItem}}
+    {{#ionList}}
+      {{#each attendees}}
+<!--         {{#if validate_current_user _id }} -->
+          <a href="{{build_path _id}}">
+            {{#ionItem avatar=true class="item-thumbnail-left"}}
+                {{#with profile}}
+                  {{ #if pic_exists pic }}
+                    <img src="{{pic}}" width="" alt="{{firstname}}" height="20">
+                  {{else}}
+                       <img src="/assets/img/profile.png" width="" alt="{{firstname}}" height="20"> 
+                  {{ /if }}
+
+                   <h2>{{firstname}}</h2>
+                   <h3>{{profession}}</h3>
+                   <p>{{skill}}</p>
+                   <p>Exp. {{experience}} years</p>
+                 {{/with}}
+
+             {{/ionItem}}
+           </a>
+        <!-- {{/if}} -->
+      {{/each}}
+    {{/ionList}}
+    {{#if moreTasks}}
+         <div id="showMoreEvents" style="">
+           <button id="showMoreResults" type="button " class="button button-block button-stable">Load More...</button>
+             <!-- Loading ...
+             <span class="loading fa fa-cog fa-spin fa-2x"></span> -->
+         </div>
+     {{/if}}
+
+
+  </div>
+  {{/ionContent}}
+  {{> _tabs}}
+  {{/ionView}}
+</template>

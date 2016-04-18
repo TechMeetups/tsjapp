@@ -40,7 +40,7 @@ Template.companyDetails.helpers(
   },
   build_path: function(_id)
   {
-    return "/tabs/job/"+Router.current().params._company_id+"/"+_id;
+    return "/tabs/job/"+Router.current().params._company_id+"/"+_id+'/'+Router.current().params._id;
   },
 });
 

@@ -75,14 +75,23 @@ Template.attendeesDetails.helpers(
       return false
     }
   },
-  list_need_to_view: function(){
-    if(attendee_manager.get_connect_request_count() > 0){
+  list_need_to_view: function()
+  {
+    if(attendee_manager.get_connect_request_count() > 0)
+    {
       return true
-      }
-      else
-      {
-        return false
-      }
+    }
+    else
+    {
+      return false
+    }
+  },
+  has_cv_linkedin: function(cv, linkedin)
+  {
+    if(cv || linkedin)
+      return true ;
+    else
+      return false ;     
   }
 });
 Template.attendeesDetails.events(
@@ -119,5 +128,85 @@ Template.attendeesDetails.events(
   {
     var item_id = $(event.currentTarget).attr('data');
     connect_manager.remove_connect_item(item_id)
+  },
+  'click #matched_cv' : function(event, template)
+  {
+    var attendee_name = $(event.currentTarget).attr('data');
+    attendee_id = Router.current().params._attendee_id;
+    event_id = Router.current().params._id;
+
+    user_id = Meteor.userId();
+    request_type = "candidate_cv" ; 
+  
+    var upic = Meteor.user().profile.pic ; 
+    if(!upic)
+      pic = "/assets/img/cv.png" ; 
+    else
+      pic = upic ; 
+
+    request ={request_type:request_type,message:'Get CV',user_id:user_id,event_id:event_id,
+      attendee_id:attendee_id,pic:upic} ; 
+
+    attendee_manager.candidate_cv(request);
+
+
+    // event_id = Router.current().params._id
+    // user_id = Meteor.userId()
+    // var id = Router.current().params._sponsor_id;
+    // var sponsor = Sponsor.findOne({_id:id});
+    // event = Events.findOne({_id:event_id});
+
+    data = {
+      user_id : user_id,
+      pic : "/assets/img/cv.png" ,
+      item_type:"Get CV",
+      desc:'Get CV of ' + attendee_name,
+      amount:10,
+      paid:"unpaid",
+      item_id:attendee_id,
+      created_at:new Date()
+    }
+  
+    checkout_manager.checkout_item(data) ; 
+//    Router.go('checkout.tab', {_id: event_id});
+  
+  },
+  'click #matched_call' : function(event, template)
+  {
+    var attendee_name = $(event.currentTarget).attr('data');
+
+    attendee_id = Router.current().params._attendee_id;
+    event_id = Router.current().params._id;
+
+    user_id = Meteor.userId();
+    request_type = "candidate_call" ; 
+  
+    var upic = Meteor.user().profile.pic ; 
+    if(!upic)
+      pic = "/assets/img/call.png" ; 
+    else
+      pic = upic ; 
+
+    request ={request_type:request_type,message:'Organise Call',user_id:user_id,event_id:event_id,
+      attendee_id:attendee_id,pic:upic} ; 
+
+    attendee_manager.candidate_call(request);
+
+    data = {
+      user_id : user_id,
+      pic : "/assets/img/call.png" ,
+      item_type:"Organise Call",
+      desc:'Organise Call with ' + attendee_name,
+      amount:100,
+      paid:"unpaid",
+      item_id:attendee_id,
+      created_at:new Date()
+    }
+  
+    checkout_manager.checkout_item(data) ; 
+
+
   }
+  
+
 });

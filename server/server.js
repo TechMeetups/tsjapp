@@ -61,31 +61,67 @@ if (Meteor.isServer)
       return ConnectRequest.find({user_id:user_id,job_id:job_id,request_type:{$in:["job_meet","job_apply"]}})
     });
 
-    Meteor.publish("attendees", function (limit, searchValue,event_id)
+    Meteor.publish("attendees", function (limit, searchValue,event_id, job_id)
     {
-      user_ids=[]
-      event_attendees =   EventAttendee.find({event_id:event_id}, {sort:{ created_at:-1}},{fields: {'attendee_id':1}}).fetch()
-      console.log(event_attendees)
-      for(i =0; i< event_attendees.length ;i++){
-        user_ids.push(event_attendees[i].attendee_id)
-      }
-      console.log(searchValue);
-      // if(!limit || limit < 1)
-      //     limit = 10 ;
-        if( searchValue &&  searchValue.length > 1)
-        {
-          // console.log(Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}}).count())
-          // return Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}});
+      console.log('Publishing attendees --------------------------') ; 
+      console.log('limit:'+limit+' searchValue:'+searchValue+' Event Id:'+event_id+' Job Id:'+job_id ) ; 
 
-          console.log(Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},{limit:limit}).count())
-          return Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},{limit:limit});
-          //return Attendees.find({_id:{$in:user_ids},'name':{'$regex': new RegExp(searchValue, "i")}},{sort:{ created_at:-1},limit:limit});
-        }
-        else
-        {
-          return Meteor.users.find({_id:{$in:user_ids}},{limit:limit});
-             // return Meteor.users.find({_id:{$in:user_ids}});
-        }
+      var jobSearch = null ; 
+
+      if(job_id)
+      {
+          var job = Job.findOne({_id : job_id}) ; 
+          if(job)
+            jobSearch = job.desc ; 
+      }  
+
+      if(event_id)
+      {
+          user_ids=[]
+          event_attendees =   EventAttendee.find({event_id:event_id}, {sort:{ created_at:-1}},{fields: {'attendee_id':1}}).fetch()
+          for(i =0; i< event_attendees.length ;i++)
+          {
+            user_ids.push(event_attendees[i].attendee_id)
+          }
+      
+          if( searchValue &&  searchValue.length > 1)
+          {
+              if(jobSearch)
+                return Meteor.users.find({_id:{$in:user_ids} , $text: {$search: jobSearch} ,
+                  'profile.firstname':{'$regex': new RegExp(searchValue, "i")}}, {limit:limit});
+              else   
+                return Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},
+                  {limit:limit});
+          }
+          else
+          {
+              if(jobSearch)
+                return Meteor.users.find({_id:{$in:user_ids}, $text: {$search: jobSearch} },{limit:limit});
+              else    
+                return Meteor.users.find({_id:{$in:user_ids}},{limit:limit});
+          }
+      }  
+      else
+      {
+          if( searchValue &&  searchValue.length > 1)
+          {
+            if(jobSearch)
+              return Meteor.users.find({ $text: {$search: jobSearch} , 'profile.firstname':
+                {'$regex': new RegExp(searchValue, "i")}},{limit:limit});  
+            else  
+              return Meteor.users.find({ 'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},{limit:limit});
+          }
+          else
+          {
+            if(jobSearch)
+              return Meteor.users.find({ $text: {$search: jobSearch} },{limit:limit});
+            else
+              return Meteor.users.find({ },{limit:limit});
+          }
+      }  
+      
+      
+      
     });
 
     Meteor.publish("jobs", function (limit,event_id,company_id,searchValue)
@@ -145,16 +181,17 @@ if (Meteor.isServer)
     Meteor.publish("company", function (limit, searchValue,event_id)
     {
       company_ids=[]
-      console.log(event_id)
+      
       event_company =   EventCompany.find({event_id:event_id}, {sort:{ created_at:-1}},{fields: {'company_id':1}}).fetch()
-      console.log(event_company)
+      
       for(i =0; i< event_company.length ;i++){
         company_ids.push(event_company[i].company_id)
       }
-      console.log(searchValue);
+      
       if(!limit || limit < 1)
           limit = 10 ;
-        if( searchValue &&  searchValue.length > 1){
+        if( searchValue &&  searchValue.length > 1)
+        {
           console.log(Company.find({_id:{$in:company_ids},'name':{'$regex': new RegExp(searchValue, "i")}},{limit:limit}).count())
           return Company.find({_id:{$in:company_ids},'name':{'$regex': new RegExp(searchValue, "i")}},{limit:limit});
         }else{
@@ -181,6 +218,22 @@ if (Meteor.isServer)
       return Events.find({_id: _id});
     });
 
+    Meteor.publish("get_matched_candidates", function (job_id)
+    {
+      console.log("get_matched_candidates.job_id"+job_id) ; 
+
+      var searchValue ; 
+
+      var job = Jobs.findOne({_id:job_id}) ; 
+      if(!job)
+        return null ;
+      searchValue = job.desc ; 
+
+      return Meteor.users.find({'profile.skill':{'$regex': new RegExp(searchValue, "i")}});
+        
+    });
+
+
     Meteor.startup(function ()
     {
 
@@ -206,12 +259,18 @@ if (Meteor.isServer)
         if(user){
           Roles.addUsersToRoles(user._id, ['admin'])
         }
+
         Job._ensureIndex(
            {
              title: "text",
              desc: "text",
              city:"text"
 
+           }) ;
+
+        Meteor.users._ensureIndex(
+           {
+             'profile.skill': "text"
            }) ;
     });
 
@@ -343,6 +402,8 @@ if (Meteor.isServer)
       });
     }
 
+
+
     var request_for_apply_job= function(user,company,job)
     {
       var fromEmail = "admin@techmeetups.com";
@@ -435,6 +496,57 @@ if (Meteor.isServer)
 
       return true ;
     }
+
+    var email_get_candidate_cv = function (user,attendee)
+    {
+      var fromEmail = "admin@techmeetups.com";
+      var toEmail = "marketing@techmeetups.com";
+      var ccEmail = "shawn@techmeetups.com";
+
+      Email.send({
+          from: fromEmail,
+          to: toEmail,
+          replyTo: fromEmail ,
+          cc:ccEmail,
+          subject: 'TechStartupJobs App - ' + user.profile.firstname+ " requests a CV",
+          text: "Hi\n\n" +
+          "A client '"+user.profile.firstname+"'  ("+user.emails[0].address+") requests the CV of\n\n"+
+          attendee.profile.firstname+ ' ('+user.emails[0].address + ') \n\n'+
+          "Please provide this CV."+
+          "\n\n"+
+          "Thank you.\n"+
+          "The TechStartupJobs Team.\n"+
+          "http://techstartupjobs.com\n"+
+          "Join.Connect.Meet.Apply"
+          // +"http://www.graphical.io/assets/img/Graphical-IO.png"
+      });
+    }
+
+    var email_organise_candidate_call = function (user,attendee)
+    {
+      var fromEmail = "admin@techmeetups.com";
+      var toEmail = "marketing@techmeetups.com";
+      var ccEmail = "shawn@techmeetups.com";
+
+      Email.send({
+          from: fromEmail,
+          to: toEmail,
+          replyTo: fromEmail ,
+          cc:ccEmail,
+          subject: 'TechStartupJobs App - ' + user.profile.firstname+ " requests a Call",
+          text: "Hi\n\n" +
+          "A client '"+user.profile.firstname+"'  ("+user.emails[0].address+") requests a Call with\n\n"+
+          attendee.profile.firstname+ ' ('+user.emails[0].address + ') \n\n'+
+          "Please organise this Call."+
+          "\n\n"+
+          "Thank you.\n"+
+          "The TechStartupJobs Team.\n"+
+          "http://techstartupjobs.com\n"+
+          "Join.Connect.Meet.Apply"
+          // +"http://www.graphical.io/assets/img/Graphical-IO.png"
+      });
+    }
+
 
   var import_attandee_files = function(file,event_id)
   {
@@ -744,6 +856,36 @@ if (Meteor.isServer)
 
            console.log("pay now request is send")
            return res ;
+        },
+        get_candidate_cv: function(data)
+        {
+          ConnectRequest.insert(
+            { request_type:data.request_type, message:data.message,user_id:data.user_id,requested_on: new Date(),
+            created_at:new Date(),company_id:"",job_id:"",event_id:data.event_id,attendee_id:data.attendee_id,
+            pic:data.pic});
+
+            user = Meteor.users.findOne({_id:data.user_id});
+            attendee = Meteor.users.findOne({_id:data.attendee_id});
+
+            if(data.request_type =="candidate_cv")
+            {
+              email_get_candidate_cv(user,attendee) ; 
+            }
+        },
+        organise_candidate_call: function(data)
+        {
+          ConnectRequest.insert(
+            { request_type:data.request_type, message:data.message,user_id:data.user_id,requested_on: new Date(),
+            created_at:new Date(),company_id:"",job_id:"",event_id:data.event_id,attendee_id:data.attendee_id,
+            pic:data.pic});
+
+            user = Meteor.users.findOne({_id:data.user_id});
+            attendee = Meteor.users.findOne({_id:data.attendee_id});
+
+            if(data.request_type =="candidate_call")
+            {
+              email_organise_candidate_call(user,attendee) ; 
+            }
         },
     });
 }

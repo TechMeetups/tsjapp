@@ -46,6 +46,14 @@ Template.messagesTab.helpers(
     {
       return "icon ion-android-people"  ;
     }
+    else if(connect_type === "candidate_cv")
+    {
+      return "icon ion-document-text"  ;
+    }
+    else if(connect_type === "candidate_call")
+    {
+      return "icon ion-android-calendar"  ;
+    }
     else
     {
       return "icon ion-person-add"  ; 

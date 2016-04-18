@@ -1,8 +1,8 @@
-Template.attendeesTab.helpers(
+Template.matchedTab.helpers(
 {
   pic_exists : function(pic_url)
   {
-      console.log("attendeesTab'"+pic_url+"'") ; 
+      console.log("matchedTab'"+pic_url+"'") ; 
       if (!pic_url.trim() || pic_url === '') 
         return false ;
       else
@@ -11,15 +11,18 @@ Template.attendeesTab.helpers(
   },   
   build_path: function(_id)
   {
-    return "/tabs/attendees/"+Router.current().params._id+"/"+_id;
+    return "/tabs/attendees/"+Router.current().params._event_id+"/"+_id;
   },
-  format_date: function(date){
+  format_date: function(date)
+  {
     return attendee_manager.format_data(date);
   },
   attendees: function()
   {
     return attendee_manager.getList()
-  },image_src : function(provider_label){
+  },
+  image_src : function(provider_label)
+  {
     if(provider_label && provider_label == "freeagent"){
       return "http://freeagent-assets.s3.amazonaws.com/website-2014/images/logo.svg"
     }else{
@@ -50,7 +53,7 @@ Template.attendeesTab.helpers(
   }
 });
 
-Template.attendeesTab.events(
+Template.matchedTab.events(
 {
   "click #showMoreResults": function(event, template)
   {
@@ -65,12 +68,13 @@ Template.attendeesTab.events(
 });
 
 EVENT_INCREMENT = 10;
-Template.attendeesTab.created = function ()
+Template.matchedTab.created = function ()
 {
   Session.set('attendee_terms','')
   Session.set("attendee_limit",0)
   this.autorun(function () 
   {
-    this.subscription = attendee_manager.default_subscribe(Router.current().params._id);
+    this.subscription = attendee_manager.matched_subscribe(Router.current().params._event_id, 
+      Router.current().params._job_id);
   }.bind(this));
 };

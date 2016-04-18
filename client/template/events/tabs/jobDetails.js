@@ -1,34 +1,69 @@
-Template.jobDetails.created = function () {
+Template.jobDetails.created = function () 
+{
   Session.set("job_limit",JOB_INCREMENT)
-  this.autorun(function () {
+  this.autorun(function () 
+  {
     this.subscription = Meteor.subscribe('job_details',Router.current().params._company_id,Router.current().params._job_id);
     this.subscription1=  job_manager.default_connect_request(Meteor.userId(),Router.current().params._job_id)
   }.bind(this));
 };
-Template.jobDetails.rendered = function () {
-  this.autorun(function () {
-    if (!this.subscription.ready()) {
+
+Template.jobDetails.rendered = function () 
+{
+  Session.set('matched_candidates',false) ;
+
+  this.autorun(function () 
+  {
+    if (!this.subscription.ready()) 
+    {
       IonLoading.show();
-    } else {
+    } 
+    else 
+    {
       IonLoading.hide();
     }
   }.bind(this));
 };
-Template.jobDetails.helpers({
-  format_date : function(date){
+
+Template.jobDetails.helpers(
+{
+    
+  build_match_path: function(_id)
+  {
+    return "/tabs/matched/"+Router.current().params._company_id+"/"+Router.current().params._job_id+'/'+
+    Router.current().params._event_id;
+  },  
+  // build_path: function(_id)
+  // {
+  //   return "/tabs/attendees/"+Router.current().params._id+"/"+_id;
+  // },
+    pic_exists : function(pic_url)
+  {
+      console.log("attendeesTab'"+pic_url+"'") ; 
+      if (!pic_url.trim() || pic_url === '') 
+        return false ;
+      else
+        return true ; 
+
+  },     
+  format_date : function(date)
+  {
     return company_manager.format_data(date)
   },
-  connect_request: function(){
+  connect_request: function()
+  {
     return ConnectRequest.find({},{sort:{created_at : -1 }});
   },
-  list_need_to_view: function(){
-    if(job_manager.get_connect_request_count() > 0){
+  list_need_to_view: function()
+  {
+    if(job_manager.get_connect_request_count() > 0)
+    {
       return true
-      }
-      else
-      {
-        return false
-      }
+    }
+    else
+    {
+      return false
+    }
   },
   display_request_type:function(connect_type)
   {
@@ -41,8 +76,28 @@ Template.jobDetails.helpers({
       return "icon ion-android-people"  ;
     }
 
+  },
+  matched_candidates : function()
+  {
+      return true ; 
+
+      // return Session.get('matched_candidates') ;
+
+    // if(attendee_manager.matched_candidate_count() > 0)
+    // {
+    //   return true
+    // }
+    // else
+    // {
+    //   return false
+    // }
+  },
+  matched_candidate_list : function()
+  {
+      return attendee_manager.matched_candidate_list() ; 
   }
 });
+
 Template.jobDetails.events(
 {
   'click #job_meet' : function(event, template)
@@ -80,5 +135,17 @@ Template.jobDetails.events(
   {
     var item_id = $(event.currentTarget).attr('data');
     connect_manager.remove_connect_item(item_id)
-  }
+  },
+  // 'click #match_making' : function(event, template)
+  // {
+  //      IonLoading.show({
+  //           customTemplate: 'Match making',
+  //           duration: 2000
+  //         });
+
+  //   var job_desc = $(event.currentTarget).attr('data');
+  //   Session.set('attendee_terms',job_desc) ;  
+  //   Session.set('matched_candidates',true) ;
+  // },
+
 });

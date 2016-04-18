@@ -38,17 +38,44 @@
           
           {{ #if linkedin }}
 
-            <a class="item-icon-right" href="{{linkedin}}" target='_blank'>
-              <i class="icon ion-social-linkedin"></i>
-            </a>
+            {{#if isInRole 'admin'}}
+              <a class="item-icon-right" href="{{linkedin}}" target='_blank'>
+                <i class="icon ion-social-linkedin"></i>
+              </a>
+            {{else}}
+              <a class="item-icon-right" href="#">
+                <i class="icon ion-social-linkedin"></i>
+              </a>
+            {{/if}} 
 
           {{/if}}
 
+<!--           {{ #if cv }}
+
+            <a class="item-icon-right" href="{{cv}}" target='_blank'>
+              <i class="icon ion-document-text"></i>
+            </a>
+
+          {{/if}}
+ -->
      </div>
       <div class="item item-divider">
         <h3>{{experience}} years exp.</h3>
       </div>
     </div>
+
+    {{#if isInRole 'admin'}}
+       <div class="button-bar">
+         {{ #if has_cv_linkedin cv linkedin }}
+            <button class="button button-balanced button-block icon ion-document-text" id="matched_cv" data="{{firstname}}">&nbsp;CV</button>
+         {{ else }}
+             <button class="button button-balanced button-block icon ion-document-text disabled" id="matched_cv" data="{{firstname}}">&nbsp;CV</button>
+         {{ /if }} 
+          <button class="button button-balanced button-block  icon ion-android-calendar" id="matched_call">&nbsp;Call</button>
+      </div> 
+
+    {{/if}}
+
 
     {{#if list_need_to_view }}
     <div class="list">
@@ -66,6 +93,7 @@
     </div>
     {{/if}}
 
+      
 
       {{#if not_me }}
 
