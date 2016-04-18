@@ -274,10 +274,10 @@ if (Meteor.isServer)
 
            }) ;
 
-        Meteor.users._ensureIndex(
-           {
-             'profile.skill': "text"
-           }) ;
+        // Meteor.users._ensureIndex(
+        //    {
+        //      'profile.skill': "text"
+        //    }) ;
     });
 
     Accounts.onCreateUser(function(options, user) {
