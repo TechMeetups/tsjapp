@@ -31,7 +31,7 @@ Template.jobDetails.helpers(
   build_match_path: function(_id)
   {
     return "/tabs/matched/"+Router.current().params._company_id+"/"+Router.current().params._job_id+'/'+
-    Router.current().params._event_id;
+    Router.current().params._id;
   },  
   // build_path: function(_id)
   // {

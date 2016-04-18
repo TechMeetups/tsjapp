@@ -66,38 +66,50 @@ if (Meteor.isServer)
       console.log('Publishing attendees --------------------------') ; 
       console.log('limit:'+limit+' searchValue:'+searchValue+' Event Id:'+event_id+' Job Id:'+job_id ) ; 
 
-      var jobSearch = null ; 
-
       if(job_id)
-      {
           var job = Job.findOne({_id : job_id}) ; 
-          if(job)
-            jobSearch = job.desc ; 
-      }  
-
+        
       if(event_id)
       {
-          user_ids=[]
-          event_attendees =   EventAttendee.find({event_id:event_id}, {sort:{ created_at:-1}},{fields: {'attendee_id':1}}).fetch()
-          for(i =0; i< event_attendees.length ;i++)
+          user_ids=[] ; 
+          event_attendees =  EventAttendee.find({event_id:event_id}, {sort:{ created_at:-1}},{fields: {'attendee_id':1}}).fetch()
+
+          if(job)  
           {
-            user_ids.push(event_attendees[i].attendee_id)
+              for(i =0; i< event_attendees.length ;i++)
+              {
+                  var usr = Meteor.users.findOne( { _id : event_attendees[i].attendee_id } ) ;
+                  
+                  console.log(usr) ; 
+
+                  if( usr )
+                  {
+                      counter = match_user_job(usr,job) ; 
+
+                      if(counter > 0)
+                      {
+                          user_ids.push(event_attendees[i].attendee_id)  ;   
+                      }  
+                  } 
+              }
+
           }
-      
+          else
+          {
+              for(i =0; i< event_attendees.length ;i++)
+                user_ids.push(event_attendees[i].attendee_id)   ; 
+          }
+                  
+          console.log('Found Users:'+user_ids.length) ;
+          console.log(user_ids) ;
+
           if( searchValue &&  searchValue.length > 1)
           {
-              if(jobSearch)
-                return Meteor.users.find({_id:{$in:user_ids} , $text: {$search: jobSearch} ,
-                  'profile.firstname':{'$regex': new RegExp(searchValue, "i")}}, {limit:limit});
-              else   
                 return Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},
                   {limit:limit});
           }
           else
           {
-              if(jobSearch)
-                return Meteor.users.find({_id:{$in:user_ids}, $text: {$search: jobSearch} },{limit:limit});
-              else    
                 return Meteor.users.find({_id:{$in:user_ids}},{limit:limit});
           }
       }  
@@ -105,17 +117,10 @@ if (Meteor.isServer)
       {
           if( searchValue &&  searchValue.length > 1)
           {
-            if(jobSearch)
-              return Meteor.users.find({ $text: {$search: jobSearch} , 'profile.firstname':
-                {'$regex': new RegExp(searchValue, "i")}},{limit:limit});  
-            else  
               return Meteor.users.find({ 'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},{limit:limit});
           }
           else
           {
-            if(jobSearch)
-              return Meteor.users.find({ $text: {$search: jobSearch} },{limit:limit});
-            else
               return Meteor.users.find({ },{limit:limit});
           }
       }  

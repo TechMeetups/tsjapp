@@ -22,7 +22,7 @@
    {{/ionItem}}
     {{#ionList}}
       {{#each attendees}}
-<!--         {{#if validate_current_user _id }} -->
+        {{#if validate_current_user _id }}
           <a href="{{build_path _id}}">
             {{#ionItem avatar=true class="item-thumbnail-left"}}
                 {{#with profile}}
@@ -40,7 +40,7 @@
 
              {{/ionItem}}
            </a>
-        <!-- {{/if}} -->
+        {{/if}}
       {{/each}}
     {{/ionList}}
     {{#if moreTasks}}

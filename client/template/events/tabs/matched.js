@@ -11,7 +11,7 @@ Template.matchedTab.helpers(
   },   
   build_path: function(_id)
   {
-    return "/tabs/attendees/"+Router.current().params._event_id+"/"+_id;
+    return "/tabs/attendees/"+Router.current().params._id+"/"+_id;
   },
   format_date: function(date)
   {
@@ -37,20 +37,28 @@ Template.matchedTab.helpers(
   },
   validate_current_user: function(_id)
   {
-    result_view = true
-    if(Meteor.userId() == _id){
-      current_user_envent_state = Session.get('current_user_envent_state');
-      if(current_user_envent_state.length > 0){
-        result_view = true
-      }else{
-        result_view = false
-      }
-    }else{
-      result_view =true
-    }
-    console.log(result_view);
-    return result_view;
-  }
+    if(Meteor.userId() != _id)
+      return true ; 
+  
+     var job_id = Router.current().params._job_id
+
+      if(job_id)
+      {
+          var job = Job.findOne({_id : job_id}) ; 
+          if(job)
+          {
+              if( match_user_job(Meteor.user(),job) > 0)
+                return true ;
+              else
+                return false ;    
+
+          }
+                  
+      } 
+    
+      return false ;  
+
+  }   
 });
 
 Template.matchedTab.events(
@@ -74,7 +82,7 @@ Template.matchedTab.created = function ()
   Session.set("attendee_limit",0)
   this.autorun(function () 
   {
-    this.subscription = attendee_manager.matched_subscribe(Router.current().params._event_id, 
+    this.subscription = attendee_manager.matched_subscribe(Router.current().params._id, 
       Router.current().params._job_id);
   }.bind(this));
 };

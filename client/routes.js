@@ -63,7 +63,7 @@ Router.map(function()
 
     this.route('matched.tab',
     {
-      path: '/tabs/matched/:_company_id/:_job_id/:_event_id',
+      path: '/tabs/matched/:_company_id/:_job_id/:_id',
       layoutTemplate: 'tabsLayout'
     });
 
@@ -86,7 +86,7 @@ Router.map(function()
 
     this.route('job.details',
     {
-      path: '/tabs/job/:_company_id/:_job_id/:_event_id',
+      path: '/tabs/job/:_company_id/:_job_id/:_id',
       data:function()
       {
         var id = this.params._job_id;
