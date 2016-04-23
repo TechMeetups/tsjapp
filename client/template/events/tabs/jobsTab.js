@@ -2,7 +2,7 @@ Template.jobsTab.helpers(
 {
   build_path: function(company_id, _id)
   {
-    return "/tabs/job/"+company_id+"/"+_id;
+    return "/tabs/job/"+company_id+"/"+_id+"/no-event";
   },
   format_date: function(date)
   {
