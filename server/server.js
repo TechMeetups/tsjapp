@@ -79,8 +79,6 @@ if (Meteor.isServer)
               for(i =0; i< event_attendees.length ;i++)
               {
                   var usr = Meteor.users.findOne( { _id : event_attendees[i].attendee_id } ) ;
-                  
-                  console.log(usr) ; 
 
                   if( usr )
                   {
@@ -409,6 +407,69 @@ if (Meteor.isServer)
     }
 
 
+    var find_matched = function (limit, searchValue,event_id, job_id)
+    {
+      console.log('Finding matched --------------------------') ; 
+      console.log('limit:'+limit+' searchValue:'+searchValue+' Event Id:'+event_id+' Job Id:'+job_id ) ; 
+
+      if(job_id)
+          var job = Job.findOne({_id : job_id}) ; 
+        
+      if(event_id)
+      {
+          user_ids=[] ; 
+          event_attendees =  EventAttendee.find({event_id:event_id}, {sort:{ created_at:-1}},{fields: {'attendee_id':1}}).fetch()
+
+          if(job)  
+          {
+              for(i =0; i< event_attendees.length ;i++)
+              {
+                  var usr = Meteor.users.findOne( { _id : event_attendees[i].attendee_id } ) ;
+                  
+                  if( usr )
+                  {
+                      counter = match_user_job(usr,job) ; 
+
+                      if(counter > 0)
+                      {
+                          user_ids.push(event_attendees[i].attendee_id)  ;   
+                      }  
+                  } 
+              }
+
+          }
+          else
+          {
+              for(i =0; i< event_attendees.length ;i++)
+                user_ids.push(event_attendees[i].attendee_id)   ; 
+          }
+                  
+          console.log('--------------------- Found Users:'+user_ids.length) ;
+          console.log(user_ids) ;
+
+          if( searchValue &&  searchValue.length > 1)
+          {
+                return Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},
+                  {limit:limit}).fetch();
+          }
+          else
+          {
+                return Meteor.users.find({_id:{$in:user_ids}},{limit:limit}).fetch();
+          }
+      }  
+      else
+      {
+          if( searchValue &&  searchValue.length > 1)
+          {
+              return Meteor.users.find({ 'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},{limit:limit}).fetch();
+          }
+          else
+          {
+              return Meteor.users.find({ },{limit:limit}).fetch();
+          }
+      }  
+    } 
+
 
     var request_for_apply_job= function(user,company,job)
     {
@@ -502,6 +563,7 @@ if (Meteor.isServer)
 
       return true ;
     }
+
 
     var email_get_candidate_cv = function (user,attendee)
     {
@@ -819,6 +881,63 @@ if (Meteor.isServer)
       };
       Meteor.methods(
       {
+        'email_matched' : function(user, job_id, event_id, searchValue, limit) 
+        {
+            console.log('Server.email_matched') ; 
+
+            var job = Job.findOne({_id:job_id}) ; 
+            if(!job)
+              return false ; 
+
+            var company = Company.findOne({_id : job.company_id}) ;
+
+            var event = Events.findOne({_id:event_id}) ; 
+            if(!event)
+              return false ; 
+
+           var matched = find_matched(limit,searchValue, event_id, job_id) ; 
+            
+            var fromEmail = "admin@techmeetups.com";
+            var toEmail = user.emails[0].address ; 
+            var ccEmail = "marketing@techmeetups.com";
+
+            var message = ""  ;
+
+            console.log('Emailing matched candidates') ;
+
+            for(i=0;i<matched.length;i++)
+            {
+              message += (i+1) + '.' +matched[i].profile.firstname ;
+
+              if( matched[i].profile.profession )
+                message += ' - ' + matched[i].profile.profession ;  
+                  
+              if( matched[i].profile.experience )
+                message += ' (' + matched[i].profile.experience + ' years of exp.)' ;
+
+              message += '\n' ;
+            }
+
+
+            Email.send(
+            {
+                from: fromEmail,
+                to: toEmail,
+                replyTo: fromEmail ,
+                cc:ccEmail,
+                subject: 'TechStartupJobs App - '+matched.length+' matched candidates for '+company.name,
+                text: "Hi "+user.profile.firstname+"\n\n" +
+                "Here is your matched list of candidates for the following Job by "+company.name+'\n\n'+
+                "Job : "+job.title+"\n"+
+                job.desc+"\n\n"+
+                matched.length + " matching candidates : \n\n"+message+"\n\n"+
+                "Thank you.\n"+
+                "The TechStartupJobs Team.\n"+
+                "http://techstartupjobs.com\n"+
+                "Join.Connect.Meet.Apply"
+                // +"http://www.graphical.io/assets/img/Graphical-IO.png"
+            });
+        }, 
         'sendMessage': function (toId)
         {
             if (Meteor.isServer)

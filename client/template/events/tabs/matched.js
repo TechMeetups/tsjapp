@@ -2,7 +2,6 @@ Template.matchedTab.helpers(
 {
   pic_exists : function(pic_url)
   {
-      console.log("matchedTab'"+pic_url+"'") ; 
       if (!pic_url.trim() || pic_url === '') 
         return false ;
       else
@@ -73,6 +72,22 @@ Template.matchedTab.events(
     //Session.get('search_terms')
     attendee_manager.search(search_terms)
   },
+  "click #emailMatched": function(event, template)
+  {
+      var job_id = Router.current().params._job_id ; 
+      var event_id = Router.current().params._id ; 
+
+      IonLoading.show(
+      {
+        customTemplate: "Emailing matched list",
+        duration: 2000
+      });
+
+      var searchValue = $("#search").val();
+      attendee_manager.email_matched(job_id,event_id,searchValue) ; 
+
+      //IonLoading.hide();      
+  }
 });
 
 EVENT_INCREMENT = 10;
