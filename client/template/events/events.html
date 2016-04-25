@@ -10,8 +10,23 @@
     <!-- <button class="button" data-ion-modal="_importAttendee">Import</button> -->
     </div>
     {{/if}}
+
+   
+
    {{/contentFor}}
   {{#ionView}}
+     <div class="tabs">
+      <a class="tab-item">
+        Home
+      </a>
+      <a class="tab-item">
+        Favorites
+      </a>
+      <a class="tab-item">
+        Settings
+      </a>
+    </div>
+
     {{#ionContent on-infinite="showMoreVisible()" }}
     <div id="overflow-scroll">
     {{#ionItem}}
