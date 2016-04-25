@@ -565,26 +565,64 @@ if (Meteor.isServer)
     {
        event_id = event._id;
     }
-    console.log('import_attandee_files.event_id'+event_id)
+    
+    console.log('import_attandee_files.event_id:'+event_id)
+    console.log('No of Atendees:'+l)
 
      for (var i=1; i < l; i++)
      {
         try
         {
            var line = lines[i];
+           var skill, prof ; 
+
+           line = rmv_start_quote(line) ; 
+           line = rmv_end_quote(line) ; 
+            
+           console.log(i+" ->"+line) ; 
            var line_parts = line.split(new RegExp(',(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))'));
-           dataObj = new Date(moment(line_parts[4]));
+
+           var cols = [ "name", "email", "exp.yrs", "skills", "date joined", "looking for", "profession", 
+           "pic", "cv", "linkedin", "city"  ] ; 
+
+           for(k=0;k<=10;k++)
+           {
+              console.log(k+'['+cols[k]+']='+line_parts[k])
+           } 
+
+            if( line_parts[4] )
+             dataObj = new Date(moment(line_parts[4]));
+            else 
+              dataObj = new Date() ; 
 
            exp = line_parts[2];
-           skill = line_parts[3].replace(/["']/g, "");
-           email = line_parts[1].trim();
+
+           if(line_parts[3])
+             skill = line_parts[3].replace(/["']/g, "");
+           else
+            skill="" ; 
+
+          if(line_parts[6])
+             prof = line_parts[6].replace(/["']/g, "");
+           else
+            prof="" ; 
+
+          if(line_parts[1])  
+            email = line_parts[1].trim();
+          else
+          {
+              console.log(i+" ERROR ! No Email found !: "+ line_parts[1]) ; 
+              continue ; 
+          }  
+            
+
            user = Meteor.users.findOne({"emails.address" : email});
            user_id=''
 
           if(user)
           {
             user_id = user._id
-            console.log("User Already Registered In System : "+ line_parts[1])+' Updating'
+            console.log(i+" User already Registered In System : "+ line_parts[1])+' Updating'
 
             var profile  =
             {
@@ -592,7 +630,7 @@ if (Meteor.isServer)
                     experience: exp,
                     skill : skill,
                     lookingfor: line_parts[5],
-                    profession: line_parts[6],
+                    profession: prof,
                     pic: line_parts[7],
                     cv: line_parts[8],
                     linkedin : line_parts[9],
@@ -614,7 +652,7 @@ if (Meteor.isServer)
                     experience: exp,
                     skill : skill,
                     lookingfor: line_parts[5],
-                    profession: line_parts[6],
+                    profession: prof,
                     pic: line_parts[7],
                     cv: line_parts[8],
                     linkedin : line_parts[9],
@@ -623,7 +661,7 @@ if (Meteor.isServer)
                     auto_created : true
               }
             });
-            console.log("User created In System : "+ line_parts[1])
+            console.log(i+" User created In System : "+ line_parts[1])
           }
 
           ticket_no = guid();
@@ -631,12 +669,12 @@ if (Meteor.isServer)
 
           if(event_attendee)
           {
-            console.log("Users Already Registered In An Event : "+ line_parts[1])
+            console.log("User Already Registered In An Event : "+ line_parts[1])
           }
           else
           {
              EventAttendee.insert({attendee_id:user_id,event_id:event_id,joined_on:dataObj,ticket_no:ticket_no,created_at:new Date()});
-             console.log("Users Registered In An Event : "+ line_parts[1])
+             console.log("Users Registered to Event : "+ line_parts[1])
           }
 
         }catch ( e )
@@ -645,6 +683,26 @@ if (Meteor.isServer)
         }
      }
     };
+
+    var rmv_start_quote = function(line)
+    {
+      if( line.charAt(0) === '"')
+      {
+          line = line.slice(1,line.length) ; 
+      }
+      return line ;
+    }
+
+    var rmv_end_quote = function(line)
+    {
+       if( line.charAt(line.length-1) === '"')
+       {
+          line = line.slice(0,line.length-1) ; 
+       }
+
+       return line ; 
+    }       
+    
     var import_all_attandee_files = function(file)
     {
       console.log("enter function import_all_file_orders")
@@ -685,7 +743,12 @@ if (Meteor.isServer)
              }else{
                exp='';
              }
-             skill = line_parts[3].replace(/["']/g, "");
+
+             if(line_parts[3])
+               skill = line_parts[3].replace(/["']/g, "");
+             else 
+              skill="" ; 
+
              email = line_parts[1].trim();
              user = Meteor.users.findOne({"emails.address" : email});
              user_id=''
@@ -939,7 +1002,8 @@ if (Meteor.isServer)
               console.log("request is send")
             }
         },
-        upload_attandee : function(fileContent,event_id){
+        upload_attandee : function(fileContent,event_id)
+        {
              console.log("start insert");
              import_attandee_files(fileContent,event_id);
              console.log("completed");
