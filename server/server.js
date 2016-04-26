@@ -418,7 +418,7 @@ if (Meteor.isServer)
           text: "Hi "+attendee.profile.firstname+"\n\n" +
           "A User '"+user.profile.firstname+"'  ("+user.emails[0].address+") has sent you a message.\n\n"+
           "Message : "+message+"\n\n"+
-          "Please check their profile and message or email him if interested."+
+          "Please check their profile and message or email them if interested."+
           "\n\n"+
           "Thank you.\n"+
           "The TechStartupJobs Team.\n"+
