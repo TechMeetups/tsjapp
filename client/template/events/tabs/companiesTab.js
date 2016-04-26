@@ -15,8 +15,10 @@ Template.companiesTab.helpers({
   }
 });
 
-Template.companiesTab.events({
-  "click #showMoreResults": function(event, template){
+Template.companiesTab.events(
+{
+  "click #showMoreResults": function(event, template)
+  {
     Session.set("company_limit",Session.get("company_limit") + EVENT_INCREMENT);
   },
   'keyup #search': function (event, template)
@@ -25,6 +27,11 @@ Template.companiesTab.events({
     //Session.get('search_terms')
     company_manager.search(search_terms)
   },
+  "click #event_match": function(event, template)
+  {
+      match_manager.email_matched(null,Router.current().params._id,null,null) ; 
+  }
+  
 });
 
 EVENT_INCREMENT = 10;

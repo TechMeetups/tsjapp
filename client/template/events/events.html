@@ -5,27 +5,14 @@
   {{/contentFor}}
   {{#contentFor "headerButtonRight"}}
     {{#if isInRole 'admin'}}
-    <div class="buttons">
-    <button class="button" data-ion-modal="_eventsNew">{{> ionIcon icon="ios-plus-empty"}}</button>
-    <!-- <button class="button" data-ion-modal="_importAttendee">Import</button> -->
-    </div>
+      <div class="buttons">
+        <button class="button" data-ion-modal="_eventsNew">{{> ionIcon icon="ios-plus-empty"}}</button>
+        <button class="button button-clear" id="allmatch" >Match</button>
+      </div>
     {{/if}}
-
-   
 
    {{/contentFor}}
   {{#ionView}}
-     <div class="tabs">
-      <a class="tab-item">
-        Home
-      </a>
-      <a class="tab-item">
-        Favorites
-      </a>
-      <a class="tab-item">
-        Settings
-      </a>
-    </div>
 
     {{#ionContent on-infinite="showMoreVisible()" }}
     <div id="overflow-scroll">

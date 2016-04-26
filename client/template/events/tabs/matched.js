@@ -84,7 +84,7 @@ Template.matchedTab.events(
       });
 
       var searchValue = $("#search").val();
-      attendee_manager.email_matched(job_id,event_id,searchValue) ; 
+      match_manager.email_matched(job_id,event_id,searchValue,Router.current().params._company_id) ; 
 
       //IonLoading.hide();      
   }

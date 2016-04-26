@@ -49,5 +49,9 @@ Template.companyDetails.events(
   'click #showMoreResults' : function(event, template)
   {
     Session.set("job_limit",Session.get("job_limit") + EVENT_INCREMENT);
+  },
+  "click #company_match": function(event, template)
+  {
+      match_manager.email_matched(null,Router.current().params._id,null,Router.current().params._company_id) ; 
   }
 });

@@ -52,5 +52,9 @@ Template.events.events(
 
     Session.set("eventLimit",Session.get("eventLimit") + EVENT_INCREMENT);
 
+  },
+  'click #allmatch' : function(event, template)
+  {
+      match_manager.email_matched(null,null,null,null) ; 
   }
 });

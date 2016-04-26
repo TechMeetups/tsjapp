@@ -638,6 +638,131 @@ if (Meteor.isServer)
     }
 
 
+    var email_matched_list = function(user,message) 
+    {
+            var fromEmail = "admin@techmeetups.com";
+            var toEmail = user.emails[0].address ; 
+            var ccEmail = "marketing@techmeetups.com";
+
+            Email.send(
+            {
+                from: fromEmail,
+                to: toEmail,
+                replyTo: fromEmail ,
+                cc:ccEmail,
+                subject: 'TechStartupJobs App - Matched Candidate Report',
+                text: "Hi "+user.profile.firstname+"\n\n" +
+                "Here is your Matched Candidate Report.\n\n"+
+                message+"\n\n"+
+                "Thank you.\n"+
+                "The TechStartupJobs Team.\n"+
+                "http://techstartupjobs.com\n"+
+                "Join.Connect.Meet.Apply"
+                // +"http://www.graphical.io/assets/img/Graphical-IO.png"
+            });
+    }
+
+      var email_matched_event = function ( user, job_id, event_id, searchValue, limit, company_id ) 
+      {
+        var message = "" ; 
+
+        console.log('Server.email_matched_event') ; 
+        console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
+
+        var event = Events.findOne({_id : event_id}) ;
+        if(!event)
+          return ; 
+        
+        message += "\n\nEvent : "+event.name+'\n'  ;          
+        message += "********************************************************************************"+'\n'  ;          
+
+        if( company_id )
+           message = email_matched_company( user, job_id, event_id, searchValue, limit, company_id ) ;       
+        else
+        {
+          var companies = EventCompany.find({event_id : event_id}).fetch()  ; 
+          for( c=0;c<companies.length;c++)
+          {
+              message += email_matched_company( user, job_id, event_id, searchValue, limit, companies[c].company_id ) ;
+          }  
+            
+        }  
+
+        return message ; 
+
+      }                 
+
+     var email_matched_company = function ( user, job_id, event_id, searchValue, limit, company_id ) 
+     {
+        var message = "" ;
+
+        console.log('Server.email_matched_company') ; 
+        console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
+
+        var company = Company.findOne({_id : company_id}) ;
+        if(!company)
+          return ; 
+
+        message += "\n\nCompany : "+company.name+'\n'  ;          
+        message += "============================================================="+'\n'  ;          
+    
+        if( job_id )
+           message = email_matched_job( user, job_id, event_id, searchValue, limit, company_id ) ;       
+        else
+        {
+          var jobs = Job.find({company_id : company_id}).fetch()  ; 
+          for( j=0;j<jobs.length;j++)
+          {  
+              message += email_matched_job( user, jobs[j]._id, event_id, searchValue, limit, company_id ) ;
+          }  
+            
+        }  
+
+        return message ;   
+
+     } 
+
+     var email_matched_job = function ( user, job_id, event_id, searchValue, limit, company_id ) 
+     {
+        var message = "" ;
+
+        console.log('Server.email_matched_job') ; 
+        console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
+
+        var job = Job.findOne({_id:job_id}) ; 
+        if(!job)
+          return false ; 
+
+        // var event = Events.findOne({_id:event_id}) ; 
+        // if(!event)
+        //   return false ; 
+
+        var matched = find_matched(limit,searchValue, event_id, job_id) ; 
+               
+        message += "\n\nJob : "+job.title +'\n'  ;   
+        message += "-----------------------------------------------------"+'\n'  ;          
+   
+        message += matched.length + " matching candidates : \n\n" ;        
+
+        for(i=0;i<matched.length;i++)
+        {
+          message += (i+1) + '. ' +matched[i].profile.firstname ;
+
+          if( matched[i].profile.profession )
+            message += ' - ' + matched[i].profile.profession ;  
+              
+          if( matched[i].profile.experience )
+            message += ' (' + matched[i].profile.experience + ' years of exp)' ;
+
+          message += '\n' ;
+        }
+
+        return message ; 
+     }
+
+
+
+
   var import_attandee_files = function(file,event_id)
   {
     console.log("enter function import_file_orders")
@@ -899,66 +1024,36 @@ if (Meteor.isServer)
           {
             console.log(e);
           }
-       }
+        }
       };
+
+
+
+
+
       Meteor.methods(
       {
-        'email_matched' : function(user, job_id, event_id, searchValue, limit) 
+        'email_matched' : function(user, job_id, event_id, searchValue, limit, company_id) 
         {
             console.log('Server.email_matched') ; 
+            console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
 
-            var job = Job.findOne({_id:job_id}) ; 
-            if(!job)
-              return false ; 
+            var message = "" ; 
 
-            var company = Company.findOne({_id : job.company_id}) ;
-
-            var event = Events.findOne({_id:event_id}) ; 
-            if(!event)
-              return false ; 
-
-           var matched = find_matched(limit,searchValue, event_id, job_id) ; 
-            
-            var fromEmail = "admin@techmeetups.com";
-            var toEmail = user.emails[0].address ; 
-            var ccEmail = "marketing@techmeetups.com";
-
-            var message = ""  ;
-
-            console.log('Emailing matched candidates') ;
-
-            for(i=0;i<matched.length;i++)
+            if( event_id )
+               message = email_matched_event( user, job_id, event_id, searchValue, limit, company_id ) ;       
+            else
             {
-              message += (i+1) + '.' +matched[i].profile.firstname ;
-
-              if( matched[i].profile.profession )
-                message += ' - ' + matched[i].profile.profession ;  
-                  
-              if( matched[i].profile.experience )
-                message += ' (' + matched[i].profile.experience + ' years of exp.)' ;
-
-              message += '\n' ;
-            }
-
-
-            Email.send(
-            {
-                from: fromEmail,
-                to: toEmail,
-                replyTo: fromEmail ,
-                cc:ccEmail,
-                subject: 'TechStartupJobs App - '+matched.length+' matched candidates for '+company.name,
-                text: "Hi "+user.profile.firstname+"\n\n" +
-                "Here is your matched list of candidates for the following Job by "+company.name+'\n\n'+
-                "Job : "+job.title+"\n"+
-                job.desc+"\n\n"+
-                matched.length + " matching candidates : \n\n"+message+"\n\n"+
-                "Thank you.\n"+
-                "The TechStartupJobs Team.\n"+
-                "http://techstartupjobs.com\n"+
-                "Join.Connect.Meet.Apply"
-                // +"http://www.graphical.io/assets/img/Graphical-IO.png"
-            });
+              var events = Events.find({}).fetch()  ; 
+              for( e=0;e<events.length;e++)
+              {
+                  message += email_matched_event( user, job_id, events[e]._id, searchValue, limit, company_id ) ;
+              }  
+                
+            }  
+              
+            email_matched_list(user,message) ; 
+  
         }, 
         'sendMessage': function (toId)
         {

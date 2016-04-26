@@ -3,7 +3,12 @@
 {{ > backtoolbar}}
     <h1 class="title align-title-center">Companies</h1>
     {{#if isInRole 'admin'}}
-    <button class="button button-clear" data-ion-modal="_companyNew">{{> ionIcon icon="ios-plus-empty"}}</button>
+
+    <div class="buttons">
+      <button class="button button-clear" data-ion-modal="_companyNew">{{> ionIcon icon="ios-plus-empty"}}</button>
+      <button class="button button-clear" id="event_match" >Match</button>
+    </div>
+
     {{/if}}
   {{/ionHeaderBar}}
 
