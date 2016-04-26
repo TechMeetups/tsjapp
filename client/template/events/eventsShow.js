@@ -20,8 +20,9 @@ Template.eventsShow.helpers({
   format_date : function(date){
     return event_manager.format_data(date)
   },
-  current_user_envent_state : function(){
-    console.log(Session.get('current_user_envent_state'))
+  current_user_envent_state : function()
+  {
+    
    return  Session.get('current_user_envent_state');
   }
 });

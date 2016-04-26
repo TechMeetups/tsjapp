@@ -414,11 +414,11 @@ if (Meteor.isServer)
           to: toEmail,
           replyTo: fromEmail ,
           cc:ccEmail,
-          subject: 'TechStartupJobs App - ' + user.profile.firstname+ " would like to connect with you",
+          subject: 'TechStartupJobs App - ' + user.profile.firstname+ " has sent you a message",
           text: "Hi "+attendee.profile.firstname+"\n\n" +
-          "A User '"+user.profile.firstname+"'  ("+user.emails[0].address+") would like to connect with you.\n\n"+
+          "A User '"+user.profile.firstname+"'  ("+user.emails[0].address+") has sent you a message.\n\n"+
           "Message : "+message+"\n\n"+
-          "Please check his profile and message or email him if interested."+
+          "Please check their profile and message or email him if interested."+
           "\n\n"+
           "Thank you.\n"+
           "The TechStartupJobs Team.\n"+
