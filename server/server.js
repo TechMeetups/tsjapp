@@ -103,7 +103,18 @@ if (Meteor.isServer)
 
           if( searchValue &&  searchValue.length > 1)
           {
-                return Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},
+                return Meteor.users.find(
+                  { 
+                    _id:{$in:user_ids},
+                    $or :
+                    [
+                      { 'profile.firstname':{'$regex': new RegExp(searchValue, "i")} } ,
+                      { 'profile.skill':{'$regex': new RegExp(searchValue, "i")} } , 
+                      { 'profile.profession':{'$regex': new RegExp(searchValue, "i")} } , 
+                      { 'profile.lookingfor':{'$regex': new RegExp(searchValue, "i")} } , 
+                      { 'profile.city':{'$regex': new RegExp(searchValue, "i")} } , 
+                    ]
+                  },
                   {limit:limit});
           }
           else
@@ -115,7 +126,18 @@ if (Meteor.isServer)
       {
           if( searchValue &&  searchValue.length > 1)
           {
-              return Meteor.users.find({ 'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},{limit:limit});
+              return Meteor.users.find(
+                { 
+                    $or :
+                    [
+                      { 'profile.firstname':{'$regex': new RegExp(searchValue, "i")} } ,
+                      { 'profile.skill':{'$regex': new RegExp(searchValue, "i")} } , 
+                      { 'profile.profession':{'$regex': new RegExp(searchValue, "i")} } , 
+                      { 'profile.lookingfor':{'$regex': new RegExp(searchValue, "i")} } , 
+                      { 'profile.city':{'$regex': new RegExp(searchValue, "i")} } , 
+                    ]
+                },
+                {limit:limit});
           }
           else
           {

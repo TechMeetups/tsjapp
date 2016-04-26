@@ -2,7 +2,6 @@ Template.attendeesTab.helpers(
 {
   pic_exists : function(pic_url)
   {
-      console.log("attendeesTab'"+pic_url+"'") ; 
       if (!pic_url.trim() || pic_url === '') 
         return false ;
       else
@@ -45,7 +44,6 @@ Template.attendeesTab.helpers(
     }else{
       result_view =true
     }
-    console.log(result_view);
     return result_view;
   }
 });
