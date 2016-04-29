@@ -1,12 +1,18 @@
 Template.attendeesTab.helpers(
 {
+  attendee_count : function(pic_url)
+  {
+    return attendee_manager.getCount() ; 
+  } , 
   pic_exists : function(pic_url)
   {
+      if(!pic_url)
+        return false ; 
+      
       if (!pic_url.trim() || pic_url === '') 
         return false ;
       else
         return true ; 
-
   },   
   build_path: function(_id)
   {

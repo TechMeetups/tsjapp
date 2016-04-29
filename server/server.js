@@ -434,68 +434,6 @@ if (Meteor.isServer)
     }
 
 
-    var find_matched = function (limit, searchValue,event_id, job_id)
-    {
-      console.log('Finding matched --------------------------') ; 
-      console.log('limit:'+limit+' searchValue:'+searchValue+' Event Id:'+event_id+' Job Id:'+job_id ) ; 
-
-      if(job_id)
-          var job = Job.findOne({_id : job_id}) ; 
-        
-      if(event_id)
-      {
-          user_ids=[] ; 
-          event_attendees =  EventAttendee.find({event_id:event_id}, {sort:{ created_at:-1}},{fields: {'attendee_id':1}}).fetch()
-
-          if(job)  
-          {
-              for(i =0; i< event_attendees.length ;i++)
-              {
-                  var usr = Meteor.users.findOne( { _id : event_attendees[i].attendee_id } ) ;
-                  
-                  if( usr )
-                  {
-                      counter = match_user_job(usr,job) ; 
-
-                      if(counter > 0)
-                      {
-                          user_ids.push(event_attendees[i].attendee_id)  ;   
-                      }  
-                  } 
-              }
-
-          }
-          else
-          {
-              for(i =0; i< event_attendees.length ;i++)
-                user_ids.push(event_attendees[i].attendee_id)   ; 
-          }
-                  
-          console.log('--------------------- Found Users:'+user_ids.length) ;
-          console.log(user_ids) ;
-
-          if( searchValue &&  searchValue.length > 1)
-          {
-                return Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},
-                  {limit:limit}).fetch();
-          }
-          else
-          {
-                return Meteor.users.find({_id:{$in:user_ids}},{limit:limit}).fetch();
-          }
-      }  
-      else
-      {
-          if( searchValue &&  searchValue.length > 1)
-          {
-              return Meteor.users.find({ 'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},{limit:limit}).fetch();
-          }
-          else
-          {
-              return Meteor.users.find({ },{limit:limit}).fetch();
-          }
-      }  
-    } 
 
 
     var request_for_apply_job= function(user,company,job)
@@ -673,7 +611,8 @@ if (Meteor.isServer)
 
         console.log('Server.email_matched_event') ; 
         console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
-
+        console.log('Keywords:'+keywords.length ) ; 
+        
         var event = Events.findOne({_id : event_id}) ;
         if(!event)
           return ; 
@@ -703,6 +642,7 @@ if (Meteor.isServer)
 
         console.log('Server.email_matched_company') ; 
         console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
+        console.log('Keywords:'+keywords.length ) ; 
 
         var company = Company.findOne({_id : company_id}) ;
         if(!company)
@@ -733,6 +673,7 @@ if (Meteor.isServer)
 
         console.log('Server.email_matched_job') ; 
         console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
+        console.log('Keywords:'+keywords.length ) ; 
 
         var job = Job.findOne({_id:job_id}) ; 
         if(!job)
@@ -765,7 +706,190 @@ if (Meteor.isServer)
         return message ; 
      }
 
+    var find_matched = function (limit, searchValue,event_id, job_id)
+    {
+      console.log('Finding matched --------------------------') ; 
+      console.log('limit:'+limit+' searchValue:'+searchValue+' Event Id:'+event_id+' Job Id:'+job_id ) ; 
+            
+      var user_ids=[] ; 
 
+      if(job_id)
+          var job = Job.findOne({_id : job_id}) ; 
+        
+      if(event_id)
+      {
+          
+          var event_attendees =  EventAttendee.find({event_id:event_id}, {sort:{ created_at:-1}},{fields: {'attendee_id':1}}).fetch()
+          console.log('event_attendees.length:'+event_attendees.length ) ; 
+              
+          if(job)  
+          {
+              for(i =0; i< event_attendees.length ;i++)
+              {
+                  var usr = Meteor.users.findOne( { _id : event_attendees[i].attendee_id } ) ;
+                  
+                  if( usr )
+                  {
+                      counter = match_user_job(usr,job) ; 
+
+                      if(counter > 0)
+                      {
+                          user_ids.push(event_attendees[i].attendee_id)  ;   
+                      }  
+                  } 
+              }
+
+          }
+          else
+          {
+              for(i =0; i< event_attendees.length ;i++)
+                user_ids.push(event_attendees[i].attendee_id)   ; 
+          }
+                  
+          console.log('--------------------- Found Users:'+user_ids.length) ;
+          console.log(user_ids) ;
+
+          if( searchValue &&  searchValue.length > 1)
+          {
+                return Meteor.users.find({_id:{$in:user_ids},'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},
+                  {limit:limit}).fetch();
+          }
+          else
+          {
+                return Meteor.users.find({_id:{$in:user_ids}},{limit:limit}).fetch();
+          }
+      }  
+      else
+      {
+          if( searchValue &&  searchValue.length > 1)
+          {
+              return Meteor.users.find({ 'profile.firstname':{'$regex': new RegExp(searchValue, "i")}},{limit:limit}).fetch();
+          }
+          else
+          {
+              return Meteor.users.find({ },{limit:limit}).fetch();
+          }
+      }  
+    } 
+
+
+match_user_job = function(usr,job)
+{
+  var user_skill = null ; 
+  var user_profession = null ; 
+  var skill = prof = 0 ; 
+  console.log('match_user_job.Keywords:'+keywords.length ) ; 
+
+  
+    if( !job.skill )
+      job = match_get_job_skill(job) ; 
+        
+    if( job.skill && usr.profile.skill ) 
+    {
+        user_skill = usr.profile.skill.split(',') ; 
+        for(x=0;x<user_skill.length;x++)
+        {
+            var uskill = user_skill[x].toLowerCase() ; 
+            uskill = uskill.trim() ; 
+
+            if( uskill )
+              if( job.skill.toLowerCase().indexOf(uskill) > -1)
+                  ++skill ; 
+        }
+
+    }  
+      
+    if( !job.profession )
+      job = match_get_job_profession(job) ; 
+
+    if( job.profession && usr.profile.profession ) 
+    {
+        user_profession = usr.profile.profession.split(',') ; 
+
+        for(x=0;x<user_profession.length;x++)
+        {
+            var uprof = user_profession[x].toLowerCase() ; 
+            uprof = uprof.trim() ; 
+
+            if( uprof )
+              if( job.profession.toLowerCase().indexOf(uprof) > -1)
+                  ++prof ; 
+        }             
+    }  
+
+    if(skill > 0 && prof > 0)
+      return skill + prof ; 
+    else
+      return 0 ;       
+}
+
+match_get_job_skill = function(job) 
+{
+    var title = job.title.toLowerCase() ; 
+    var words = title.split(/[\s,]+/) ; 
+    console.log('match_get_job_skill.Keywords:'+keywords.length ) ; 
+
+    for(i=0;i<words.length;i++)
+    {
+        for(j=0;j<keywords.length;j++)
+        {
+            console.log('match_keyword['+j+']='+keywords[j].keyword+' Word:'+keywords[j].word+' Class:'+
+              keywords[j].class) ; 
+
+            if( words[i] == keywords[j].keyword && keywords[j].class == 'skill')
+            {
+                job.skill = keywords[j].word ; 
+                console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ; 
+                break ;   
+            }  
+        }
+    }  
+
+    return job ; 
+} 
+
+match_get_job_profession = function(job) 
+{
+    var title = job.title.toLowerCase() ; 
+    var words = title.split(/[\s,]+/) ; 
+    console.log('match_get_job_profession.Keywords:'+keywords.length ) ; 
+
+    for(i=0;i<words.length;i++)
+    {
+        for(j=0;j<keywords.length;j++)
+        {
+            console.log('match_keyword['+j+']='+keywords[j].keyword+' Word:'+keywords[j].word+' Class:'+
+              keywords[j].class) ; 
+
+            if( words[i] == keywords[j].keyword && keywords[j].class == 'profession')
+            {
+                job.profession = keywords[j].word ; 
+                console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ; 
+                break ;   
+            }  
+              
+        }  
+    }  
+
+    return job ; 
+} 
+
+match_keyword = function(word,class_type) 
+{
+    console.log('match_keyword.Keywords:'+keywords.length ) ; 
+    console.log('match_keyword.word:'+word) ; 
+    console.log('match_keyword.class_type:'+class_type) ; 
+
+    for(i=0;i<keywords.length;i++)
+    {
+        console.log('match_keyword['+i+']='+keywords[i].keyword+' Word:'+keywords[i].word+' Class:'+
+          keywords[i].class) ; 
+
+        if( word == keywords[i].keyword && keywords[i].class == class_type)
+          return keywords[i].word ; 
+    }  
+    return null ; 
+} 
 
 
   var import_attandee_files = function(file,event_id)
@@ -1033,7 +1157,7 @@ if (Meteor.isServer)
       };
 
 
-
+      var keywords = [] ; 
 
 
       Meteor.methods(
@@ -1042,6 +1166,9 @@ if (Meteor.isServer)
         {
             console.log('Server.email_matched') ; 
             console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
+
+            keywords = match_manager.loadKeyWords() ; 
+            console.log('Keywords:'+keywords.length ) ; 
 
             var message = "" ; 
 

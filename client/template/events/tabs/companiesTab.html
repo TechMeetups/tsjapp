@@ -6,7 +6,7 @@
 
     <div class="buttons">
       <button class="button button-clear" data-ion-modal="_companyNew">{{> ionIcon icon="ios-plus-empty"}}</button>
-      <button class="button button-clear" id="event_match" >Match</button>
+      <!-- <button class="button button-clear" id="event_match" >Match</button> -->
     </div>
 
     {{/if}}
@@ -37,8 +37,17 @@
            <button id="showMoreResults" type="button " class="button button-block button-stable">Load More...</button>
          </div>
      {{/if}} -->
+      {{#if isInRole 'admin'}}
+          <a href="#" class="button button-block button-balanced" id="event_match" data="{{desc}}">
+                Search {{ match_count }}&nbsp;
+                <i class="icon ion-ios-people"></i>
+          </a>
+      {{/if}}
+
   </div>
   {{/ionContent}}
   {{> _tabs}}
   {{/ionView}}
 </template>
+
+

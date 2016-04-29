@@ -18,6 +18,8 @@ Meteor.startup(function()
 // Client specific code *******************************************************************************
 if (Meteor.isClient)
 {
+  match_manager.default_subscribe() ; 
+  
   Template.registerHelper('is_admin', function(){
 
   })

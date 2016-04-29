@@ -2,7 +2,7 @@
   {{#ionView}}
   {{#ionHeaderBar class="bar-positive"}}
   {{ > backtoolbar }}
-    <h1 class="title align-title-center">Attendees</h1>
+    <h1 class="title align-title-center">{{ attendee_count }} Attendees</h1>
     {{#if isInRole 'admin'}}
       <button class="button button-clear pull-right" data-ion-modal="_attendeeNew"><i class="icon ion-ios-plus-empty"></i></button>
     {{/if}}

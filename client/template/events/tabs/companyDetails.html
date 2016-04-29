@@ -53,13 +53,20 @@
     {{/ionList}}
     {{/ionList}}
 
-    {{#if moreTasks}}
+
+<!--     {{#if moreTasks}}
          <div id="showMoreEvents" style="">
            <button id="showMoreResults" type="button " class="button button-block button-stable">Load More...</button>
-             <!-- Loading ...
-             <span class="loading fa fa-cog fa-spin fa-2x"></span> -->
          </div>
-     {{/if}}
+     {{/if}} -->
+
+     {{#if isInRole 'admin'}}
+          <a href="#" class="button button-block button-balanced" id="company_match" data="{{desc}}">
+                Search {{ match_count }}&nbsp;
+                <i class="icon ion-ios-people"></i>
+          </a>
+      {{/if}}
+      
     {{/ionContent}}
     {{> _tabs}}
   {{/ionView}}
