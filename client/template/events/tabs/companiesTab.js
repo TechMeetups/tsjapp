@@ -1,4 +1,5 @@
-Template.companiesTab.helpers({
+Template.companiesTab.helpers(
+{
   build_path: function(_id){
     return "/tabs/company/"+Router.current().params._id+"/"+_id;
   },

@@ -27,7 +27,10 @@ Template.jobDetails.rendered = function ()
 
 Template.jobDetails.helpers(
 {
-    
+  match_count : function()
+  {
+      return attendee_manager.getCount()-1 ; 
+  }, 
   build_match_path: function(_id)
   {
     return "/tabs/matched/"+Router.current().params._company_id+"/"+Router.current().params._job_id+'/'+

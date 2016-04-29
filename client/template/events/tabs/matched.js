@@ -1,5 +1,9 @@
 Template.matchedTab.helpers(
 {
+  match_count : function()
+  {
+      return attendee_manager.getCount()-1 ; 
+  },   
   pic_exists : function(pic_url)
   {
       if (!pic_url.trim() || pic_url === '') 

@@ -3,9 +3,9 @@
   {{#ionHeaderBar class="bar-balanced"}}
   {{ > backtoolbar }}
     <h1 class="title align-title-center">
-      <i class="icon ion-person"></i>&nbsp;
       <i class="icon ion-android-checkmark-circle"></i>&nbsp;
-      Matched candidates
+      {{ match_count }}&nbsp;
+      <i class="icon ion-ios-people"></i>
     </h1>
     {{#if isInRole 'admin'}}
       <button class="button button-clear pull-right" id="emailMatched"><i class="icon ion-email"></i></button>

@@ -25,6 +25,11 @@ if (Meteor.isServer)
       return Sponsor.find({});
     });
 
+    Meteor.publish("keyword_map", function ()
+    {
+      return KeywordMap.find({});
+    });
+
     Meteor.publish("connect_request_for_user", function (user_id)
     {
         console.log('connect_request_for_user:'+user_id);
