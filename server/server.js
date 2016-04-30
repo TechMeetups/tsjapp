@@ -611,7 +611,7 @@ if (Meteor.isServer)
 
         console.log('Server.email_matched_event') ; 
         console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
-        console.log('Keywords:'+keywords.length ) ; 
+        //console.log('Keywords:'+keywords.length ) ; 
         
         var event = Events.findOne({_id : event_id}) ;
         if(!event)
@@ -642,7 +642,7 @@ if (Meteor.isServer)
 
         console.log('Server.email_matched_company') ; 
         console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
-        console.log('Keywords:'+keywords.length ) ; 
+        //console.log('Keywords:'+keywords.length ) ; 
 
         var company = Company.findOne({_id : company_id}) ;
         if(!company)
@@ -673,7 +673,7 @@ if (Meteor.isServer)
 
         console.log('Server.email_matched_job') ; 
         console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
-        console.log('Keywords:'+keywords.length ) ; 
+        //console.log('Keywords:'+keywords.length ) ; 
 
         var job = Job.findOne({_id:job_id}) ; 
         if(!job)
@@ -715,7 +715,7 @@ if (Meteor.isServer)
 
       if(job_id)
           var job = Job.findOne({_id : job_id}) ; 
-        
+
       if(event_id)
       {
           
@@ -730,8 +730,8 @@ if (Meteor.isServer)
                   
                   if( usr )
                   {
-                      counter = match_user_job(usr,job) ; 
-
+                      var counter = match_user_job(usr,job) ; 
+                      
                       if(counter > 0)
                       {
                           user_ids.push(event_attendees[i].attendee_id)  ;   
@@ -778,7 +778,7 @@ match_user_job = function(usr,job)
   var user_skill = null ; 
   var user_profession = null ; 
   var skill = prof = 0 ; 
-  console.log('match_user_job.Keywords:'+keywords.length ) ; 
+  // console.log('match_user_job.Keywords:'+keywords.length ) ; 
 
   
     if( !job.skill )
@@ -827,14 +827,14 @@ match_get_job_skill = function(job)
 {
     var title = job.title.toLowerCase() ; 
     var words = title.split(/[\s,]+/) ; 
-    console.log('match_get_job_skill.Keywords:'+keywords.length ) ; 
+    // console.log('match_get_job_skill.Keywords:'+keywords.length ) ; 
 
     for(i=0;i<words.length;i++)
     {
         for(j=0;j<keywords.length;j++)
         {
-            console.log('match_keyword['+j+']='+keywords[j].keyword+' Word:'+keywords[j].word+' Class:'+
-              keywords[j].class) ; 
+            // console.log('match_keyword['+j+']='+keywords[j].keyword+' Word:'+keywords[j].word+' Class:'+
+            //   keywords[j].class) ; 
 
             if( words[i] == keywords[j].keyword && keywords[j].class == 'skill')
             {
@@ -852,14 +852,14 @@ match_get_job_profession = function(job)
 {
     var title = job.title.toLowerCase() ; 
     var words = title.split(/[\s,]+/) ; 
-    console.log('match_get_job_profession.Keywords:'+keywords.length ) ; 
+    //console.log('match_get_job_profession.Keywords:'+keywords.length ) ; 
 
     for(i=0;i<words.length;i++)
     {
         for(j=0;j<keywords.length;j++)
         {
-            console.log('match_keyword['+j+']='+keywords[j].keyword+' Word:'+keywords[j].word+' Class:'+
-              keywords[j].class) ; 
+            // console.log('match_keyword['+j+']='+keywords[j].keyword+' Word:'+keywords[j].word+' Class:'+
+            //   keywords[j].class) ; 
 
             if( words[i] == keywords[j].keyword && keywords[j].class == 'profession')
             {
@@ -876,14 +876,14 @@ match_get_job_profession = function(job)
 
 match_keyword = function(word,class_type) 
 {
-    console.log('match_keyword.Keywords:'+keywords.length ) ; 
-    console.log('match_keyword.word:'+word) ; 
-    console.log('match_keyword.class_type:'+class_type) ; 
+    // console.log('match_keyword.Keywords:'+keywords.length ) ; 
+    // console.log('match_keyword.word:'+word) ; 
+    // console.log('match_keyword.class_type:'+class_type) ; 
 
     for(i=0;i<keywords.length;i++)
     {
-        console.log('match_keyword['+i+']='+keywords[i].keyword+' Word:'+keywords[i].word+' Class:'+
-          keywords[i].class) ; 
+        // console.log('match_keyword['+i+']='+keywords[i].keyword+' Word:'+keywords[i].word+' Class:'+
+        //   keywords[i].class) ; 
 
         if( word == keywords[i].keyword && keywords[i].class == class_type)
           return keywords[i].word ; 
@@ -1168,7 +1168,7 @@ match_keyword = function(word,class_type)
             console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
 
             keywords = match_manager.loadKeyWords() ; 
-            console.log('Keywords:'+keywords.length ) ; 
+            //console.log('Keywords:'+keywords.length ) ; 
 
             var message = "" ; 
 
