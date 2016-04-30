@@ -656,9 +656,9 @@ if (Meteor.isServer)
         else
         {
           var jobs = Job.find({company_id : company_id}).fetch()  ; 
-          for( j=0;j<jobs.length;j++)
+          for( jc=0;jc<jobs.length;jc++)
           {  
-              message += email_matched_job( user, jobs[j]._id, event_id, searchValue, limit, company_id ) ;
+              message += email_matched_job( user, jobs[jc]._id, event_id, searchValue, limit, company_id ) ;
           }  
             
         }  
@@ -690,15 +690,15 @@ if (Meteor.isServer)
    
         message += matched.length + " matching candidates : \n\n" ;        
 
-        for(i=0;i<matched.length;i++)
+        for(ic=0;ic<matched.length;ic++)
         {
-          message += (i+1) + '. ' +matched[i].profile.firstname ;
+          message += (ic+1) + '. ' +matched[ic].profile.firstname ;
 
-          if( matched[i].profile.profession )
-            message += ' - ' + matched[i].profile.profession ;  
+          if( matched[ic].profile.profession )
+            message += ' - ' + matched[ic].profile.profession ;  
               
-          if( matched[i].profile.experience )
-            message += ' (' + matched[i].profile.experience + ' years of exp)' ;
+          if( matched[ic].profile.experience )
+            message += ' (' + matched[ic].profile.experience + ' years of exp)' ;
 
           message += '\n' ;
         }
@@ -829,7 +829,10 @@ match_get_job_skill = function(job)
     var title = job.title.toLowerCase() ; 
     var words = title.split(/[\s,]+/) ; 
     
-    var skill_list = job.skill.split(',') ; 
+    var skill_list = [] ; 
+
+    if(job.skill)
+      skill_list = job.skill.split(',') ; 
   
     for(i=0;i<words.length;i++)
     {
@@ -859,7 +862,10 @@ match_get_job_profession = function(job)
     var title = job.title.toLowerCase() ; 
     var words = title.split(/[\s,]+/) ; 
     
-    var profession_list = job.profession.split(',') ; 
+    var profession_list = [] ; 
+
+    if(job.profession)
+      profession_list = job.profession.split(',') ; 
 
     for(i=0;i<words.length;i++)
     {
@@ -881,23 +887,6 @@ match_get_job_profession = function(job)
     }  
 
     return job ; 
-} 
-
-match_keyword = function(word,class_type) 
-{
-    // console.log('match_keyword.Keywords:'+keywords.length ) ; 
-    // console.log('match_keyword.word:'+word) ; 
-    // console.log('match_keyword.class_type:'+class_type) ; 
-
-    for(i=0;i<keywords.length;i++)
-    {
-        // console.log('match_keyword['+i+']='+keywords[i].keyword+' Word:'+keywords[i].word+' Class:'+
-        //   keywords[i].class) ; 
-
-        if( word == keywords[i].keyword && keywords[i].class == class_type)
-          return keywords[i].word ; 
-    }  
-    return null ; 
 } 
 
 
