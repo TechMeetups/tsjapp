@@ -788,11 +788,18 @@ match_user_job = function(usr,job)
   var skill = prof = 0 ; 
   // console.log('match_user_job.Keywords:'+keywords.length ) ; 
 
+    console.log('Matching Job------------------------')
+    console.log(job) ; 
+    console.log('With User --------------------------')
+    console.log(usr) ; 
+    console.log('====================================')
+
     job = match_get_job_skill(job) ; 
         
     if( job.skill && usr.profile.skill ) 
     {
-        user_skill = usr.profile.skill.split(',') ; 
+        user_skill = usr.profile.skill.split(/[\s,]+/) ; 
+
         for(x=0;x<user_skill.length;x++)
         {
             var uskill = user_skill[x].toLowerCase() ; 
@@ -810,7 +817,7 @@ match_user_job = function(usr,job)
 
     if( job.profession && usr.profile.profession ) 
     {
-        user_profession = usr.profile.profession.split(',') ; 
+        user_profession = usr.profile.profession.split(/[\s,]+/) ; 
 
         for(x=0;x<user_profession.length;x++)
         {
@@ -855,7 +862,9 @@ match_get_job_skill = function(job)
     {
         uskill = Array.from(new Set(skill_list));
         skill_str = uskill.join() ; 
+        console.log('New Skill found. Updating Job with Skill :'+skill_str) ;   
         Job.update({_id:job._id},{ $set: {"skill":skill_str}}) ; 
+        job.skill = skill_str ; 
     }  
       
 
@@ -888,7 +897,9 @@ match_get_job_profession = function(job)
     {
         uprofession = Array.from(new Set(profession_list));
         profession_str = uprofession.join() ; 
+        console.log('New Profession found. Updating Job with Profession :'+profession_str) ;   
         Job.update({_id:job._id},{ $set: {"profession":profession_str}}) ; 
+        job.profession = profession_str ; 
     }  
 
     return job ; 
