@@ -52,6 +52,7 @@ Template.companyDetails.events(
   },
   "click #company_match": function(event, template)
   {
+      animateThis($(event.currentTarget),'tada') ;
       match_manager.email_matched(null,Router.current().params._id,null,Router.current().params._company_id) ; 
   }
 });
