@@ -29,7 +29,8 @@ Template.jobDetails.helpers(
 {
   match_count : function()
   {
-      return attendee_manager.getCount()-1 ; 
+      return '' 
+      // return attendee_manager.getCount()-1 ; 
   }, 
   build_match_path: function(_id)
   {
@@ -139,16 +140,9 @@ Template.jobDetails.events(
     var item_id = $(event.currentTarget).attr('data');
     connect_manager.remove_connect_item(item_id)
   },
-  // 'click #match_making' : function(event, template)
-  // {
-  //      IonLoading.show({
-  //           customTemplate: 'Match making',
-  //           duration: 2000
-  //         });
-
-  //   var job_desc = $(event.currentTarget).attr('data');
-  //   Session.set('attendee_terms',job_desc) ;  
-  //   Session.set('matched_candidates',true) ;
-  // },
+  'click #match_making' : function(event, template)
+  {
+       animateThis($(event.currentTarget),'tada') ;
+  },
 
 });

@@ -31,6 +31,10 @@ Template.companiesTab.events(
   "click #event_match": function(event, template)
   {
       match_manager.email_matched(null,Router.current().params._id,null,null) ; 
+  },
+  "click .companyItem": function(event, template)
+  {
+      animateThis($(event.currentTarget),'tada') ;
   }
   
 });

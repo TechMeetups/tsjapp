@@ -1,6 +1,7 @@
 
 if (Meteor.isServer)
 {
+    var keywords = [] ; 
 
     Meteor.publish("events", function (limit, searchValue)
     {
@@ -72,7 +73,11 @@ if (Meteor.isServer)
       console.log('limit:'+limit+' searchValue:'+searchValue+' Event Id:'+event_id+' Job Id:'+job_id ) ; 
 
       if(job_id)
+      {
           var job = Job.findOne({_id : job_id}) ; 
+          keywords = match_manager.loadKeyWords() ; 
+      }  
+
         
       if(event_id)
       {
@@ -81,9 +86,9 @@ if (Meteor.isServer)
 
           if(job)  
           {
-              for(i =0; i< event_attendees.length ;i++)
+              for(ai =0; ai< event_attendees.length ;ai++)
               {
-                  var usr = Meteor.users.findOne( { _id : event_attendees[i].attendee_id } ) ;
+                  var usr = Meteor.users.findOne( { _id : event_attendees[ai].attendee_id } ) ;
 
                   if( usr )
                   {
@@ -91,7 +96,7 @@ if (Meteor.isServer)
 
                       if(counter > 0)
                       {
-                          user_ids.push(event_attendees[i].attendee_id)  ;   
+                          user_ids.push(event_attendees[ai].attendee_id)  ;   
                       }  
                   } 
               }
@@ -1155,7 +1160,7 @@ match_get_job_profession = function(job)
       };
 
 
-      var keywords = [] ; 
+      
 
 
       Meteor.methods(
