@@ -74,8 +74,11 @@ if (Meteor.isServer)
 
       if(job_id)
       {
-          var job = Job.findOne({_id : job_id}) ; 
           keywords = match_manager.loadKeyWords() ; 
+
+          var job = Job.findOne({_id : job_id}) ; 
+          match_get_job_skill(job) ; 
+          match_get_job_profession(job) ; 
       }  
 
         
@@ -657,12 +660,15 @@ if (Meteor.isServer)
         message += "============================================================="+'\n'  ;          
     
         if( job_id )
-           message = email_matched_job( user, job_id, event_id, searchValue, limit, company_id ) ;       
+        {
+            message = email_matched_job( user, job_id, event_id, searchValue, limit, company_id ) ;       
+        }  
         else
         {
           var jobs = Job.find({company_id : company_id}).fetch()  ; 
+
           for( jc=0;jc<jobs.length;jc++)
-          {  
+          {
               message += email_matched_job( user, jobs[jc]._id, event_id, searchValue, limit, company_id ) ;
           }  
             
@@ -719,7 +725,12 @@ if (Meteor.isServer)
       var user_ids=[] ; 
 
       if(job_id)
+      {
           var job = Job.findOne({_id : job_id}) ; 
+          match_get_job_skill(job) ; 
+          match_get_job_profession(job) ; 
+      }  
+          
 
       if(event_id)
       {
@@ -788,13 +799,13 @@ match_user_job = function(usr,job)
   var skill = prof = 0 ; 
   // console.log('match_user_job.Keywords:'+keywords.length ) ; 
 
-    console.log('Matching Job------------------------')
-    console.log(job) ; 
-    console.log('With User --------------------------')
-    console.log(usr) ; 
-    console.log('====================================')
+    // console.log('Matching Job------------------------')
+    // console.log(job) ; 
+    // console.log('With User --------------------------')
+    // console.log(usr) ; 
+    // console.log('====================================')
 
-    job = match_get_job_skill(job) ; 
+    // job = match_get_job_skill(job) ; 
         
     if( job.skill && usr.profile.skill ) 
     {
@@ -813,7 +824,7 @@ match_user_job = function(usr,job)
     }  
       
 
-    job = match_get_job_profession(job) ; 
+    // job = match_get_job_profession(job) ; 
 
     if( job.profession && usr.profile.profession ) 
     {
@@ -838,22 +849,34 @@ match_user_job = function(usr,job)
 
 match_get_job_skill = function(job) 
 {
+
+  console.log('Checking Job------------------------')
+  console.log(job) ; 
+
     var title = job.title.toLowerCase() ; 
     var words = title.split(/[\s,]+/) ; 
     
     var skill_list = [] ; 
+    var org_skill_count = 0 ; 
 
     if(job.skill)
-      skill_list = job.skill.split(',') ; 
-  
+    {
+        skill_list = job.skill.split(/[\s,]+/) ; 
+       org_skill_count = skill_list.length ; 
+    }  
+       
     for(i=0;i<words.length;i++)
     {
         for(j=0;j<keywords.length;j++)
         {
             if( words[i] == keywords[j].keyword && keywords[j].class == 'skill')
             {
-                console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ;   
-                skill_list.push(keywords[j].word) ; 
+                var pos = skill_list.indexOf(keywords[j].word);
+                if( pos < 0)
+                {
+                    console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ;   
+                    skill_list.push(keywords[j].word) ;   
+                }  
             }  
         }
     }  
@@ -861,12 +884,20 @@ match_get_job_skill = function(job)
     if(skill_list && skill_list.length > 0)
     {
         uskill = Array.from(new Set(skill_list));
-        skill_str = uskill.join() ; 
-        console.log('New Skill found. Updating Job with Skill :'+skill_str) ;   
-        Job.update({_id:job._id},{ $set: {"skill":skill_str}}) ; 
-        job.skill = skill_str ; 
+
+        if( uskill.length > org_skill_count)
+        {
+          skill_str = uskill.join() ; 
+          console.log('New Skill found. Updating Job with Skill :'+skill_str) ;   
+          Job.update({_id:job._id},{ $set: {"skill":skill_str}}) ; 
+          job.skill = skill_str ; 
+        }
+
     }  
-      
+
+  console.log('Tagged Job------------------------')
+  console.log(job) ; 
+
 
     return job ; 
 } 
@@ -877,29 +908,41 @@ match_get_job_profession = function(job)
     var words = title.split(/[\s,]+/) ; 
     
     var profession_list = [] ; 
+    var org_profession_count = 0 ; 
 
     if(job.profession)
-      profession_list = job.profession.split(',') ; 
-
+    {
+        profession_list = job.profession.split('/[\s,]+/') ; 
+        org_profession_count = profession_list.length ;     
+    }  
+      
     for(i=0;i<words.length;i++)
     {
         for(j=0;j<keywords.length;j++)
         {
             if( words[i] == keywords[j].keyword && keywords[j].class == 'profession')
             {
-                console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ; 
-                profession_list.push(keywords[j].word) ; 
+                var pos = profession_list.indexOf(keywords[j].word);
+                if( pos < 0)
+                {
+                  console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ; 
+                  profession_list.push(keywords[j].word) ; 
+                }                
             }  
         }  
     }  
 
     if(profession_list && profession_list.length > 0)
     {
-        uprofession = Array.from(new Set(profession_list));
-        profession_str = uprofession.join() ; 
-        console.log('New Profession found. Updating Job with Profession :'+profession_str) ;   
-        Job.update({_id:job._id},{ $set: {"profession":profession_str}}) ; 
-        job.profession = profession_str ; 
+        var uprofession = Array.from(new Set(profession_list));
+
+        if( uprofession.length > org_profession_count)
+        {
+            profession_str = uprofession.join() ; 
+            console.log('New Profession found. Updating Job with Profession :'+profession_str) ;   
+            Job.update({_id:job._id},{ $set: {"profession":profession_str}}) ; 
+            job.profession = profession_str ;   
+        }  
     }  
 
     return job ; 
