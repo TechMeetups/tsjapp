@@ -724,9 +724,12 @@ if (Meteor.isServer)
               
           if(job)  
           {
-              for(i =0; i< event_attendees.length ;i++)
+              for(a=0; a < event_attendees.length ;a++)
               {
-                  var usr = Meteor.users.findOne( { _id : event_attendees[i].attendee_id } ) ;
+                  var usr = Meteor.users.findOne( { _id : event_attendees[a].attendee_id } ) ;
+
+                  // console.log(usr) ; 
+                  // console.log('event_attendees[a].attendee_id:'+event_attendees[a].attendee_id) ; 
                   
                   if( usr )
                   {
@@ -734,7 +737,7 @@ if (Meteor.isServer)
                       
                       if(counter > 0)
                       {
-                          user_ids.push(event_attendees[i].attendee_id)  ;   
+                          user_ids.push(event_attendees[a].attendee_id)  ;   
                       }  
                   } 
               }
