@@ -783,9 +783,7 @@ match_user_job = function(usr,job)
   var skill = prof = 0 ; 
   // console.log('match_user_job.Keywords:'+keywords.length ) ; 
 
-  
-    if( !job.skill )
-      job = match_get_job_skill(job) ; 
+    job = match_get_job_skill(job) ; 
         
     if( job.skill && usr.profile.skill ) 
     {
@@ -802,8 +800,8 @@ match_user_job = function(usr,job)
 
     }  
       
-    if( !job.profession )
-      job = match_get_job_profession(job) ; 
+
+    job = match_get_job_profession(job) ; 
 
     if( job.profession && usr.profile.profession ) 
     {
@@ -830,23 +828,28 @@ match_get_job_skill = function(job)
 {
     var title = job.title.toLowerCase() ; 
     var words = title.split(/[\s,]+/) ; 
-    // console.log('match_get_job_skill.Keywords:'+keywords.length ) ; 
-
+    
+    var skill_list = job.skill.split(',') ; 
+  
     for(i=0;i<words.length;i++)
     {
         for(j=0;j<keywords.length;j++)
         {
-            // console.log('match_keyword['+j+']='+keywords[j].keyword+' Word:'+keywords[j].word+' Class:'+
-            //   keywords[j].class) ; 
-
             if( words[i] == keywords[j].keyword && keywords[j].class == 'skill')
             {
-                job.skill = keywords[j].word ; 
-                console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ; 
-                break ;   
+                console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ;   
+                skill_list.push(keywords[j].word) ; 
             }  
         }
     }  
+ 
+    if(skill_list && skill_list.length > 0)
+    {
+        uskill = Array.from(new Set(skill_list));
+        skill_str = uskill.join() ; 
+        Job.update({_id:job._id},{ $set: {"skill":skill_str}}) ; 
+    }  
+      
 
     return job ; 
 } 
@@ -855,23 +858,26 @@ match_get_job_profession = function(job)
 {
     var title = job.title.toLowerCase() ; 
     var words = title.split(/[\s,]+/) ; 
-    //console.log('match_get_job_profession.Keywords:'+keywords.length ) ; 
+    
+    var profession_list = job.profession.split(',') ; 
 
     for(i=0;i<words.length;i++)
     {
         for(j=0;j<keywords.length;j++)
         {
-            // console.log('match_keyword['+j+']='+keywords[j].keyword+' Word:'+keywords[j].word+' Class:'+
-            //   keywords[j].class) ; 
-
             if( words[i] == keywords[j].keyword && keywords[j].class == 'profession')
             {
-                job.profession = keywords[j].word ; 
                 console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ; 
-                break ;   
+                profession_list.push(keywords[j].word) ; 
             }  
-              
         }  
+    }  
+
+    if(profession_list && profession_list.length > 0)
+    {
+        uprofession = Array.from(new Set(profession_list));
+        profession_str = uprofession.join() ; 
+        Job.update({_id:job._id},{ $set: {"profession":profession_str}}) ; 
     }  
 
     return job ; 
