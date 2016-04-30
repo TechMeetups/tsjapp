@@ -79,6 +79,7 @@ if (Meteor.isServer)
           var job = Job.findOne({_id : job_id}) ; 
           match_get_job_skill(job) ; 
           match_get_job_profession(job) ; 
+          match_get_job_experience(job) ; 
       }  
 
         
@@ -729,6 +730,7 @@ if (Meteor.isServer)
           var job = Job.findOne({_id : job_id}) ; 
           match_get_job_skill(job) ; 
           match_get_job_profession(job) ; 
+          match_get_job_experience(job) ; 
       }  
           
 
@@ -766,7 +768,7 @@ if (Meteor.isServer)
           }
                   
           console.log('--------------------- Found Users:'+user_ids.length) ;
-          console.log(user_ids) ;
+          // console.log(user_ids) ;
 
           if( searchValue &&  searchValue.length > 1)
           {
@@ -797,6 +799,8 @@ match_user_job = function(usr,job)
   var user_skill = null ; 
   var user_profession = null ; 
   var skill = prof = 0 ; 
+  var exp = 0 ;
+
   // console.log('match_user_job.Keywords:'+keywords.length ) ; 
 
     // console.log('Matching Job------------------------')
@@ -841,8 +845,15 @@ match_user_job = function(usr,job)
         }             
     }  
 
-    if(skill > 0 && prof > 0)
-      return skill + prof ; 
+
+    if( job.experience && usr.profile.experience ) 
+    {
+        exp = eval(usr.profile.experience) - eval(job.experience) ; 
+    }  
+
+
+    if(skill > 0 && prof > 0 && exp >= 0)
+      return skill + prof + 1 ; 
     else
       return 0 ;       
 }
@@ -850,8 +861,8 @@ match_user_job = function(usr,job)
 match_get_job_skill = function(job) 
 {
 
-  console.log('Checking Job------------------------')
-  console.log(job) ; 
+  // console.log('Checking Job------------------------')
+  // console.log(job) ; 
 
     var title = job.title.toLowerCase() ; 
     var words = title.split(/[\s,]+/) ; 
@@ -895,8 +906,8 @@ match_get_job_skill = function(job)
 
     }  
 
-  console.log('Tagged Job------------------------')
-  console.log(job) ; 
+  // console.log('Tagged Job------------------------')
+  // console.log(job) ; 
 
 
     return job ; 
@@ -947,6 +958,28 @@ match_get_job_profession = function(job)
 
     return job ; 
 } 
+
+match_get_job_experience = function(job) 
+{
+    var title = job.title.toLowerCase() ; 
+    var words = title.split(/[\s,]+/) ; 
+          
+    for(i=0;i<words.length;i++)
+    {
+        for(j=0;j<keywords.length;j++)
+        {
+            if( words[i] == keywords[j].keyword && keywords[j].class == 'experience')
+            {
+                Job.update({_id:job._id},{ $set: {"experience":keywords[j].word}}) ; 
+                job.experience = keywords[j].word ;   
+                break ; 
+            }  
+        }  
+    }  
+
+    return job ; 
+} 
+
 
 
   var import_attandee_files = function(file,event_id)
