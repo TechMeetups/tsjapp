@@ -20,8 +20,8 @@
     {{#with profile}}
     <div class="list card">
         <div class="item item-divider">
-        <p><strong>{{profession}}</strong></p>
-      </div>
+        <p><strong>{{firstname}}</strong></p>
+    </div>
       <div class="item item-thumbnail-left item-avatar item-button-right">
         
                   {{ #if pic }}
@@ -32,9 +32,22 @@
 
            
            <div class="item-text-wrap">
+           <p>Profession : <span class="balanced">{{profession}}</span></p>
+          </div>
+
+           <div class="item-text-wrap">
            <p>Skills : <span class="balanced">{{skill}}</span></p>
           </div>
-          <p>Looking for: <strong>{{lookingfor}}</strong></p>       
+
+
+          {{ #if experience }}              
+             <p>Experience : <span class="balanced">{{experience}} years</span></p>
+          {{else}}
+             <p>Experience : <span class="balanced">?</span></p>
+          {{/if}}
+
+          
+          <p>Looking for : <span class="balanced">{{lookingfor}}</span></p>
           
           {{ #if linkedin }}
 
@@ -60,7 +73,11 @@
  -->
      </div>
       <div class="item item-divider">
-        <h3>{{experience}} years exp.</h3>
+          {{ #if city }}      
+            <h3>{{city}}</h3>
+          {{else}}
+          {{/if}}
+              
       </div>
     </div>
 

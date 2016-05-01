@@ -77,9 +77,12 @@ if (Meteor.isServer)
           keywords = match_manager.loadKeyWords() ; 
 
           var job = Job.findOne({_id : job_id}) ; 
-          match_get_job_skill(job) ; 
-          match_get_job_profession(job) ; 
-          match_get_job_experience(job) ; 
+          if( job )
+            tag_job(job) ; 
+
+          // tag_job_skill(job) ; 
+          // tag_job_profession(job) ; 
+          // tag_job_experience(job) ; 
       }  
 
         
@@ -728,9 +731,13 @@ if (Meteor.isServer)
       if(job_id)
       {
           var job = Job.findOne({_id : job_id}) ; 
-          match_get_job_skill(job) ; 
-          match_get_job_profession(job) ; 
-          match_get_job_experience(job) ; 
+
+          // if( job )
+          //   tag_job(job) ; 
+
+          // tag_job_skill(job) ; 
+          // tag_job_profession(job) ; 
+          // tag_job_experience(job) ; 
       }  
           
 
@@ -858,7 +865,109 @@ match_user_job = function(usr,job)
       return 0 ;       
 }
 
-match_get_job_skill = function(job) 
+tag_job = function(job) 
+{
+    var updt_job = false ;   
+    var title = job.title.toLowerCase() ; 
+    // var words = title.split(/[\s,]+/) ; 
+    
+    var skill_list = [] ; 
+    var org_skill_count = 0 ; 
+
+    if(job.skill)
+    {
+        skill_list = job.skill.split(/[\s,]+/) ; 
+        org_skill_count = skill_list.length ; 
+    }  
+
+
+    var profession_list = [] ; 
+    var org_profession_count = 0 ; 
+
+    if(job.profession)
+    {
+        profession_list = job.profession.split('/[\s,]+/') ; 
+        org_profession_count = profession_list.length ;     
+    }  
+
+
+
+    for(j=0;j<keywords.length;j++)
+    {
+        switch(keywords[j].class)
+        {
+            case 'skill' :  if( title.search( keywords[j].keyword ) > -1) 
+                            {
+                                var pos = skill_list.indexOf(keywords[j].word);
+                                if( pos < 0)
+                                {
+                                    console.log('Mapped Skill :'+keywords[j].keyword+' --> '+keywords[j].word ) ;   
+                                    skill_list.push(keywords[j].word) ;   
+                                }  
+                            }   
+                            break ;  
+                          
+            case  'profession' : if( title.search( keywords[j].keyword ) > -1) 
+                                  {
+                                      var pos = profession_list.indexOf(keywords[j].word);
+                                      if( pos < 0)
+                                      {
+                                          console.log('Mapped Profession :'+keywords[j].keyword+' --> '+keywords[j].word ) ;   
+                                          profession_list.push(keywords[j].word) ;   
+                                      }  
+                                  }   
+                                  break ; 
+
+            case  'experience' : if( title.search( keywords[j].keyword ) > -1) 
+                                  {
+                                    updt_job = true ; 
+                                    job.experience = keywords[j].word ;   
+                                  }  
+                                  break ; 
+        }
+
+    }
+
+ 
+    if(skill_list && skill_list.length > 0)
+    {
+        uskill = Array.from(new Set(skill_list));
+
+        if( uskill.length > org_skill_count)
+        {
+          skill_str = uskill.join() ; 
+          console.log('New Skill found. Updating Job with Skill :'+skill_str) ;   
+          updt_job = true ; 
+          job.skill = skill_str ; 
+        }
+
+    }  
+
+    if(profession_list && profession_list.length > 0)
+    {
+        var uprofession = Array.from(new Set(profession_list));
+
+        if( uprofession.length > org_profession_count)
+        {
+            profession_str = uprofession.join() ; 
+            console.log('New Profession found. Updating Job with Profession :'+profession_str) ;   
+            updt_job = true ; 
+            job.profession = profession_str ;   
+        }  
+    }  
+
+    if(updt_job)
+    {
+        Job.update({_id:job._id}, { $set : { skill : job.skill , profession : job.profession, experience : job.experience } } ) ; 
+    }  
+      
+
+
+    return job ; 
+}
+
+
+tag_job_skill = function(job) 
 {
 
   // console.log('Checking Job------------------------')
@@ -873,24 +982,41 @@ match_get_job_skill = function(job)
     if(job.skill)
     {
         skill_list = job.skill.split(/[\s,]+/) ; 
-       org_skill_count = skill_list.length ; 
+        org_skill_count = skill_list.length ; 
     }  
        
-    for(i=0;i<words.length;i++)
+    // for(i=0;i<words.length;i++)
+    // {
+    //     for(j=0;j<keywords.length;j++)
+    //     {
+    //         if( words[i] == keywords[j].keyword && keywords[j].class == 'skill')
+    //         {
+    //             var pos = skill_list.indexOf(keywords[j].word);
+    //             if( pos < 0)
+    //             {
+    //                 console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ;   
+    //                 skill_list.push(keywords[j].word) ;   
+    //             }  
+    //         }  
+    //     }
+    // }  
+
+    for(j=0;j<keywords.length;j++)
     {
-        for(j=0;j<keywords.length;j++)
+        if( keywords[j].class == 'skill')
         {
-            if( words[i] == keywords[j].keyword && keywords[j].class == 'skill')
+            if( title.search( keywords[j].keyword ) > -1) 
             {
                 var pos = skill_list.indexOf(keywords[j].word);
                 if( pos < 0)
                 {
-                    console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ;   
+                    console.log('Mapped :'+keywords[j].keyword+' --> '+keywords[j].word ) ;   
                     skill_list.push(keywords[j].word) ;   
                 }  
-            }  
-        }
-    }  
+            }   
+        }  
+    }
+
  
     if(skill_list && skill_list.length > 0)
     {
@@ -913,7 +1039,7 @@ match_get_job_skill = function(job)
     return job ; 
 } 
 
-match_get_job_profession = function(job) 
+tag_job_profession = function(job) 
 {
     var title = job.title.toLowerCase() ; 
     var words = title.split(/[\s,]+/) ; 
@@ -927,21 +1053,39 @@ match_get_job_profession = function(job)
         org_profession_count = profession_list.length ;     
     }  
       
-    for(i=0;i<words.length;i++)
+    // for(i=0;i<words.length;i++)
+    // {
+    //     for(j=0;j<keywords.length;j++)
+    //     {
+    //         if( words[i] == keywords[j].keyword && keywords[j].class == 'profession')
+    //         {
+    //             var pos = profession_list.indexOf(keywords[j].word);
+    //             if( pos < 0)
+    //             {
+    //               console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ; 
+    //               profession_list.push(keywords[j].word) ; 
+    //             }                
+    //         }  
+    //     }  
+    // }  
+
+
+
+    for(j=0;j<keywords.length;j++)
     {
-        for(j=0;j<keywords.length;j++)
+        if( keywords[j].class == 'profession')
         {
-            if( words[i] == keywords[j].keyword && keywords[j].class == 'profession')
+            if( title.search( keywords[j].keyword ) > -1) 
             {
                 var pos = profession_list.indexOf(keywords[j].word);
                 if( pos < 0)
                 {
-                  console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ; 
-                  profession_list.push(keywords[j].word) ; 
-                }                
-            }  
+                    console.log('Mapped :'+keywords[j].keyword+' --> '+keywords[j].word ) ;   
+                    profession_list.push(keywords[j].word) ;   
+                }  
+            }   
         }  
-    }  
+    }
 
     if(profession_list && profession_list.length > 0)
     {
@@ -959,7 +1103,7 @@ match_get_job_profession = function(job)
     return job ; 
 } 
 
-match_get_job_experience = function(job) 
+tag_job_experience = function(job) 
 {
     var title = job.title.toLowerCase() ; 
     var words = title.split(/[\s,]+/) ; 
