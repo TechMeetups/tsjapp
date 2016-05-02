@@ -7,23 +7,40 @@
         <button type="submit" class="button button-positive button-clear">Add</button>
       </div>
       <div class="content has-header overflow-scroll">
-	      <label type="stacked" class="item item-input item-stacked-label">
-        <span class="input-label">title</span>
-    <input type="text" label-type="stacked" placeholder="title" name="title" id="title" required="" data-schema-key="title">
+	      <label type="stacked" class="item item-input">
+        <span class="input-label">Title</span>
+    <input type="text" placeholder="Enter the title of your job" name="title" id="title" required="" data-schema-key="title">
     </label>
-    <label type="stacked" class="item item-input item-stacked-label">
-        <span class="input-label">desc</span>
-    <textarea label-type="stacked" placeholder="desc" name="desc" rows="6" id="desc"  required="" data-schema-key="desc"></textarea>
+    
+
+    <label class="item item-input">
+        <span class="input-label">Profession</span>
+        <input type="text" placeholder="Developer, Designer, Product Manager...(comma separated)" name="profession" id="profession" data-schema-key="profession">
     </label>
 
-    <label type="stacked" class="item item-input item-stacked-label">
+    <label type="stacked" class="item item-input">
+      <span class="input-label">Skills</span>
+      <input type="text" placeholder="Javascript, MongoDB, HTML5...(comma separated)" rows="2" name="skill" id="skill" data-schema-key="skill">
+    </label>
+
+    <label class="item item-input">
+        <span class="input-label">Experience</span>
+        <input type="text" placeholder="Enter experience level in years" name="experience" id="experience" data-schema-key="experience">
+    </label>
+
+    <label type="stacked" class="item item-input">
+        <span class="input-label">Description</span>
+    <textarea label-type="stacked" placeholder="Enter description of your job" name="desc" rows="4" id="desc"  required="" data-schema-key="desc"></textarea>
+    </label>
+
+    <label type="stacked" class="item item-input">
         <span class="input-label">City</span>
     <input type="text" label-type="stacked" placeholder="City" name="city" id="city"  required="" data-schema-key="city">
     </label>
 
-    <label type="stacked" class="item item-input item-stacked-label">
+    <label type="stacked" class="item item-input">
         <span class="input-label">Picture</span>
-    <textarea label-type="stacked" placeholder="Picture for Job" name="pic" id="pic"  required="" data-schema-key="pic"></textarea>
+    <textarea label-type="stacked" placeholder="URL of picture for Job" name="pic" id="pic"  required="" data-schema-key="pic"></textarea>
     </label>
 
       </div>

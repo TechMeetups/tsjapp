@@ -7,17 +7,22 @@
       </span>
   </button>
     <h1 class="title align-title-center">{{ name }}</h1>
-    {{#if isInRole 'admin'}}
+
+    {{#if canISearch user_id }}
 
     <div class="buttons">
-      <button class="button button-clear" data-ion-modal="_jobNew">{{> ionIcon icon="ios-plus-empty"}}{{> ionIcon 
-      icon="ios-archive"}}</button>
+      <button class="button" data-ion-modal="_jobNew">{{> ionIcon icon="ios-plus-empty"}} Job {{> ionIcon 
+      icon="ion-archive"}}</button>
 
-      <button class="button" id="company_match" >Match</button>
+      {{#if isInRole 'admin'}}
+              <button class="button" id="company_match" >Match</button>    
+      {{/if}}
+
     </div>
 
-
     {{/if}}
+
+
   {{/ionHeaderBar}}
   {{#ionView}}
 

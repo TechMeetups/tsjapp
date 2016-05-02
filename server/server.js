@@ -1480,7 +1480,8 @@ tag_job_experience = function(job)
           EventCompany.insert({event_id:event_id,company_id:company_id,joined_on:new Date(),created_at:new Date()})
         }
         ,
-        insert_Job: function(data){
+        insert_Job: function(data)
+        {
           console.log(data)
           Job.insert(data)
         },

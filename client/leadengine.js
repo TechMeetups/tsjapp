@@ -19,9 +19,11 @@ Meteor.startup(function()
 if (Meteor.isClient)
 {
   match_manager.default_subscribe() ; 
-  
-  Template.registerHelper('is_admin', function(){
 
+  Template.registerHelper('canISearch', function(user_id)
+  {
+      if( Roles.userIsInRole(Meteor.user(), ['admin']) || user_id === Meteor.userId())
+        return true ;  
   })
   Template.layout.events(
   {

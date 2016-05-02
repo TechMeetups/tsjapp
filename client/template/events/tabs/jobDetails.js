@@ -27,11 +27,6 @@ Template.jobDetails.rendered = function ()
 
 Template.jobDetails.helpers(
 {
-  canISearch : function(user_id) 
-  {
-      if( Roles.userIsInRole(Meteor.user(), ['admin']) || user_id === Meteor.userId())
-        return true ;  
-  }, 
   match_count : function()
   {
       return '' 
