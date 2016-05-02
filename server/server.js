@@ -814,7 +814,7 @@ tag_job = function(job)
 
     if(job.skill)
     {
-        skill_list = job.skill.split(/[\s,]+/) ; 
+        skill_list = job.skill.split(',') ; 
         org_skill_count = skill_list.length ; 
 
         console.log('org_skill_count:'+org_skill_count) ; 
@@ -828,7 +828,7 @@ tag_job = function(job)
 
     if(job.profession)
     {
-        profession_list = job.profession.split(/[\s,]+/) ; 
+        profession_list = job.profession.split(',') ; 
         org_profession_count = profession_list.length ;     
 
         console.log('org_profession_count:'+org_profession_count) ; 
