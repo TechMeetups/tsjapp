@@ -801,69 +801,7 @@ if (Meteor.isServer)
     } 
 
 
-match_user_job = function(usr,job)
-{
-  var user_skill = null ; 
-  var user_profession = null ; 
-  var skill = prof = 0 ; 
-  var exp = 0 ;
 
-  // console.log('match_user_job.Keywords:'+keywords.length ) ; 
-
-    // console.log('Matching Job------------------------')
-    // console.log(job) ; 
-    // console.log('With User --------------------------')
-    // console.log(usr) ; 
-    // console.log('====================================')
-
-    // job = match_get_job_skill(job) ; 
-        
-    if( job.skill && usr.profile.skill ) 
-    {
-        user_skill = usr.profile.skill.split(/[\s,]+/) ; 
-
-        for(x=0;x<user_skill.length;x++)
-        {
-            var uskill = user_skill[x].toLowerCase() ; 
-            uskill = uskill.trim() ; 
-
-            if( uskill )
-              if( job.skill.toLowerCase().indexOf(uskill) > -1)
-                  ++skill ; 
-        }
-
-    }  
-      
-
-    // job = match_get_job_profession(job) ; 
-
-    if( job.profession && usr.profile.profession ) 
-    {
-        user_profession = usr.profile.profession.split(/[\s,]+/) ; 
-
-        for(x=0;x<user_profession.length;x++)
-        {
-            var uprof = user_profession[x].toLowerCase() ; 
-            uprof = uprof.trim() ; 
-
-            if( uprof )
-              if( job.profession.toLowerCase().indexOf(uprof) > -1)
-                  ++prof ; 
-        }             
-    }  
-
-
-    if( job.experience && usr.profile.experience ) 
-    {
-        exp = eval(usr.profile.experience) - eval(job.experience) ; 
-    }  
-
-
-    if(skill > 0 && prof > 0 && exp >= 0)
-      return skill + prof + 1 ; 
-    else
-      return 0 ;       
-}
 
 tag_job = function(job) 
 {

@@ -72,7 +72,7 @@
         </div>
       {{/if}}
 
-      {{#if isInRole 'admin'}}
+      {{#if canISearch user_id }}
           <a href="{{build_match_path}}" class="button button-block button-balanced" id="match_making" data="{{desc}}">
                 <i class="icon ion-ios-search-strong"></i>&nbsp;
                 Search {{ match_count }}&nbsp;
