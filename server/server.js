@@ -116,7 +116,7 @@ if (Meteor.isServer)
           }
                   
           console.log('Found Users:'+user_ids.length) ;
-          console.log(user_ids) ;
+          //console.log(user_ids) ;
 
           if( searchValue &&  searchValue.length > 1)
           {
