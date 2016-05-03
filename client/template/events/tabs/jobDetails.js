@@ -104,6 +104,32 @@ Template.jobDetails.helpers(
 
 Template.jobDetails.events(
 {
+  'click #exp_up' : function(event, template)
+  {
+    animateThis($(event.currentTarget),'bounce') ;
+    var jobid = $(event.currentTarget).attr('jobid') ; 
+    var exp = $(event.currentTarget).attr('exp') ;
+
+    if(!exp.trim())
+      exp = 0 ; 
+
+    exp = eval(exp)+1 ; 
+    job_manager.change_exp(jobid,exp) ; 
+  },   
+  'click #exp_down' : function(event, template)
+  {
+    animateThis($(event.currentTarget),'bounce') ;
+    var jobid = $(event.currentTarget).attr('jobid') ; 
+    var exp = $(event.currentTarget).attr('exp') ;
+
+    if(!exp)
+      exp = 0 ; 
+
+    exp = eval(exp-1) ; 
+    if(exp<0)
+      exp = 0 ; 
+    job_manager.change_exp(jobid,exp) ; 
+  }, 
   'click #job_meet' : function(event, template)
   {
     company_id = Router.current().params._company_id;

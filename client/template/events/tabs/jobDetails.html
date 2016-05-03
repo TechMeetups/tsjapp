@@ -33,7 +33,15 @@
 
               <div class="item-text-wrap">
                 {{ #if experience }}              
-                   <p>Experience : <span class="balanced">{{experience}} years</span></p>
+                   <p>Experience : <span class="balanced">{{experience}} years
+                    {{#if canISearch user_id}}
+                        &nbsp; 
+                        <button class="button button-small button-light icon ion-chevron-up" id="exp_up" jobid="{{_id}}" exp="{{experience}}"></button>&nbsp; 
+                        <button class="button button-small button-light icon ion-chevron-down" id="exp_down" jobid="{{_id}}" exp="{{experience}}"></button>
+
+                    {{/if}} 
+                   </span>
+                   </p>
                 {{else}}
                    <p>Experience : <span class="balanced">?</span></p>
                 {{/if}}
