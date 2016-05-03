@@ -27,6 +27,14 @@ Template.jobDetails.rendered = function ()
 
 Template.jobDetails.helpers(
 {
+  changing_profession : function()
+  {
+      return Session.get('changing_profession') ; 
+  } ,  
+  changing_skill : function()
+  {
+      return Session.get('changing_skill') ; 
+  } ,  
   match_count : function()
   {
       return '' 
@@ -104,13 +112,47 @@ Template.jobDetails.helpers(
 
 Template.jobDetails.events(
 {
+  'click #updt_skill' : function(event, template)  
+  {
+    var jobid = $(event.currentTarget).attr('jobid') ; 
+    var skill = $('#new_skill').val() ; 
+
+    job_manager.change_skill(jobid,skill) ;
+
+    Session.set('changing_skill',false ) 
+  },
+  'click #cancel_skill' : function(event, template)  
+  {
+    Session.set('changing_skill',false ) 
+  }, 
+  'click #skill_edit' : function(event, template)
+  {
+     Session.set('changing_skill',true ) 
+  }, 
+  'click #updt_profession' : function(event, template)  
+  {
+    var jobid = $(event.currentTarget).attr('jobid') ; 
+    var prof = $('#new_prof').val() ; 
+
+    job_manager.change_profession(jobid,prof) ;
+
+    Session.set('changing_profession',false ) 
+  },
+  'click #cancel_profession' : function(event, template)  
+  {
+    Session.set('changing_profession',false ) 
+  }, 
+  'click #prof_edit' : function(event, template)
+  {
+    Session.set('changing_profession',true ) 
+  },   
   'click #exp_up' : function(event, template)
   {
     animateThis($(event.currentTarget),'bounce') ;
     var jobid = $(event.currentTarget).attr('jobid') ; 
     var exp = $(event.currentTarget).attr('exp') ;
 
-    if(!exp.trim())
+    if(!exp)
       exp = 0 ; 
 
     exp = eval(exp)+1 ; 
