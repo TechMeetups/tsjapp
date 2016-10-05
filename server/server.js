@@ -1092,15 +1092,30 @@ tag_job_experience = function(job)
         try
         {
            var line = lines[i];
-           var skill, prof ; 
+           var skill, prof, lookingfor ; 
+           var line_parts ; 
 
            line = rmv_start_quote(line) ; 
            line = rmv_end_quote(line) ; 
             
            console.log(i+" ->"+line) ; 
-           var line_parts = line.split(new RegExp(',(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))'));
+           
+           line_parts = line.split(new RegExp(',(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))'));
+           if( line_parts[1] === undefined)
+           {
+              line_parts = line.split(new RegExp(';(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))'));
+              if( line_parts[1] === undefined)
+              {
+                 console.log('File format Error !') ; 
+                 return ;     
+              }  
+              else
+              {
+                 console.log('Swtching to ; as delimiter') ; 
+              }  
+           } 
 
-           var cols = [ "name", "email", "exp.yrs", "skills", "date joined", "looking for", "profession", 
+           var cols = [ "firstname", "email", "exp.yrs", "skills", "date joined", "looking for", "profession", 
            "pic", "cv", "linkedin", "city"  ] ; 
 
            for(k=0;k<=10;k++)
@@ -1113,7 +1128,14 @@ tag_job_experience = function(job)
             else 
               dataObj = new Date() ; 
 
-           exp = line_parts[2];
+            if( line_parts[2] )
+            {
+                exp = parseInt( line_parts[2] ) ;   
+                if( isNaN (exp) )
+                  exp = 0 ; 
+            }  
+              
+
 
            if(line_parts[3])
              skill = line_parts[3].replace(/["']/g, "");
@@ -1133,6 +1155,8 @@ tag_job_experience = function(job)
               continue ; 
           }  
             
+          if( ! line_parts[5] ) 
+            lookingfor = 'Job' ;  
 
            user = Meteor.users.findOne({"emails.address" : email});
            user_id=''
@@ -1147,7 +1171,7 @@ tag_job_experience = function(job)
                     firstname : line_parts[0],
                     experience: exp,
                     skill : skill,
-                    lookingfor: line_parts[5],
+                    lookingfor: lookingfor,
                     profession: prof,
                     pic: line_parts[7],
                     cv: line_parts[8],
@@ -1169,7 +1193,7 @@ tag_job_experience = function(job)
                     firstname : line_parts[0],
                     experience: exp,
                     skill : skill,
-                    lookingfor: line_parts[5],
+                    lookingfor: lookingfor,
                     profession: prof,
                     pic: line_parts[7],
                     cv: line_parts[8],
