@@ -47,6 +47,15 @@
             <a class="item item-icon-right pointer"  href="/user_profile" data-ion-menu-close>
               Change Password {{> ionIcon icon="ios-arrow-right"}}
             </a>
+
+
+            {{#if isInRole 'admin'}}
+      
+              <span data-ion-menu-close class="item item-icon-right pointer" data-ion-modal="_eventsNew">Add new Event {{> ionIcon icon="ios-plus-empty"}}</span>
+              <span data-ion-menu-close class="item item-icon-right pointer" id="allmatch" >Match Report {{> ionIcon icon="ios-list-outline"}}</span>
+            
+            {{/if}}
+          
           </div>
         </div>
       {{/ionSideMenu}}

@@ -33,6 +33,10 @@ if (Meteor.isClient)
       Meteor.logout();
       Session.set('login_user',null)
       Router.go("login");
+    },
+    'click #allmatch' : function(event, template)
+    {
+        match_manager.email_matched(null,null,null,null) ; 
     }
   });
   EVENT_INCREMENT = 10;

@@ -424,20 +424,22 @@ if (Meteor.isServer)
 
         var fromEmail = "admin@techmeetups.com";
         var toEmail = user.emails[0].address;
-        var start_dt = moment(event.start).format("DD/MM/YYYY");
-        var end_dt = moment(event.end).format("DD/MM/YYYY");
+        var start_dt = moment(event.start).format("llll");
+        var end_dt = moment(event.end).format("llll");
         Email.send({
             from: fromEmail,
             to: toEmail,
             replyTo: fromEmail ,
-            subject: "Event change notification" ,
+            subject: "Event Change Notification" ,
             text: "Hi "+user.profile.firstname+'\n'+
-                    "\Please find updated event details\n"+
-                    "\nEvent : "+event.name+
-                    "\nstart : "+start_dt+" - "+end_dt+
+                    "\nPlease find updated Event details\n"+
+                    "\nEvent   : "+event.name+
+                    "\nDetails : "+event.desc+
+                    "\nStart   : "+start_dt+ 
+                    "\nFinish  : "+end_dt+
                     "\nAddress : "+event.address+
                    "\n\n"+
-                   "Please reply if required more details.\n\n"+
+                   "Please email us if you need more details.\n\n"+
             "Thank you.\n"+
             "The TechStartupJobs Team.\n"+
             "http://techstartupjobs.com\n"+
