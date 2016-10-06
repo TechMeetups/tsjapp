@@ -22,7 +22,7 @@ Template.eventsShow.helpers({
   },
   current_user_envent_state : function()
   {
-    
+
    return  Session.get('current_user_envent_state');
   }
 });
@@ -31,7 +31,7 @@ Template.eventsShow.events(
 {
   'click #jobseeker_ticket': function (event, template)
   {
-    
+
     IonLoading.show({
       customTemplate: "Generating Ticket...",
       duration: 2000
@@ -57,5 +57,25 @@ Template.eventsShow.events(
   'click #sponsor_btn': function (event, template){
     event_id = Router.current().params._id
     Router.go("/tabs/sponsor/"+event_id)
+  },
+  'click #btn_notification': function (event, template) {
+    IonPopup.confirm({
+       title: 'confirm notification?',
+       template: 'Please press ok to notify all attendees for event change notification.',
+       onOk: function() {
+         console.log(Router.current().params._id)
+         Meteor.call("notification_event_update", Router.current().params._id, function(error, result){
+           if(error){
+             console.log("error", error);
+           }
+           if(result){
+
+           }
+         });
+       },
+       onCancel: function() {
+         Router.go('events.show', {_id: Router.current().params._id});
+       }
+     });
   }
 });

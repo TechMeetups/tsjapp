@@ -1391,7 +1391,6 @@ tag_job_experience = function(job)
         event = Events.findOne({_id:event_id});
         user_ids = EventAttendee.find({event_id:event_id}).fetch().map(function(doc){return doc.attendee_id});
         all_user = Meteor.users.find({_id:{$in:user_ids}}).fetch();
-        console.log(all_user);
         for(var i=0;i<all_user.length;i++){
           send_event_change_notification(event,all_user[i])
         }

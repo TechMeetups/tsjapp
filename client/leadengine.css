@@ -179,10 +179,10 @@ a.dropdown-toggle::after {
 }
 */
 
-.integrated 
-{ 
+.integrated
+{
     background-color: blue;
-    color : white ;  
+    color : white ;
     line-height: 200px ;
     text-align: center;
 }
@@ -199,4 +199,10 @@ a.dropdown-toggle::after {
       background: url('../img/Happy-Team.jpg') no-repeat;
       background-size: cover;
     }
+}
+
+.modal {
+    top: 10% !important;
+    bottom: 10% !important;
+    min-height: 350px !important;
 }
