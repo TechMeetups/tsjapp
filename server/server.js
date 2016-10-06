@@ -1,7 +1,7 @@
 
 if (Meteor.isServer)
 {
-    var keywords = [] ; 
+    var keywords = [] ;
 
     Meteor.publish("events", function (limit, searchValue)
     {
@@ -69,29 +69,29 @@ if (Meteor.isServer)
 
     Meteor.publish("attendees", function (limit, searchValue,event_id, job_id)
     {
-      console.log('Publishing attendees --------------------------') ; 
-      console.log('limit:'+limit+' searchValue:'+searchValue+' Event Id:'+event_id+' Job Id:'+job_id ) ; 
+      console.log('Publishing attendees --------------------------') ;
+      console.log('limit:'+limit+' searchValue:'+searchValue+' Event Id:'+event_id+' Job Id:'+job_id ) ;
 
       if(job_id)
       {
-          keywords = match_manager.loadKeyWords() ; 
+          keywords = match_manager.loadKeyWords() ;
 
-          var job = Job.findOne({_id : job_id}) ; 
+          var job = Job.findOne({_id : job_id}) ;
           if( job )
-            tag_job(job) ; 
+            tag_job(job) ;
 
-          // tag_job_skill(job) ; 
-          // tag_job_profession(job) ; 
-          // tag_job_experience(job) ; 
-      }  
+          // tag_job_skill(job) ;
+          // tag_job_profession(job) ;
+          // tag_job_experience(job) ;
+      }
 
-        
+
       if(event_id)
       {
-          user_ids=[] ; 
+          user_ids=[] ;
           event_attendees =  EventAttendee.find({event_id:event_id}, {sort:{ created_at:-1}},{fields: {'attendee_id':1}}).fetch()
 
-          if(job)  
+          if(job)
           {
               for(ai =0; ai< event_attendees.length ;ai++)
               {
@@ -99,37 +99,37 @@ if (Meteor.isServer)
 
                   if( usr )
                   {
-                      counter = match_user_job(usr,job) ; 
+                      counter = match_user_job(usr,job) ;
 
                       if(counter > 0)
                       {
-                          user_ids.push(event_attendees[ai].attendee_id)  ;   
-                      }  
-                  } 
+                          user_ids.push(event_attendees[ai].attendee_id)  ;
+                      }
+                  }
               }
 
           }
           else
           {
               for(i =0; i< event_attendees.length ;i++)
-                user_ids.push(event_attendees[i].attendee_id)   ; 
+                user_ids.push(event_attendees[i].attendee_id)   ;
           }
-                  
+
           console.log('Found Users:'+user_ids.length) ;
           //console.log(user_ids) ;
 
           if( searchValue &&  searchValue.length > 1)
           {
                 return Meteor.users.find(
-                  { 
+                  {
                     _id:{$in:user_ids},
                     $or :
                     [
                       { 'profile.firstname':{'$regex': new RegExp(searchValue, "i")} } ,
-                      { 'profile.skill':{'$regex': new RegExp(searchValue, "i")} } , 
-                      { 'profile.profession':{'$regex': new RegExp(searchValue, "i")} } , 
-                      { 'profile.lookingfor':{'$regex': new RegExp(searchValue, "i")} } , 
-                      { 'profile.city':{'$regex': new RegExp(searchValue, "i")} } , 
+                      { 'profile.skill':{'$regex': new RegExp(searchValue, "i")} } ,
+                      { 'profile.profession':{'$regex': new RegExp(searchValue, "i")} } ,
+                      { 'profile.lookingfor':{'$regex': new RegExp(searchValue, "i")} } ,
+                      { 'profile.city':{'$regex': new RegExp(searchValue, "i")} } ,
                     ]
                   },
                   {limit:limit});
@@ -138,20 +138,20 @@ if (Meteor.isServer)
           {
                 return Meteor.users.find({_id:{$in:user_ids}},{limit:limit});
           }
-      }  
+      }
       else
       {
           if( searchValue &&  searchValue.length > 1)
           {
               return Meteor.users.find(
-                { 
+                {
                     $or :
                     [
                       { 'profile.firstname':{'$regex': new RegExp(searchValue, "i")} } ,
-                      { 'profile.skill':{'$regex': new RegExp(searchValue, "i")} } , 
-                      { 'profile.profession':{'$regex': new RegExp(searchValue, "i")} } , 
-                      { 'profile.lookingfor':{'$regex': new RegExp(searchValue, "i")} } , 
-                      { 'profile.city':{'$regex': new RegExp(searchValue, "i")} } , 
+                      { 'profile.skill':{'$regex': new RegExp(searchValue, "i")} } ,
+                      { 'profile.profession':{'$regex': new RegExp(searchValue, "i")} } ,
+                      { 'profile.lookingfor':{'$regex': new RegExp(searchValue, "i")} } ,
+                      { 'profile.city':{'$regex': new RegExp(searchValue, "i")} } ,
                     ]
                 },
                 {limit:limit});
@@ -160,10 +160,10 @@ if (Meteor.isServer)
           {
               return Meteor.users.find({ },{limit:limit});
           }
-      }  
-      
-      
-      
+      }
+
+
+
     });
 
     Meteor.publish("jobs", function (limit,event_id,company_id,searchValue)
@@ -223,13 +223,13 @@ if (Meteor.isServer)
     Meteor.publish("company", function (limit, searchValue,event_id)
     {
       company_ids=[]
-      
+
       event_company =   EventCompany.find({event_id:event_id}, {sort:{ created_at:-1}},{fields: {'company_id':1}}).fetch()
-      
+
       for(i =0; i< event_company.length ;i++){
         company_ids.push(event_company[i].company_id)
       }
-      
+
       // if(!limit || limit < 1)
       //     limit = 10 ;
         if( searchValue &&  searchValue.length > 1)
@@ -263,17 +263,17 @@ if (Meteor.isServer)
 
     Meteor.publish("get_matched_candidates", function (job_id)
     {
-      console.log("get_matched_candidates.job_id"+job_id) ; 
+      console.log("get_matched_candidates.job_id"+job_id) ;
 
-      var searchValue ; 
+      var searchValue ;
 
-      var job = Jobs.findOne({_id:job_id}) ; 
+      var job = Jobs.findOne({_id:job_id}) ;
       if(!job)
         return null ;
-      searchValue = job.desc ; 
+      searchValue = job.desc ;
 
       return Meteor.users.find({'profile.skill':{'$regex': new RegExp(searchValue, "i")}});
-        
+
     });
 
 
@@ -420,7 +420,32 @@ if (Meteor.isServer)
           // +"http://www.graphical.io/assets/img/Graphical-IO.png"
       });
     }
+    var send_event_change_notification = function(event,user){
 
+        var fromEmail = "admin@techmeetups.com";
+        var toEmail = user.emails[0].address;
+        var start_dt = moment(event.start).format("DD/MM/YYYY");
+        var end_dt = moment(event.end).format("DD/MM/YYYY");
+        Email.send({
+            from: fromEmail,
+            to: toEmail,
+            replyTo: fromEmail ,
+            subject: "Event change notification" ,
+            text: "Hi "+user.profile.firstname+'\n'+
+                    "\Please find updated event details\n"+
+                    "\nEvent : "+event.name+
+                    "\nstart : "+start_dt+" - "+end_dt+
+                    "\nAddress : "+event.address+
+                   "\n\n"+
+                   "Please reply if required more details.\n\n"+
+            "Thank you.\n"+
+            "The TechStartupJobs Team.\n"+
+            "http://techstartupjobs.com\n"+
+            "Join.Connect.Meet.Apply"
+            // +"http://www.graphical.io/assets/img/Graphical-IO.png"
+        });
+
+    }
     var request_for_meet_candidate = function (user,attendee,message)
     {
       var fromEmail = "admin@techmeetups.com";
@@ -593,10 +618,10 @@ if (Meteor.isServer)
     }
 
 
-    var email_matched_list = function(user,message) 
+    var email_matched_list = function(user,message)
     {
             var fromEmail = "admin@techmeetups.com";
-            var toEmail = user.emails[0].address ; 
+            var toEmail = user.emails[0].address ;
             var ccEmail = "marketing@techmeetups.com";
 
             Email.send(
@@ -617,163 +642,163 @@ if (Meteor.isServer)
             });
     }
 
-      var email_matched_event = function ( user, job_id, event_id, searchValue, limit, company_id ) 
+      var email_matched_event = function ( user, job_id, event_id, searchValue, limit, company_id )
       {
-        var message = "" ; 
+        var message = "" ;
 
-        console.log('Server.email_matched_event') ; 
-        console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
-        //console.log('Keywords:'+keywords.length ) ; 
-        
+        console.log('Server.email_matched_event') ;
+        console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ;
+        //console.log('Keywords:'+keywords.length ) ;
+
         var event = Events.findOne({_id : event_id}) ;
         if(!event)
-          return ; 
-        
-        message += "\n\nEvent : "+event.name+'\n'  ;          
-        message += "********************************************************************************"+'\n'  ;          
+          return ;
+
+        message += "\n\nEvent : "+event.name+'\n'  ;
+        message += "********************************************************************************"+'\n'  ;
 
         if( company_id )
-           message = email_matched_company( user, job_id, event_id, searchValue, limit, company_id ) ;       
+           message = email_matched_company( user, job_id, event_id, searchValue, limit, company_id ) ;
         else
         {
-          var companies = EventCompany.find({event_id : event_id}).fetch()  ; 
+          var companies = EventCompany.find({event_id : event_id}).fetch()  ;
           for( c=0;c<companies.length;c++)
           {
               message += email_matched_company( user, job_id, event_id, searchValue, limit, companies[c].company_id ) ;
-          }  
-            
-        }  
+          }
 
-        return message ; 
+        }
 
-      }                 
+        return message ;
 
-     var email_matched_company = function ( user, job_id, event_id, searchValue, limit, company_id ) 
+      }
+
+     var email_matched_company = function ( user, job_id, event_id, searchValue, limit, company_id )
      {
         var message = "" ;
 
-        console.log('Server.email_matched_company') ; 
-        console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
-        //console.log('Keywords:'+keywords.length ) ; 
+        console.log('Server.email_matched_company') ;
+        console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ;
+        //console.log('Keywords:'+keywords.length ) ;
 
         var company = Company.findOne({_id : company_id}) ;
         if(!company)
-          return ; 
+          return ;
 
-        message += "\n\nCompany : "+company.name+'\n'  ;          
-        message += "============================================================="+'\n'  ;          
-    
+        message += "\n\nCompany : "+company.name+'\n'  ;
+        message += "============================================================="+'\n'  ;
+
         if( job_id )
         {
-            message = email_matched_job( user, job_id, event_id, searchValue, limit, company_id ) ;       
-        }  
+            message = email_matched_job( user, job_id, event_id, searchValue, limit, company_id ) ;
+        }
         else
         {
-          var jobs = Job.find({company_id : company_id}).fetch()  ; 
+          var jobs = Job.find({company_id : company_id}).fetch()  ;
 
           for( jc=0;jc<jobs.length;jc++)
           {
               message += email_matched_job( user, jobs[jc]._id, event_id, searchValue, limit, company_id ) ;
-          }  
-            
-        }  
+          }
 
-        return message ;   
+        }
 
-     } 
+        return message ;
 
-     var email_matched_job = function ( user, job_id, event_id, searchValue, limit, company_id ) 
+     }
+
+     var email_matched_job = function ( user, job_id, event_id, searchValue, limit, company_id )
      {
         var message = "" ;
 
-        console.log('Server.email_matched_job') ; 
-        console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
-        //console.log('Keywords:'+keywords.length ) ; 
+        console.log('Server.email_matched_job') ;
+        console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ;
+        //console.log('Keywords:'+keywords.length ) ;
 
-        var job = Job.findOne({_id:job_id}) ; 
+        var job = Job.findOne({_id:job_id}) ;
         if(!job)
-          return false ; 
+          return false ;
 
-        // var event = Events.findOne({_id:event_id}) ; 
+        // var event = Events.findOne({_id:event_id}) ;
         // if(!event)
-        //   return false ; 
+        //   return false ;
 
-        var matched = find_matched(limit,searchValue, event_id, job_id) ; 
-               
-        message += "\n\nJob : "+job.title +'\n'  ;   
-        message += "-----------------------------------------------------"+'\n'  ;          
-   
-        message += matched.length + " matching candidates : \n\n" ;        
+        var matched = find_matched(limit,searchValue, event_id, job_id) ;
+
+        message += "\n\nJob : "+job.title +'\n'  ;
+        message += "-----------------------------------------------------"+'\n'  ;
+
+        message += matched.length + " matching candidates : \n\n" ;
 
         for(ic=0;ic<matched.length;ic++)
         {
           message += (ic+1) + '. ' +matched[ic].profile.firstname ;
 
           if( matched[ic].profile.profession )
-            message += ' - ' + matched[ic].profile.profession ;  
-              
+            message += ' - ' + matched[ic].profile.profession ;
+
           if( matched[ic].profile.experience )
             message += ' (' + matched[ic].profile.experience + ' years of exp)' ;
 
           message += '\n' ;
         }
 
-        return message ; 
+        return message ;
      }
 
     var find_matched = function (limit, searchValue,event_id, job_id)
     {
-      console.log('Finding matched --------------------------') ; 
-      console.log('limit:'+limit+' searchValue:'+searchValue+' Event Id:'+event_id+' Job Id:'+job_id ) ; 
-            
-      var user_ids=[] ; 
+      console.log('Finding matched --------------------------') ;
+      console.log('limit:'+limit+' searchValue:'+searchValue+' Event Id:'+event_id+' Job Id:'+job_id ) ;
+
+      var user_ids=[] ;
 
       if(job_id)
       {
-          var job = Job.findOne({_id : job_id}) ; 
+          var job = Job.findOne({_id : job_id}) ;
 
           // if( job )
-          //   tag_job(job) ; 
+          //   tag_job(job) ;
 
-          // tag_job_skill(job) ; 
-          // tag_job_profession(job) ; 
-          // tag_job_experience(job) ; 
-      }  
-          
+          // tag_job_skill(job) ;
+          // tag_job_profession(job) ;
+          // tag_job_experience(job) ;
+      }
+
 
       if(event_id)
       {
-          
+
           var event_attendees =  EventAttendee.find({event_id:event_id}, {sort:{ created_at:-1}},{fields: {'attendee_id':1}}).fetch()
-          console.log('event_attendees.length:'+event_attendees.length ) ; 
-              
-          if(job)  
+          console.log('event_attendees.length:'+event_attendees.length ) ;
+
+          if(job)
           {
               for(a=0; a < event_attendees.length ;a++)
               {
                   var usr = Meteor.users.findOne( { _id : event_attendees[a].attendee_id } ) ;
 
-                  // console.log(usr) ; 
-                  // console.log('event_attendees[a].attendee_id:'+event_attendees[a].attendee_id) ; 
-                  
+                  // console.log(usr) ;
+                  // console.log('event_attendees[a].attendee_id:'+event_attendees[a].attendee_id) ;
+
                   if( usr )
                   {
-                      var counter = match_user_job(usr,job) ; 
-                      
+                      var counter = match_user_job(usr,job) ;
+
                       if(counter > 0)
                       {
-                          user_ids.push(event_attendees[a].attendee_id)  ;   
-                      }  
-                  } 
+                          user_ids.push(event_attendees[a].attendee_id)  ;
+                      }
+                  }
               }
 
           }
           else
           {
               for(i =0; i< event_attendees.length ;i++)
-                user_ids.push(event_attendees[i].attendee_id)   ; 
+                user_ids.push(event_attendees[i].attendee_id)   ;
           }
-                  
+
           console.log('--------------------- Found Users:'+user_ids.length) ;
           // console.log(user_ids) ;
 
@@ -786,7 +811,7 @@ if (Meteor.isServer)
           {
                 return Meteor.users.find({_id:{$in:user_ids}},{limit:limit}).fetch();
           }
-      }  
+      }
       else
       {
           if( searchValue &&  searchValue.length > 1)
@@ -797,44 +822,44 @@ if (Meteor.isServer)
           {
               return Meteor.users.find({ },{limit:limit}).fetch();
           }
-      }  
-    } 
+      }
+    }
 
 
 
 
-tag_job = function(job) 
+tag_job = function(job)
 {
-    var updt_job = false ;   
-    var title = job.title.toLowerCase() ; 
-    // var words = title.split(/[\s,]+/) ; 
-    
-    var skill_list = [] ; 
-    var org_skill_count = 0 ; 
+    var updt_job = false ;
+    var title = job.title.toLowerCase() ;
+    // var words = title.split(/[\s,]+/) ;
+
+    var skill_list = [] ;
+    var org_skill_count = 0 ;
 
     if(job.skill)
     {
-        skill_list = job.skill.split(',') ; 
-        org_skill_count = skill_list.length ; 
+        skill_list = job.skill.split(',') ;
+        org_skill_count = skill_list.length ;
 
-        console.log('org_skill_count:'+org_skill_count) ; 
+        console.log('org_skill_count:'+org_skill_count) ;
         for(sc=0;sc<org_skill_count;sc++)
-            console.log(sc+'.'+skill_list[sc]) ; 
-    }  
+            console.log(sc+'.'+skill_list[sc]) ;
+    }
 
 
-    var profession_list = [] ; 
-    var org_profession_count = 0 ; 
+    var profession_list = [] ;
+    var org_profession_count = 0 ;
 
     if(job.profession)
     {
-        profession_list = job.profession.split(',') ; 
-        org_profession_count = profession_list.length ;     
+        profession_list = job.profession.split(',') ;
+        org_profession_count = profession_list.length ;
 
-        console.log('org_profession_count:'+org_profession_count) ; 
+        console.log('org_profession_count:'+org_profession_count) ;
         for(pc=0;pc<org_profession_count;pc++)
-            console.log(pc+'.'+profession_list[pc]) ; 
-    }  
+            console.log(pc+'.'+profession_list[pc]) ;
+    }
 
 
 
@@ -842,52 +867,52 @@ tag_job = function(job)
     {
         switch(keywords[j].class)
         {
-            case 'skill' :  if( title.search( keywords[j].keyword ) > -1) 
+            case 'skill' :  if( title.search( keywords[j].keyword ) > -1)
                             {
                                 var pos = skill_list.indexOf(keywords[j].word);
                                 if( pos < 0)
                                 {
-                                    console.log('Mapped Skill :'+keywords[j].keyword+' --> '+keywords[j].word ) ;   
-                                    skill_list.push(keywords[j].word) ;   
-                                }  
-                            }   
-                            break ;  
-                          
-            case  'profession' : if( title.search( keywords[j].keyword ) > -1) 
+                                    console.log('Mapped Skill :'+keywords[j].keyword+' --> '+keywords[j].word ) ;
+                                    skill_list.push(keywords[j].word) ;
+                                }
+                            }
+                            break ;
+
+            case  'profession' : if( title.search( keywords[j].keyword ) > -1)
                                   {
                                       var pos = profession_list.indexOf(keywords[j].word);
                                       if( pos < 0)
                                       {
-                                          console.log('Mapped Profession :'+keywords[j].keyword+' --> '+keywords[j].word ) ;   
-                                          profession_list.push(keywords[j].word) ;   
-                                      }  
-                                  }   
-                                  break ; 
+                                          console.log('Mapped Profession :'+keywords[j].keyword+' --> '+keywords[j].word ) ;
+                                          profession_list.push(keywords[j].word) ;
+                                      }
+                                  }
+                                  break ;
 
-            case  'experience' : if( title.search( keywords[j].keyword ) > -1) 
+            case  'experience' : if( title.search( keywords[j].keyword ) > -1)
                                   {
-                                    updt_job = true ; 
-                                    job.experience = keywords[j].word ;   
-                                  }  
-                                  break ; 
+                                    updt_job = true ;
+                                    job.experience = keywords[j].word ;
+                                  }
+                                  break ;
         }
 
     }
 
- 
+
     if(skill_list && skill_list.length > 0)
     {
         uskill = Array.from(new Set(skill_list));
 
         if( uskill.length > org_skill_count)
         {
-          skill_str = uskill.join() ; 
-          console.log('New Skill found. Updating Job with Skill :'+skill_str) ;   
-          updt_job = true ; 
-          job.skill = skill_str ; 
+          skill_str = uskill.join() ;
+          console.log('New Skill found. Updating Job with Skill :'+skill_str) ;
+          updt_job = true ;
+          job.skill = skill_str ;
         }
 
-    }  
+    }
 
     if(profession_list && profession_list.length > 0)
     {
@@ -895,42 +920,42 @@ tag_job = function(job)
 
         if( uprofession.length > org_profession_count)
         {
-            profession_str = uprofession.join() ; 
-            console.log('New Profession found. Updating Job with Profession :'+profession_str) ;   
-            updt_job = true ; 
-            job.profession = profession_str ;   
-        }  
-    }  
+            profession_str = uprofession.join() ;
+            console.log('New Profession found. Updating Job with Profession :'+profession_str) ;
+            updt_job = true ;
+            job.profession = profession_str ;
+        }
+    }
 
     if(updt_job)
     {
-        Job.update({_id:job._id}, { $set : { skill : job.skill , profession : job.profession, experience : job.experience } } ) ; 
-    }  
-      
+        Job.update({_id:job._id}, { $set : { skill : job.skill , profession : job.profession, experience : job.experience } } ) ;
+    }
 
 
-    return job ; 
+
+    return job ;
 }
 
 
-tag_job_skill = function(job) 
+tag_job_skill = function(job)
 {
 
   // console.log('Checking Job------------------------')
-  // console.log(job) ; 
+  // console.log(job) ;
 
-    var title = job.title.toLowerCase() ; 
-    var words = title.split(/[\s,]+/) ; 
-    
-    var skill_list = [] ; 
-    var org_skill_count = 0 ; 
+    var title = job.title.toLowerCase() ;
+    var words = title.split(/[\s,]+/) ;
+
+    var skill_list = [] ;
+    var org_skill_count = 0 ;
 
     if(job.skill)
     {
-        skill_list = job.skill.split(/[\s,]+/) ; 
-        org_skill_count = skill_list.length ; 
-    }  
-       
+        skill_list = job.skill.split(/[\s,]+/) ;
+        org_skill_count = skill_list.length ;
+    }
+
     // for(i=0;i<words.length;i++)
     // {
     //     for(j=0;j<keywords.length;j++)
@@ -940,65 +965,65 @@ tag_job_skill = function(job)
     //             var pos = skill_list.indexOf(keywords[j].word);
     //             if( pos < 0)
     //             {
-    //                 console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ;   
-    //                 skill_list.push(keywords[j].word) ;   
-    //             }  
-    //         }  
+    //                 console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ;
+    //                 skill_list.push(keywords[j].word) ;
+    //             }
+    //         }
     //     }
-    // }  
+    // }
 
     for(j=0;j<keywords.length;j++)
     {
         if( keywords[j].class == 'skill')
         {
-            if( title.search( keywords[j].keyword ) > -1) 
+            if( title.search( keywords[j].keyword ) > -1)
             {
                 var pos = skill_list.indexOf(keywords[j].word);
                 if( pos < 0)
                 {
-                    console.log('Mapped :'+keywords[j].keyword+' --> '+keywords[j].word ) ;   
-                    skill_list.push(keywords[j].word) ;   
-                }  
-            }   
-        }  
+                    console.log('Mapped :'+keywords[j].keyword+' --> '+keywords[j].word ) ;
+                    skill_list.push(keywords[j].word) ;
+                }
+            }
+        }
     }
 
- 
+
     if(skill_list && skill_list.length > 0)
     {
         uskill = Array.from(new Set(skill_list));
 
         if( uskill.length > org_skill_count)
         {
-          skill_str = uskill.join() ; 
-          console.log('New Skill found. Updating Job with Skill :'+skill_str) ;   
-          Job.update({_id:job._id},{ $set: {"skill":skill_str}}) ; 
-          job.skill = skill_str ; 
+          skill_str = uskill.join() ;
+          console.log('New Skill found. Updating Job with Skill :'+skill_str) ;
+          Job.update({_id:job._id},{ $set: {"skill":skill_str}}) ;
+          job.skill = skill_str ;
         }
 
-    }  
+    }
 
   // console.log('Tagged Job------------------------')
-  // console.log(job) ; 
+  // console.log(job) ;
 
 
-    return job ; 
-} 
+    return job ;
+}
 
-tag_job_profession = function(job) 
+tag_job_profession = function(job)
 {
-    var title = job.title.toLowerCase() ; 
-    var words = title.split(/[\s,]+/) ; 
-    
-    var profession_list = [] ; 
-    var org_profession_count = 0 ; 
+    var title = job.title.toLowerCase() ;
+    var words = title.split(/[\s,]+/) ;
+
+    var profession_list = [] ;
+    var org_profession_count = 0 ;
 
     if(job.profession)
     {
-        profession_list = job.profession.split('/[\s,]+/') ; 
-        org_profession_count = profession_list.length ;     
-    }  
-      
+        profession_list = job.profession.split('/[\s,]+/') ;
+        org_profession_count = profession_list.length ;
+    }
+
     // for(i=0;i<words.length;i++)
     // {
     //     for(j=0;j<keywords.length;j++)
@@ -1008,12 +1033,12 @@ tag_job_profession = function(job)
     //             var pos = profession_list.indexOf(keywords[j].word);
     //             if( pos < 0)
     //             {
-    //               console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ; 
-    //               profession_list.push(keywords[j].word) ; 
-    //             }                
-    //         }  
-    //     }  
-    // }  
+    //               console.log('Mapped :'+words[i]+' -->'+keywords[j].word ) ;
+    //               profession_list.push(keywords[j].word) ;
+    //             }
+    //         }
+    //     }
+    // }
 
 
 
@@ -1021,16 +1046,16 @@ tag_job_profession = function(job)
     {
         if( keywords[j].class == 'profession')
         {
-            if( title.search( keywords[j].keyword ) > -1) 
+            if( title.search( keywords[j].keyword ) > -1)
             {
                 var pos = profession_list.indexOf(keywords[j].word);
                 if( pos < 0)
                 {
-                    console.log('Mapped :'+keywords[j].keyword+' --> '+keywords[j].word ) ;   
-                    profession_list.push(keywords[j].word) ;   
-                }  
-            }   
-        }  
+                    console.log('Mapped :'+keywords[j].keyword+' --> '+keywords[j].word ) ;
+                    profession_list.push(keywords[j].word) ;
+                }
+            }
+        }
     }
 
     if(profession_list && profession_list.length > 0)
@@ -1039,36 +1064,36 @@ tag_job_profession = function(job)
 
         if( uprofession.length > org_profession_count)
         {
-            profession_str = uprofession.join() ; 
-            console.log('New Profession found. Updating Job with Profession :'+profession_str) ;   
-            Job.update({_id:job._id},{ $set: {"profession":profession_str}}) ; 
-            job.profession = profession_str ;   
-        }  
-    }  
+            profession_str = uprofession.join() ;
+            console.log('New Profession found. Updating Job with Profession :'+profession_str) ;
+            Job.update({_id:job._id},{ $set: {"profession":profession_str}}) ;
+            job.profession = profession_str ;
+        }
+    }
 
-    return job ; 
-} 
+    return job ;
+}
 
-tag_job_experience = function(job) 
+tag_job_experience = function(job)
 {
-    var title = job.title.toLowerCase() ; 
-    var words = title.split(/[\s,]+/) ; 
-          
+    var title = job.title.toLowerCase() ;
+    var words = title.split(/[\s,]+/) ;
+
     for(i=0;i<words.length;i++)
     {
         for(j=0;j<keywords.length;j++)
         {
             if( words[i] == keywords[j].keyword && keywords[j].class == 'experience')
             {
-                Job.update({_id:job._id},{ $set: {"experience":keywords[j].word}}) ; 
-                job.experience = keywords[j].word ;   
-                break ; 
-            }  
-        }  
-    }  
+                Job.update({_id:job._id},{ $set: {"experience":keywords[j].word}}) ;
+                job.experience = keywords[j].word ;
+                break ;
+            }
+        }
+    }
 
-    return job ; 
-} 
+    return job ;
+}
 
 
 
@@ -1083,7 +1108,7 @@ tag_job_experience = function(job)
     {
        event_id = event._id;
     }
-    
+
     console.log('import_attandee_files.event_id:'+event_id)
     console.log('No of Atendees:'+l)
 
@@ -1092,71 +1117,71 @@ tag_job_experience = function(job)
         try
         {
            var line = lines[i];
-           var skill, prof, lookingfor ; 
-           var line_parts ; 
+           var skill, prof, lookingfor ;
+           var line_parts ;
 
-           line = rmv_start_quote(line) ; 
-           line = rmv_end_quote(line) ; 
-            
-           console.log(i+" ->"+line) ; 
-           
+           line = rmv_start_quote(line) ;
+           line = rmv_end_quote(line) ;
+
+           console.log(i+" ->"+line) ;
+
            line_parts = line.split(new RegExp(',(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))'));
            if( line_parts[1] === undefined)
            {
               line_parts = line.split(new RegExp(';(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))'));
               if( line_parts[1] === undefined)
               {
-                 console.log('File format Error !') ; 
-                 return ;     
-              }  
+                 console.log('File format Error !') ;
+                 return ;
+              }
               else
               {
-                 console.log('Swtching to ; as delimiter') ; 
-              }  
-           } 
+                 console.log('Swtching to ; as delimiter') ;
+              }
+           }
 
-           var cols = [ "firstname", "email", "exp.yrs", "skills", "date joined", "looking for", "profession", 
-           "pic", "cv", "linkedin", "city"  ] ; 
+           var cols = [ "firstname", "email", "exp.yrs", "skills", "date joined", "looking for", "profession",
+           "pic", "cv", "linkedin", "city"  ] ;
 
            for(k=0;k<=10;k++)
            {
               console.log(k+'['+cols[k]+']='+line_parts[k])
-           } 
+           }
 
             if( line_parts[4] )
              dataObj = new Date(moment(line_parts[4]));
-            else 
-              dataObj = new Date() ; 
+            else
+              dataObj = new Date() ;
 
             if( line_parts[2] )
             {
-                exp = parseInt( line_parts[2] ) ;   
+                exp = parseInt( line_parts[2] ) ;
                 if( isNaN (exp) )
-                  exp = 0 ; 
-            }  
-              
+                  exp = 0 ;
+            }
+
 
 
            if(line_parts[3])
              skill = line_parts[3].replace(/["']/g, "");
            else
-            skill="" ; 
+            skill="" ;
 
           if(line_parts[6])
              prof = line_parts[6].replace(/["']/g, "");
            else
-            prof="" ; 
+            prof="" ;
 
-          if(line_parts[1])  
+          if(line_parts[1])
             email = line_parts[1].trim();
           else
           {
-              console.log(i+" ERROR ! No Email found !: "+ line_parts[1]) ; 
-              continue ; 
-          }  
-            
-          if( ! line_parts[5] ) 
-            lookingfor = 'Job' ;  
+              console.log(i+" ERROR ! No Email found !: "+ line_parts[1]) ;
+              continue ;
+          }
+
+          if( ! line_parts[5] )
+            lookingfor = 'Job' ;
 
            user = Meteor.users.findOne({"emails.address" : email});
            user_id=''
@@ -1230,7 +1255,7 @@ tag_job_experience = function(job)
     {
       if( line.charAt(0) === '"')
       {
-          line = line.slice(1,line.length) ; 
+          line = line.slice(1,line.length) ;
       }
       return line ;
     }
@@ -1239,12 +1264,12 @@ tag_job_experience = function(job)
     {
        if( line.charAt(line.length-1) === '"')
        {
-          line = line.slice(0,line.length-1) ; 
+          line = line.slice(0,line.length-1) ;
        }
 
-       return line ; 
-    }       
-    
+       return line ;
+    }
+
     var import_all_attandee_files = function(file)
     {
       console.log("enter function import_all_file_orders")
@@ -1288,8 +1313,8 @@ tag_job_experience = function(job)
 
              if(line_parts[3])
                skill = line_parts[3].replace(/["']/g, "");
-             else 
-              skill="" ; 
+             else
+              skill="" ;
 
              email = line_parts[1].trim();
              user = Meteor.users.findOne({"emails.address" : email});
@@ -1361,36 +1386,48 @@ tag_job_experience = function(job)
       };
 
 
-      
 
+      function sendEventUpdateNotification(event_id){
+        event = Events.findOne({_id:event_id});
+        user_ids = EventAttendee.find({event_id:event_id}).fetch().map(function(doc){return doc.attendee_id});
+        all_user = Meteor.users.find({_id:{$in:user_ids}}).fetch();
+        console.log(all_user);
+        for(var i=0;i<all_user.length;i++){
+          send_event_change_notification(event,all_user[i])
+        }
+      }
 
       Meteor.methods(
       {
-        'email_matched' : function(user, job_id, event_id, searchValue, limit, company_id) 
+        'email_matched' : function(user, job_id, event_id, searchValue, limit, company_id)
         {
-            console.log('Server.email_matched') ; 
-            console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ; 
+            console.log('Server.email_matched') ;
+            console.log('Event Id:'+event_id+' Company Id:'+company_id+' Job Id:'+job_id+' Search Value:'+searchValue) ;
 
-            keywords = match_manager.loadKeyWords() ; 
-            //console.log('Keywords:'+keywords.length ) ; 
+            keywords = match_manager.loadKeyWords() ;
+            //console.log('Keywords:'+keywords.length ) ;
 
-            var message = "" ; 
+            var message = "" ;
 
             if( event_id )
-               message = email_matched_event( user, job_id, event_id, searchValue, limit, company_id ) ;       
+               message = email_matched_event( user, job_id, event_id, searchValue, limit, company_id ) ;
             else
             {
-              var events = Events.find({}).fetch()  ; 
+              var events = Events.find({}).fetch()  ;
               for( e=0;e<events.length;e++)
               {
                   message += email_matched_event( user, job_id, events[e]._id, searchValue, limit, company_id ) ;
-              }  
-                
-            }  
-              
-            email_matched_list(user,message) ; 
-  
-        }, 
+              }
+
+            }
+
+            email_matched_list(user,message) ;
+
+        },
+        'notification_event_update': function(event_id){
+            if (Meteor.isServer)
+              sendEventUpdateNotification(event_id)
+        },
         'sendMessage': function (toId)
         {
             if (Meteor.isServer)
@@ -1626,7 +1663,7 @@ tag_job_experience = function(job)
 
             if(data.request_type =="candidate_cv")
             {
-              email_get_candidate_cv(user,attendee) ; 
+              email_get_candidate_cv(user,attendee) ;
             }
         },
         organise_candidate_call: function(data)
@@ -1641,7 +1678,7 @@ tag_job_experience = function(job)
 
             if(data.request_type =="candidate_call")
             {
-              email_organise_candidate_call(user,attendee) ; 
+              email_organise_candidate_call(user,attendee) ;
             }
         },
     });
