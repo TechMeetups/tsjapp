@@ -2,7 +2,7 @@ App.info({
 	id: 'com.TechStartupJobs',
     name: 'TechStartupJobs',
     description: 'TechStartupJobs - Join.Connect.Meet.Apply',
-    version: '0.0.1',
+    version: '1.4.0',
     author: 'TechStartupJobs.com',
     email: 'admin@techstartupjobs.com',
     website: 'http://techstartupjobs.com'
