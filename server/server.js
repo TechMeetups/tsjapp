@@ -121,8 +121,10 @@ if (Meteor.isServer)
                   {
                       counter = match_user_job(usr,job) ;
 
+
                       if(counter > 0)
                       {
+                          // console.log('MATCH FOUND ********************') ; 
                           user_ids.push(event_attendees[ai].attendee_id)  ;
                       }
                   }
@@ -809,6 +811,7 @@ if (Meteor.isServer)
 
                       if(counter > 0)
                       {
+                          // console.log('MATCH FOUND ********************') ; 
                           user_ids.push(event_attendees[a].attendee_id)  ;
                       }
                   }
