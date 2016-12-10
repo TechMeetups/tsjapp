@@ -42,7 +42,7 @@ Template.events.helpers(
       if( Session.get("showPastEvents") )
         return 'Only show upcoming events'
       else   
-        return 'Show all events'
+        return 'Show past events'
     }
 });
 
