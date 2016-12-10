@@ -10,8 +10,8 @@
     {{#if currentUser}}
       <div class="pull-left">
         <button class="button button-clear pull-left button-icon icon ion-navicon" data-ion-menu-toggle="left"></button>
-        <span style="padding-right:10px;"></span>
-        <button class="button btn-success logout" data-action="logout">Log Out</button>
+        <!-- <span style="padding-right:10px;"></span>
+        <button class="button btn-success logout" data-action="logout">Log Out</button> -->
       </div>
     {{else}}
       <div class="pull-left">
@@ -19,6 +19,7 @@
       </div>
     {{/if}}
   {{/contentFor}}
+
 </template>
 
 <template name="layout">
@@ -55,6 +56,8 @@
               <span data-ion-menu-close class="item item-icon-right pointer" id="allmatch" >Match Report {{> ionIcon icon="ios-list-outline"}}</span>
             
             {{/if}}
+
+            <span data-ion-menu-close class="item item-icon-right pointer logout" >Logout {{> ionIcon icon="log-out"}}</span>
           
           </div>
         </div>

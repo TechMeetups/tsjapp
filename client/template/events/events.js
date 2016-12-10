@@ -36,6 +36,13 @@ Template.events.helpers(
   moreTasks  : function()
     {
       return !(event_manager.getCount() < Session.get("eventLimit"));
+    },
+    helpShowEventText : function()
+    {
+      if( Session.get("showPastEvents") )
+        return 'Only show upcoming events'
+      else   
+        return 'Show all events'
     }
 });
 
@@ -43,6 +50,7 @@ Template.events.events(
 {
   'keyup #search': function (event, template)
   {
+      console.log("search") ; 
     search_terms = $(event.currentTarget).val();
     //Session.get('search_terms')
     event_manager.search(search_terms)
@@ -55,6 +63,16 @@ Template.events.events(
   },
   'click #allmatch' : function(event, template)
   {
+      console.log("allmatch") ; 
       match_manager.email_matched(null,null,null,null) ; 
-  }
+  },
+  'click #pastEventBtn' : function(event, template)
+  {
+    console.log("showPastEvents") ; 
+   if( Session.get("showPastEvents") )
+        Session.set("showPastEvents",false );
+    else   
+      Session.set("showPastEvents",true );
+  },
+  
 });

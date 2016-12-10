@@ -1,14 +1,20 @@
 <template name="events">
   {{> checklogin}}
+
   {{#contentFor "headerTitle"}}
     <h1 class="title align-title-center">Events</h1>
   {{/contentFor}}
+
   {{#contentFor "headerButtonRight"}}
     {{#if isInRole 'admin'}}
-      <div class="buttons">
+      <!-- <div class="buttons">
         <button class="button" data-ion-modal="_eventsNew">{{> ionIcon icon="ios-plus-empty"}}</button>
         <button class="button button-clear" id="allmatch" >Match</button>
-      </div>
+        <button id="pastEventBtn" class="button btn-success">Past
+        <i class="icon ion-calendar" id="pastIcon"></i>
+        </button>
+
+      </div> -->
     {{/if}}
 
    {{/contentFor}}
@@ -32,7 +38,12 @@
              {{/ionItem}}
 
         {{/each}}
+
+      <a ui-sref="" class="button  button-dark button-block" id="pastEventBtn">{{helpShowEventText}}</a>
+
       {{/ionList}}
+      
+
       {{#if moreTasks}}
            <div id="showMoreEvents" style="">
              <button id="showMoreResults" type="button " class="button button-block button-stable">Load More...</button>

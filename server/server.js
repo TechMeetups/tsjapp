@@ -3,22 +3,40 @@ if (Meteor.isServer)
 {
     var keywords = [] ;
 
-    Meteor.publish("events", function (limit, searchValue)
+    Meteor.publish("events", function (limit, searchValue, showPast )
     {
       console.log(searchValue)
       console.log(limit)
       if(!limit || limit < 1)
           limit = 10 ;
-        if( searchValue &&  searchValue.length > 1)
-        {
-          console.log(Events.find({'name': {'$regex': new RegExp(searchValue, "i")}}, {sort:{ start:1},limit:limit}).count());
-          return Events.find({'name': {'$regex': new RegExp(searchValue, "i")}}, {sort:{ start:1},limit:limit});
-        }
-        else
-        {
-          console.log(Events.find({},{sort:{ start:1},limit:limit}).count());
-          return Events.find({},{sort:{ start:1},limit:limit});
-        }
+        // if( searchValue &&  searchValue.length > 1)
+        // {
+        //   console.log(Events.find({'name': {'$regex': new RegExp(searchValue, "i")}}, {sort:{ start:1},limit:limit}).count());
+        //   return Events.find({'name': {'$regex': new RegExp(searchValue, "i")}}, {sort:{ start:1},limit:limit});
+        // }
+        // else
+        // {
+
+        var $search = {} 
+          
+          if( showPast )
+          {
+            // var today = new Date('1/1/2000') ;   
+            $search = {  } ;  
+          }  
+          else
+          {
+              var today = new Date() ; 
+              $search['start'] = { $gte : today  } ;  
+
+//              $set[chk_date] = { $gte: start , $lt: end } ;    
+          }   
+            
+          console.log('Search') ;
+           console.log($search) ;
+          // console.log(Events.find({},{sort:{ start:1},limit:limit}).count());
+          return Events.find($search ,{sort:{ start:1},limit:limit});
+        // }
     });
 
     Meteor.publish("sponsor_list", function (user_id, attendee_id)
