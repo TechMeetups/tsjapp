@@ -23,11 +23,13 @@ if (Meteor.isServer)
           {
             // var today = new Date('1/1/2000') ;   
             $search = {  } ;  
+            return Events.find($search ,{sort:{ start:-1},limit:limit});
           }  
           else
           {
               var today = new Date() ; 
               $search['start'] = { $gte : today  } ;  
+              return Events.find($search ,{sort:{ start:1},limit:limit});
 
 //              $set[chk_date] = { $gte: start , $lt: end } ;    
           }   
@@ -35,7 +37,7 @@ if (Meteor.isServer)
           console.log('Search') ;
            console.log($search) ;
           // console.log(Events.find({},{sort:{ start:1},limit:limit}).count());
-          return Events.find($search ,{sort:{ start:1},limit:limit});
+          
         // }
     });
 
