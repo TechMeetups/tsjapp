@@ -43,6 +43,13 @@ Template.events.helpers(
         return 'Only show upcoming events'
       else   
         return 'Show past events'
+    },
+    showPast : function()
+    {
+        if( Session.get("showPastEvents") )
+          return true ;
+        else 
+          return false ; 
     }
 });
 
@@ -68,7 +75,6 @@ Template.events.events(
   },
   'click #pastEventBtn' : function(event, template)
   {
-    console.log("showPastEvents") ; 
    if( Session.get("showPastEvents") )
         Session.set("showPastEvents",false );
     else   
