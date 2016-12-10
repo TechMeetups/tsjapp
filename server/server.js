@@ -1207,6 +1207,8 @@ tag_job_experience = function(job)
 
           if( ! line_parts[5] )
             lookingfor = 'Job' ;
+          else
+            lookingfor = line_parts[5] ; 
 
            user = Meteor.users.findOne({"emails.address" : email});
            user_id=''
