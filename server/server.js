@@ -204,7 +204,7 @@ if (Meteor.isServer)
       if(!limit || limit < 1)
           limit = 10 ;
 
-      return Job.find($set,{limit:limit});
+      return Job.find($set,{sort:{ created_at:-1},limit:limit});
     });
 
 
