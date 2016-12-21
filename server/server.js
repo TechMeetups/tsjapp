@@ -375,13 +375,35 @@ if (Meteor.isServer)
     });
     var userRegistration = function(user,pass){
         var fromEmail = "admin@techmeetups.com";
-        var toEmail = user.emails[0].address;
+        console.log(user)
+        console.log(user.emails)
+        var toEmail='';
+        var username = user.profile.firstname
+        if(user.emails != undefined){
+          var toEmail = user.emails[0].address;
+        }
+        if(user.services.facebook){
+          var toEmail = user.services.facebook.email
+          username = user.profile.name
+        }
+        if(user.services.google){
+          var toEmail = user.services.google.email
+          username = user.profile.name
+        }
+        if(user.services.twitter){
+          // var toEmail = user.services.twitter.email
+          username = user.profile.name
+        }
+        if(toEmail || toEmail.length < 1){
+          toEmail = fromEmail
+          username += "\n user registration with twitter account it not have email so it only report to admin"
+        }
         Email.send({
             from: fromEmail,
             to: toEmail,
             replyTo: fromEmail ,
             subject: "TechStartupJobs App Registration",
-            text: "Hi "+user.profile.firstname+",\nYour Email: "+user.emails[0].address+" has been registered."+
+            text: "Hi "+username+",\nYour Email: "+toEmail+" has been registered."+
             "\nYour password is : "+pass+"\n\n"+
           "Thank you.\n"+
           "The TechStartupJobs Team.\n"+

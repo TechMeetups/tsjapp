@@ -22,6 +22,7 @@ function resetLoginDetails()
 }
 Template.register.events(
 {
+
   'click #user_register': function(event, template)
   {
       event.preventDefault();
@@ -63,6 +64,33 @@ Template.register.events(
 
 Template.login.events(
 {
+      'click #facebook-login': function(event) {
+          Meteor.loginWithFacebook({}, function(err){
+              if (err) {
+                  throw new Meteor.Error("Facebook login failed");
+              }else{
+                Router.go('events');
+              }
+          });
+        },
+        'click #google-login': function(event) {
+            Meteor.loginWithGoogle({}, function(err){
+                if (err) {
+                    throw new Meteor.Error("Facebook login failed");
+                }else{
+                  Router.go('events');
+                }
+            });
+          },
+          'click #twitter-login': function(event) {
+            Meteor.loginWithTwitter({}, function(err){
+                if (err) {
+                    throw new Meteor.Error("Facebook login failed");
+                }else{
+                  Router.go('events');
+                }
+            });
+          },
         'click .login' : function(event, template){
             $('#loginModel').modal('show');
             $('#register_Model').modal('hide');
@@ -198,7 +226,7 @@ Template.login.events(
 
     Template.forgotpassword.events(
     {
-      'click #forgotPasswordForm': function(e, t) 
+      'click #forgotPasswordForm': function(e, t)
       {
           var email = $('#forgotPasswordEmail').val();
           var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
@@ -241,7 +269,7 @@ Template.login.events(
           // e.preventDefault();
           // var email = $('#forgotPasswordEmail').val();
 
-          // console.log('forgotPasswordForm:'+email) ; 
+          // console.log('forgotPasswordForm:'+email) ;
           //   Accounts.forgotPassword({email: email}, function(err)
           //   {
           //     if (err)
