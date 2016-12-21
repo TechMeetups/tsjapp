@@ -1,0 +1,20 @@
+<template id="_editJob" name="_editJob">
+  {{#ionModal customTemplate=true}}
+  {{#autoForm id="editJob" collection="Job" doc=job  type="update"}}
+  <div class="bar bar-header bar-stable">
+    <button data-dismiss="modal" type="button" class="button button-clear">Cancel</button>
+    <h2 class="title">Edit Job</h2>
+    <button type="submit" class="button button-positive button-clear">update</button>
+  </div>
+  <div class="content has-header overflow-scroll">
+    {{> afQuickField name="title"}}
+    {{> afQuickField name="profession"}}
+    {{> afQuickField name="skill"}}
+    {{> afQuickField name="experience"}}
+    {{> afQuickField name="desc"  rows=6}}
+    {{> afQuickField name="pic"}}
+    {{> afQuickField name="city"}}
+  </div>
+{{/autoForm}}
+{{/ionModal}}
+</template>
