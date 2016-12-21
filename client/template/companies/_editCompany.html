@@ -1,0 +1,17 @@
+<template id="_editCompany" name="_editCompany">
+  {{#ionModal customTemplate=true}}
+  {{#autoForm id="editCompany" collection="Company" doc=company  type="update"}}
+  <div class="bar bar-header bar-stable">
+    <button data-dismiss="modal" type="button" class="button button-clear">Cancel</button>
+    <h2 class="title">Company</h2>
+    <button type="submit" class="button button-positive button-clear">update</button>
+  </div>
+  <div class="content has-header overflow-scroll">
+    {{> afQuickField name="name"}}
+    {{> afQuickField name="pic"}}
+    {{> afQuickField name="city"}}
+    {{> afQuickField name="desc"}}
+  </div>
+{{/autoForm}}
+{{/ionModal}}
+</template>

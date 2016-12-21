@@ -16,7 +16,7 @@ Router.map(function()
     this.route('forgotpassword', {path: '/forgotpassword'});
     this.route('userImport', {path: '/user_import'});
 
-    
+
     this.route('events.show',
     {
         path: '/event/:_id',
@@ -111,7 +111,22 @@ Router.map(function()
       path: '/tabs/companies/:_id',
      layoutTemplate: 'tabsLayout'
     });
+    this.route('companies',
+    {
+      path: '/tabs/companies',
+     layoutTemplate: 'tabsLayout'
+    });
 
+    this.route('jobs.list',
+    {
+      path: '/company/jobs/:_id',
+     layoutTemplate: 'tabsLayout',
+     data:function(){
+       var id = this.params._id;
+       var data = Company.findOne({_id:id});
+       return data;
+     }
+    });
     this.route('jobs.tab',
     {
       path: '/tabs/jobs/:_id',

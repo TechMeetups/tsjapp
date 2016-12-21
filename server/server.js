@@ -17,27 +17,27 @@ if (Meteor.isServer)
         // else
         // {
 
-        var $search = {} 
-          
+        var $search = {}
+
           if( showPast )
           {
-            // var today = new Date('1/1/2000') ;   
-            $search = {  } ;  
+            // var today = new Date('1/1/2000') ;
+            $search = {  } ;
             return Events.find($search ,{sort:{ start:-1},limit:limit});
-          }  
+          }
           else
           {
-              var today = new Date() ; 
-              $search['start'] = { $gte : today  } ;  
+              var today = new Date() ;
+              $search['start'] = { $gte : today  } ;
               return Events.find($search ,{sort:{ start:1},limit:limit});
 
-//              $set[chk_date] = { $gte: start , $lt: end } ;    
-          }   
-            
+//              $set[chk_date] = { $gte: start , $lt: end } ;
+          }
+
           console.log('Search') ;
            console.log($search) ;
           // console.log(Events.find({},{sort:{ start:1},limit:limit}).count());
-          
+
         // }
     });
 
@@ -124,7 +124,7 @@ if (Meteor.isServer)
 
                       if(counter > 0)
                       {
-                          // console.log('MATCH FOUND ********************') ; 
+                          // console.log('MATCH FOUND ********************') ;
                           user_ids.push(event_attendees[ai].attendee_id)  ;
                       }
                   }
@@ -241,7 +241,24 @@ if (Meteor.isServer)
       }
       return Company.find({_id:{$in:company_ids}});
     });
+    Meteor.publish('company_details_without_event', function(company_id)
+    {
+      return Company.find({_id:company_id});
+    });
 
+    Meteor.publish("company_list", function (limit, searchValue)
+    {
+      // if(!limit || limit < 1)
+      //     limit = 10 ;
+        if( searchValue &&  searchValue.length > 1)
+        {
+          return Company.find({'name':{'$regex': new RegExp(searchValue, "i")}},{limit:limit});
+        }
+        else
+        {
+          return Company.find({},{limit:limit});
+        }
+    });
     Meteor.publish("company", function (limit, searchValue,event_id)
     {
       company_ids=[]
@@ -457,7 +474,7 @@ if (Meteor.isServer)
                     "\nPlease find updated Event details\n"+
                     "\nEvent   : "+event.name+
                     "\nDetails : "+event.desc+
-                    "\nStart   : "+start_dt+ 
+                    "\nStart   : "+start_dt+
                     "\nFinish  : "+end_dt+
                     "\nAddress : "+event.address+
                    "\n\n"+
@@ -811,7 +828,7 @@ if (Meteor.isServer)
 
                       if(counter > 0)
                       {
-                          // console.log('MATCH FOUND ********************') ; 
+                          // console.log('MATCH FOUND ********************') ;
                           user_ids.push(event_attendees[a].attendee_id)  ;
                       }
                   }
@@ -1208,7 +1225,7 @@ tag_job_experience = function(job)
           if( ! line_parts[5] )
             lookingfor = 'Job' ;
           else
-            lookingfor = line_parts[5] ; 
+            lookingfor = line_parts[5] ;
 
            user = Meteor.users.findOne({"emails.address" : email});
            user_id=''
@@ -1566,15 +1583,16 @@ tag_job_experience = function(job)
         {
           company =  Company.findOne({"name":data.name});
           if(company){
-            company_id = user._id
+            company_id = company._id
           }else{
             company_id = Company.insert(data);
           }
           event_id = event_id
-          joined_on= new Date();
-          EventCompany.insert({event_id:event_id,company_id:company_id,joined_on:new Date(),created_at:new Date()})
-        }
-        ,
+          if(event_id){
+            joined_on= new Date();
+            EventCompany.insert({event_id:event_id,company_id:company_id,joined_on:new Date(),created_at:new Date()})
+          }
+        },
         insert_Job: function(data)
         {
           console.log(data)

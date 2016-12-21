@@ -1,0 +1,50 @@
+<template name="companies">
+  {{#ionHeaderBar class="bar-positive"}}
+{{ > backtoolbar}}
+    <h1 class="title align-title-center">Companies</h1>
+    {{#if isInRole 'admin'}}
+
+    <div class="buttons">
+      <button class="button button-clear" data-ion-modal="_companyNew">{{> ionIcon icon="ios-plus-empty"}}</button>
+    </div>
+
+    {{/if}}
+  {{/ionHeaderBar}}
+
+  {{#ionView}}
+  {{#ionContent class="padding"}}
+  <div id="overflow-scroll">
+  {{#ionItem}}
+  <label class="item item-input">
+      <i class="icon ion-search placeholder-icon"></i>
+      <input type="search" placeholder="Filter name" id="search">
+  </label>
+   {{/ionItem}}
+    {{#ionList}}
+    {{#each companies}}
+      <a href="{{build_path _id}}">
+        {{#ionItem class="item-thumbnail-left companyItem"}}
+               <img src="{{pic}}" width="" alt="{{name}}" height="20">
+               <h2>{{name}}</h2>
+               <p>{{desc}}</p>               
+         {{/ionItem}}
+       </a>
+    {{/each}}
+    {{/ionList}}
+<!--     {{#if moreTasks}}
+         <div id="showMoreEvents" style="">
+           <button id="showMoreResults" type="button " class="button button-block button-stable">Load More...</button>
+         </div>
+     {{/if}} -->
+<!--       {{#if isInRole 'admin'}}
+          <a href="#" class="button button-block button-balanced" id="event_match" data="{{desc}}">
+                Search {{ match_count }}&nbsp;
+                <i class="icon ion-ios-people"></i>
+          </a>
+      {{/if}} -->
+
+  </div>
+  {{/ionContent}}
+  {{> main_tabs}}
+  {{/ionView}}
+</template>
