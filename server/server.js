@@ -252,11 +252,11 @@ if (Meteor.isServer)
       //     limit = 10 ;
         if( searchValue &&  searchValue.length > 1)
         {
-          return Company.find({'name':{'$regex': new RegExp(searchValue, "i")}},{limit:limit});
+          return Company.find({'name':{'$regex': new RegExp(searchValue, "i")}},{sort:{ created_at:-1},limit:limit});
         }
         else
         {
-          return Company.find({},{limit:limit});
+          return Company.find({},{sort:{ created_at:-1},limit:limit});
         }
     });
     Meteor.publish("company", function (limit, searchValue,event_id)
