@@ -273,11 +273,14 @@ if (Meteor.isServer)
       //     limit = 10 ;
         if( searchValue &&  searchValue.length > 1)
         {
-          return Company.find({_id:{$in:company_ids},'name':{'$regex': new RegExp(searchValue, "i")}},{limit:limit});
+          return Company.find({_id:{$in:company_ids},'name':{'$regex': new RegExp(searchValue, "i")}},
+            {sort:{ created_at:-1},limit:limit});
         }
         else
         {
-          return Company.find({_id:{$in:company_ids}},{limit:limit});
+            
+
+          return Company.find({_id:{$in:company_ids}},{sort:{ created_at:-1},limit:limit});
         }
     });
 
