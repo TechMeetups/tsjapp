@@ -4,8 +4,8 @@ ServiceConfiguration.configurations.remove({
 });
 ServiceConfiguration.configurations.insert({
   service: "facebook",
-  appId: "1761592474164318",
-  secret: "a15a529aed26da1ee0408f9df23d4f4e"
+  appId: "1338623249501281",
+  secret: "a578d0b8edf5dabc7bfc8cce63539d23"
 });
 
 // // first, remove configuration entry in case service is already configured
@@ -14,8 +14,8 @@ ServiceConfiguration.configurations.remove({
 });
 ServiceConfiguration.configurations.insert({
   service: "twitter",
-  consumerKey: "dWUCGMAjbPc2OXhumTz3Itkb7",
-  secret: "MX41AhXOk97EiIfzTuWlz5ME5cQWyQ5DpieTcnsxSGFxP8l1fz"
+  consumerKey: "7dMF3uSQ8TGfFiQAI6oEfU7qf",
+  secret: "qNH7bkAiYjiepEyFBEbsjic5DeWjI7iKVN4ukOns1xm0FM7owq"
 });
 
 ServiceConfiguration.configurations.remove({
@@ -23,6 +23,6 @@ ServiceConfiguration.configurations.remove({
 });
 ServiceConfiguration.configurations.insert({
   service: "google",
-  clientId: "67018370884-u5mrogskri3evrdlug59esefqpblvhai.apps.googleusercontent.com",
-  secret: "VTfOveAtwxwn1HHsr9n4sQxV"
+  clientId: "890456960906-4t0ptqo2ekam8mcao7rnmi7gach4vfcg.apps.googleusercontent.com",
+  secret: "t4Zxmla31GrivP6T6ZTo8uEI"
 });
