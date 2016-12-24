@@ -13,7 +13,7 @@ Template._companyNew.events({
             console.log(data)
             console.log(event_id)
             company_manager.add(data,event_id)
-            IonModal.close();
+
           //  template.modal.hide();
             //Router.go('events');
   }

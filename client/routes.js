@@ -119,10 +119,10 @@ Router.map(function()
 
     this.route('jobs.list',
     {
-      path: '/company/jobs/:_id',
+      path: '/company/jobs/:_company_id',
      layoutTemplate: 'tabsLayout',
      data:function(){
-       var id = this.params._id;
+       var id = this.params._company_id;
        var data = Company.findOne({_id:id});
        return data;
      }

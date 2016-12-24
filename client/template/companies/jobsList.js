@@ -4,8 +4,8 @@ Template.jobsList.created = function ()
   Session.set("job_limit",JOB_INCREMENT)
   this.autorun(function ()
   {
-    this.subscription = Meteor.subscribe('company_details_without_event',Router.current().params._id);
-    this.subscription_job = job_manager.default_subscribe(null,Router.current().params._id);
+    this.subscription = Meteor.subscribe('company_details_without_event',Router.current().params._company_id);
+    this.subscription_job = job_manager.default_subscribe(null,Router.current().params._company_id);
   }.bind(this));
 };
 
@@ -40,7 +40,7 @@ Template.jobsList.helpers(
   },
   build_path: function(_id)
   {
-    return "/tabs/job/"+Router.current().params._id+"/"+_id+"/no-event";
+    return "/tabs/job/"+Router.current().params._company_id+"/"+_id+"/no-event";
   }
 });
 

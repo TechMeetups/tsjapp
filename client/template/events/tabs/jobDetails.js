@@ -1,24 +1,25 @@
-Template.jobDetails.created = function () 
+Template.jobDetails.created = function ()
 {
   Session.set("job_limit",JOB_INCREMENT)
-  this.autorun(function () 
+  this.autorun(function ()
   {
     this.subscription = Meteor.subscribe('job_details',Router.current().params._company_id,Router.current().params._job_id);
+    this.subscription_company = Meteor.subscribe('company_details_without_event',Router.current().params._company_id);
     this.subscription1=  job_manager.default_connect_request(Meteor.userId(),Router.current().params._job_id)
   }.bind(this));
 };
 
-Template.jobDetails.rendered = function () 
+Template.jobDetails.rendered = function ()
 {
   Session.set('matched_candidates',false) ;
 
-  this.autorun(function () 
+  this.autorun(function ()
   {
-    if (!this.subscription.ready()) 
+    if (!this.subscription.ready())
     {
       IonLoading.show();
-    } 
-    else 
+    }
+    else
     {
       IonLoading.hide();
     }
@@ -29,35 +30,47 @@ Template.jobDetails.helpers(
 {
   changing_profession : function()
   {
-      return Session.get('changing_profession') ; 
-  } ,  
+      return Session.get('changing_profession') ;
+  } ,
   changing_skill : function()
   {
-      return Session.get('changing_skill') ; 
-  } ,  
+      return Session.get('changing_skill') ;
+  } ,
   match_count : function()
   {
-      return '' 
-      // return attendee_manager.getCount()-1 ; 
-  }, 
+      return ''
+      // return attendee_manager.getCount()-1 ;
+  },
+  check_image:function(image){
+    company = Company.findOne({});
+
+    if(image && image.length > 1){
+      return image;
+    }else if(company.logo && company.logo.length > 1){
+      return company.logo;
+    }
+    else if(company.pic && company.pic.length > 1){
+      return company.pic;
+    }
+  },
   build_match_path: function(_id)
   {
     return "/tabs/matched/"+Router.current().params._company_id+"/"+Router.current().params._job_id+'/'+
     Router.current().params._id;
-  },  
+  },
   // build_path: function(_id)
   // {
   //   return "/tabs/attendees/"+Router.current().params._id+"/"+_id;
   // },
     pic_exists : function(pic_url)
   {
-      console.log("attendeesTab'"+pic_url+"'") ; 
-      if (!pic_url.trim() || pic_url === '') 
+      console.log("attendeesTab'"+pic_url+"'") ;
+      if (!pic_url.trim() || pic_url === '')
         return false ;
       else
-        return true ; 
+        return true ;
 
-  },     
+  },
   format_date : function(date)
   {
     return company_manager.format_data(date)
@@ -91,7 +104,7 @@ Template.jobDetails.helpers(
   },
   matched_candidates : function()
   {
-      return true ; 
+      return true ;
 
       // return Session.get('matched_candidates') ;
 
@@ -106,72 +119,72 @@ Template.jobDetails.helpers(
   },
   matched_candidate_list : function()
   {
-      return attendee_manager.matched_candidate_list() ; 
+      return attendee_manager.matched_candidate_list() ;
   }
 });
 
 Template.jobDetails.events(
 {
-  'click #updt_skill' : function(event, template)  
+  'click #updt_skill' : function(event, template)
   {
-    var jobid = $(event.currentTarget).attr('jobid') ; 
-    var skill = $('#new_skill').val() ; 
+    var jobid = $(event.currentTarget).attr('jobid') ;
+    var skill = $('#new_skill').val() ;
 
     job_manager.change_skill(jobid,skill) ;
 
-    Session.set('changing_skill',false ) 
+    Session.set('changing_skill',false )
   },
-  'click #cancel_skill' : function(event, template)  
+  'click #cancel_skill' : function(event, template)
   {
-    Session.set('changing_skill',false ) 
-  }, 
+    Session.set('changing_skill',false )
+  },
   'click #skill_edit' : function(event, template)
   {
-     Session.set('changing_skill',true ) 
-  }, 
-  'click #updt_profession' : function(event, template)  
+     Session.set('changing_skill',true )
+  },
+  'click #updt_profession' : function(event, template)
   {
-    var jobid = $(event.currentTarget).attr('jobid') ; 
-    var prof = $('#new_prof').val() ; 
+    var jobid = $(event.currentTarget).attr('jobid') ;
+    var prof = $('#new_prof').val() ;
 
     job_manager.change_profession(jobid,prof) ;
 
-    Session.set('changing_profession',false ) 
+    Session.set('changing_profession',false )
   },
-  'click #cancel_profession' : function(event, template)  
+  'click #cancel_profession' : function(event, template)
   {
-    Session.set('changing_profession',false ) 
-  }, 
+    Session.set('changing_profession',false )
+  },
   'click #prof_edit' : function(event, template)
   {
-    Session.set('changing_profession',true ) 
-  },   
+    Session.set('changing_profession',true )
+  },
   'click #exp_up' : function(event, template)
   {
     animateThis($(event.currentTarget),'bounce') ;
-    var jobid = $(event.currentTarget).attr('jobid') ; 
+    var jobid = $(event.currentTarget).attr('jobid') ;
     var exp = $(event.currentTarget).attr('exp') ;
 
     if(!exp)
-      exp = 0 ; 
+      exp = 0 ;
 
-    exp = eval(exp)+1 ; 
-    job_manager.change_exp(jobid,exp) ; 
-  },   
+    exp = eval(exp)+1 ;
+    job_manager.change_exp(jobid,exp) ;
+  },
   'click #exp_down' : function(event, template)
   {
     animateThis($(event.currentTarget),'bounce') ;
-    var jobid = $(event.currentTarget).attr('jobid') ; 
+    var jobid = $(event.currentTarget).attr('jobid') ;
     var exp = $(event.currentTarget).attr('exp') ;
 
     if(!exp)
-      exp = 0 ; 
+      exp = 0 ;
 
-    exp = eval(exp-1) ; 
+    exp = eval(exp-1) ;
     if(exp<0)
-      exp = 0 ; 
-    job_manager.change_exp(jobid,exp) ; 
-  }, 
+      exp = 0 ;
+    job_manager.change_exp(jobid,exp) ;
+  },
   'click #job_meet' : function(event, template)
   {
     company_id = Router.current().params._company_id;
@@ -181,7 +194,7 @@ Template.jobDetails.events(
     request_type = "job_meet"
     var message = template.find('#message').value;
     template.find('#message').value = "" ;
-    var pic = $('#job_pic').attr('src') ; 
+    var pic = $('#job_pic').attr('src') ;
 
     request ={request_type:request_type,message:message,user_id:user_id,company_id:company_id,job_id:
       job_id,event_id:event_id,pic:pic}
@@ -197,7 +210,7 @@ Template.jobDetails.events(
     request_type = "job_apply"
     var message = template.find('#message').value;
     template.find('#message').value = "" ;
-    var pic = $('#job_pic').attr('src') ; 
+    var pic = $('#job_pic').attr('src') ;
 
     request ={request_type:request_type,message:message,user_id:user_id,company_id:company_id,job_id:job_id,
       event_id:event_id,pic:pic}
