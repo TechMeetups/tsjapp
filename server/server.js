@@ -278,7 +278,7 @@ if (Meteor.isServer)
         }
         else
         {
-            
+
 
           return Company.find({_id:{$in:company_ids}},{sort:{ created_at:-1},limit:limit});
         }
@@ -1622,6 +1622,9 @@ tag_job_experience = function(job)
         {
           console.log(data)
           Job.insert(data)
+        },
+        delete_job:function(id){
+          Job.remove({_id:id});
         },
         current_user_envent_state : function(event_id,user_id){
           console.log(user_id+" : "+event_id);

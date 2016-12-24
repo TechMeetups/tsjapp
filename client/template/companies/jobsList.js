@@ -46,6 +46,10 @@ Template.jobsList.helpers(
 
 Template.jobsList.events(
 {
+  'click .delete_job': function(event, template){
+    var jobid = $(event.currentTarget).attr('data-id') ;
+    job_manager.delete(jobid);
+  },
   'click #showMoreResults' : function(event, template)
   {
     Session.set("job_limit",Session.get("job_limit") + EVENT_INCREMENT);

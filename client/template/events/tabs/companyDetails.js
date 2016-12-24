@@ -1,22 +1,22 @@
 JOB_INCREMENT=10
-Template.companyDetails.created = function () 
+Template.companyDetails.created = function ()
 {
   Session.set("job_limit",JOB_INCREMENT)
-  this.autorun(function () 
+  this.autorun(function ()
   {
     this.subscription = Meteor.subscribe('company_details',Router.current().params._id,Router.current().params._company_id);
     this.subscription_job = job_manager.default_subscribe(null,Router.current().params._company_id);
   }.bind(this));
 };
 
-Template.companyDetails.rendered = function () 
+Template.companyDetails.rendered = function ()
 {
   this.autorun(function () {
-    if (!this.subscription.ready() || !this.subscription_job.ready()) 
+    if (!this.subscription.ready() || !this.subscription_job.ready())
     {
       IonLoading.show();
-    } 
-    else 
+    }
+    else
     {
       IonLoading.hide();
     }
@@ -29,7 +29,7 @@ Template.companyDetails.helpers(
   {
     return company_manager.format_data(date)
   },
-  
+
   jobs_list : function()
   {
    return job_manager.getList();
@@ -46,6 +46,10 @@ Template.companyDetails.helpers(
 
 Template.companyDetails.events(
 {
+  'click .delete_job': function(event, template){
+    var jobid = $(event.currentTarget).attr('data-id') ;
+    job_manager.delete(jobid);
+  },
   'click #showMoreResults' : function(event, template)
   {
     Session.set("job_limit",Session.get("job_limit") + EVENT_INCREMENT);
@@ -53,6 +57,6 @@ Template.companyDetails.events(
   "click #company_match": function(event, template)
   {
       animateThis($(event.currentTarget),'tada') ;
-      match_manager.email_matched(null,Router.current().params._id,null,Router.current().params._company_id) ; 
+      match_manager.email_matched(null,Router.current().params._id,null,Router.current().params._company_id) ;
   }
 });

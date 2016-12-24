@@ -15,11 +15,9 @@
       icon="ion-archive"}}</button>
 
       {{#if isInRole 'admin'}}
-              <button class="button " id="company_match" >Match</button>
+              <!-- <button class="button " id="company_match" >Match</button> -->
       {{/if}}
-
     </div>
-
     {{/if}}
 
 
@@ -46,12 +44,23 @@
     <h4>Jobs</h4>
     {{#ionList}}
     {{#each jobs_list}}
-      <a href="{{ build_path _id}}">
-        {{#ionItem }}
-              <h2>{{title}}</h2>
-               <p>{{city}}</p>
-         {{/ionItem}}
+
+    {{#if isInRole 'admin'}}
+      <div class="item item-icon-right">
+        <i class="delete_job icon ion-minus-circled" data-id={{_id}}></i>
+        <a href="{{ build_path _id}}">
+          <h2>{{title}}</h2>
+           <p>{{city}}</p>
        </a>
+      </div>
+    {{else}}
+    <div class="item ">
+        <a href="{{ build_path _id}}">
+          <h2>{{title}}</h2>
+           <p>{{city}}</p>
+       </a>
+      </div>
+    {{/if}}
     {{/each}}
     {{/ionList}}
     {{/ionList}}

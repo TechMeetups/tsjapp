@@ -11,11 +11,11 @@
     {{#if canISearch user_id }}
 
     <div class="buttons">
-      <button class="button" data-ion-modal="_jobNew">{{> ionIcon icon="ios-plus-empty"}} Job {{> ionIcon 
+      <button class="button" data-ion-modal="_jobNew">{{> ionIcon icon="ios-plus-empty"}} Job {{> ionIcon
       icon="ion-archive"}}</button>
 
       {{#if isInRole 'admin'}}
-              <button class="button" id="company_match" >Match</button>    
+              <button class="button" id="company_match" >Match</button>
       {{/if}}
 
     </div>
@@ -33,11 +33,13 @@
       <div class="item item-thumbnail-left">
 
           <img src="{{pic}}" width="" alt="{{name}}" height="20">
-           
+
            <div class="item-text-wrap">
             <p>{{desc}}</p>
           </div>
-
+          {{#if isInRole 'admin'}}
+              <button class="button ion-button clear pull-right" data-ion-modal="_editCompany">Edit</button>
+          {{/if}}
       </div>
 
       <div class="item item-divider">
@@ -48,12 +50,22 @@
     <h4>Jobs</h4>
     {{#ionList}}
     {{#each jobs_list}}
-      <a href="{{ build_path _id}}">
-        {{#ionItem }}
-              <h2>{{title}}</h2>
-               <p>{{city}}</p>
-         {{/ionItem}}
+    {{#if isInRole 'admin'}}
+      <div class="item item-icon-right">
+        <i class="delete_job icon ion-minus-circled" data-id={{_id}}></i>
+        <a href="{{ build_path _id}}">
+          <h2>{{title}}</h2>
+           <p>{{city}}</p>
        </a>
+      </div>
+    {{else}}
+      <div class="item ">
+        <a href="{{ build_path _id}}">
+          <h2>{{title}}</h2>
+           <p>{{city}}</p>
+       </a>
+      </div>
+    {{/if}}
     {{/each}}
     {{/ionList}}
     {{/ionList}}
@@ -71,7 +83,7 @@
                 <i class="icon ion-ios-people"></i>
           </a>
       {{/if}} -->
-      
+
     {{/ionContent}}
     {{> _tabs}}
   {{/ionView}}
