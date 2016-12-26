@@ -45,10 +45,18 @@
           </div>
         {{else}}
         <div class="item ">
-            <a href="{{ build_path _id}}">
-              <h2>{{title}}</h2>
-               <p>{{city}}</p>
+          <div class="item item-icon-right item-thumbnail-left thumb-right">
+            {{ #if pic_exists pic }}
+              <img src="{{pic}}" width="" alt="" height="20">
+            {{else}}
+              <img src="/assets/img/job.png" width="" alt="" height="20">
+            {{ /if }}
+            <a href="{{build_path company_id _id}}">
+             <h2>{{title}}</h2>
+             <p>{{desc}}</p>
+             <h3>{{city}}</h3>
            </a>
+          </div>
           </div>
         {{/if}}
     {{/each}}
