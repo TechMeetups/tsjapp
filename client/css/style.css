@@ -35,3 +35,6 @@ $loading-font-size: 22px;
 .align-title-center{
   text-align: center !important;
 }
+.delete_job{
+  cursor: pointer;
+}

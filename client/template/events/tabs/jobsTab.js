@@ -18,7 +18,7 @@ Template.jobsTab.helpers(
   },
   pic_exists : function(pic_url)
   {
-      if (!pic_url.trim() || pic_url === '')
+      if (!pic_url.trim() || pic_url === '' || pic_url.length < 1)
         return false ;
       else
         return true ;
@@ -28,6 +28,10 @@ Template.jobsTab.helpers(
 
 Template.jobsTab.events(
 {
+  'click .delete_job': function(event, template){
+    var jobid = $(event.currentTarget).attr('data-id') ;
+    job_manager.delete(jobid);
+  },
   "click #showMoreResults": function(event, template)
   {
     Session.set("job_limit",Session.get("job_limit") + EVENT_INCREMENT);
