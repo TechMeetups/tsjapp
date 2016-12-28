@@ -24,6 +24,18 @@ Template.jobsTab.helpers(
         return true ;
 
   },
+  check_image:function(image){
+    company = Company.findOne({});
+
+    if(image && image.length > 1){
+      return image;
+    }else if(company.logo && company.logo.length > 1){
+      return company.logo;
+    }
+    else if(company.pic && company.pic.length > 1){
+      return company.pic;
+    }
+  }
 });
 
 Template.jobsTab.events(
