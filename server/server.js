@@ -1753,5 +1753,9 @@ tag_job_experience = function(job)
               email_organise_candidate_call(user,attendee) ;
             }
         },
+        delete_company : function(company_id){
+          Job.remove({company_id:company_id});
+          Company.remove({_id:company_id});          
+        }
     });
 }

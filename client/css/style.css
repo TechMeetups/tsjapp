@@ -38,3 +38,6 @@ $loading-font-size: 22px;
 .delete_job{
   cursor: pointer;
 }
+.delete_company{
+  cursor: pointer;
+}

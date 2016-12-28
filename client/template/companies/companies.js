@@ -35,8 +35,11 @@ Template.companies.events(
   "click .companyItem": function(event, template)
   {
       animateThis($(event.currentTarget),'tada') ;
+  },
+  "click .delete_company": function(event, template){
+     var company_id = $(event.currentTarget).attr("data-id");
+     company_manager.delete(company_id);
   }
-
 });
 
 EVENT_INCREMENT = 10;
