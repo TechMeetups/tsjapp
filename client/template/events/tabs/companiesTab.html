@@ -22,15 +22,28 @@
   </label>
    {{/ionItem}}
     {{#ionList}}
-    {{#each companies}}
-      <a href="{{build_path _id}}">
-        {{#ionItem class="item-thumbnail-left companyItem"}}
-               <img src="{{pic}}" width="" alt="{{name}}" height="20">
+      {{#each companies}}
+         {{#if isInRole 'admin'}}
+           <div class="item item-icon-right item-thumbnail-left thumb-right">
+             <img src="{{pic}}" width="" alt="{{name}}" height="20">
+             <a href="{{build_path _id}}">
                <h2>{{name}}</h2>
                <p>{{desc}}</p>
-         {{/ionItem}}
-       </a>
-    {{/each}}
+            </a>
+            <i class="delete_company icon ion-minus-circled" data-id={{_id}}></i>
+           </div>
+         {{else}}
+         <div class="item ">
+           <div class="item item-icon-right item-thumbnail-left thumb-right">
+             <img src="{{pic}}" width="" alt="{{name}}" height="20">
+             <a href="{{build_path _id}}">
+               <h2>{{name}}</h2>
+               <p>{{desc}}</p>
+            </a>
+           </div>
+           </div>
+         {{/if}}
+      {{/each}}
     {{/ionList}}
     {{#if moreTasks}}
          <div id="showMoreEvents" style="">
@@ -49,5 +62,3 @@
   {{> _tabs}}
   {{/ionView}}
 </template>
-
-

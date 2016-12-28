@@ -30,13 +30,18 @@ Template.companiesTab.events(
   },
   "click #event_match": function(event, template)
   {
-      match_manager.email_matched(null,Router.current().params._id,null,null) ; 
+      match_manager.email_matched(null,Router.current().params._id,null,null) ;
   },
   "click .companyItem": function(event, template)
   {
       animateThis($(event.currentTarget),'tada') ;
+  },
+  "click .delete_company": function(event, template){
+     var company_id = $(event.currentTarget).attr("data-id");
+     console.log(company_id);
+     company_manager.delete_event_company(company_id);     
   }
-  
+
 });
 
 EVENT_INCREMENT = 10;
