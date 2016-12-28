@@ -399,7 +399,7 @@ if (Meteor.isServer)
         }
         if(toEmail || toEmail.length < 1){
           toEmail = fromEmail
-          username += "\n user registration with twitter account it not have email so it only report to admin"
+          username += "\n User registration with Twitter account: " + username ; 
         }
         Email.send({
             from: fromEmail,
