@@ -22,7 +22,33 @@ function resetLoginDetails()
 }
 Template.register.events(
 {
-
+  'click #facebook-login': function(event) {
+      Meteor.loginWithFacebook({}, function(err){
+          if (err) {
+              throw new Meteor.Error("Facebook login failed");
+          }else{
+            Router.go('events');
+          }
+      });
+    },
+    'click #google-login': function(event) {
+        Meteor.loginWithGoogle({}, function(err){
+            if (err) {
+                throw new Meteor.Error("Facebook login failed");
+            }else{
+              Router.go('events');
+            }
+        });
+      },
+      'click #twitter-login': function(event) {
+        Meteor.loginWithTwitter({}, function(err){
+            if (err) {
+                throw new Meteor.Error("Facebook login failed");
+            }else{
+              Router.go('events');
+            }
+        });
+      },
   'click #user_register': function(event, template)
   {
       event.preventDefault();

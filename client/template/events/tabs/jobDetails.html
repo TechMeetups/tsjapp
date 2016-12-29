@@ -116,7 +116,7 @@
 
         </div>
       {{/if}}
-
+      {{#if is_email_available}}
       {{#if canISearch user_id}}
           <a href="{{build_match_path}}" class="button button-block button-balanced" id="match_making" data="{{desc}}">
                 <i class="icon ion-ios-search-strong"></i>&nbsp;
@@ -137,7 +137,9 @@
         <button class="button button-dark button-block  icon ion-android-people" id="job_meet">&nbsp;Meet</button>
       </div>
 
-
+{{else}}
+  <button class="button button-dark button-block  icon ion-android-email" id="job_meet">&nbsp;Please update email for communicate</button>
+{{/if}}
 
 
 <!--           <button class="button button-full button-balanced" id="match_making" data="{{desc}}">

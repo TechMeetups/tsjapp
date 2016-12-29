@@ -18,13 +18,23 @@ Meteor.startup(function()
 // Client specific code *******************************************************************************
 if (Meteor.isClient)
 {
-  match_manager.default_subscribe() ; 
+  match_manager.default_subscribe() ;
 
   Template.registerHelper('canISearch', function(user_id)
   {
       if( Roles.userIsInRole(Meteor.user(), ['admin']) || user_id === Meteor.userId())
-        return true ;  
+        return true ;
   })
+  Template.registerHelper('is_email_available', function()
+  {
+      var email = getUserEmail(Meteor.user())
+      if(email == false){
+        return false;
+      }else{
+        return true;
+      }
+  })
+
   Template.layout.events(
   {
     "click .logout": function(event, template)
@@ -36,15 +46,15 @@ if (Meteor.isClient)
     },
     'click #allmatch' : function(event, template)
     {
-        match_manager.email_matched(null,null,null,null) ; 
+        match_manager.email_matched(null,null,null,null) ;
     }
   });
   EVENT_INCREMENT = 10;
   function showMoreVisible()
     {
-          
+
           var threshold, target = $("#showMoreEvents");
-          
+
           if (!target.length)
             return;
 
