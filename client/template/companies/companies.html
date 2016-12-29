@@ -31,15 +31,13 @@
           </a>
           <i class="delete_company icon ion-minus-circled" data-id={{_id}}></i>
          </div>
-       {{else}}
-       <div class="item ">
+       {{else}}       
          <div class="item item-icon-right item-thumbnail-left thumb-right">
            <img src="{{pic}}" width="" alt="{{name}}" height="20">
            <a href="{{build_path _id}}">
              <h2>{{name}}</h2>
              <p>{{desc}}</p>
           </a>
-         </div>
          </div>
        {{/if}}
     {{/each}}
