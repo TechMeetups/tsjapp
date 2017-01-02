@@ -1,21 +1,21 @@
-Template.attendeesDetails.created = function () 
+Template.attendeesDetails.created = function ()
 {
-  this.autorun(function () 
+  this.autorun(function ()
   {
     this.subscription = Meteor.subscribe('attendees_details',Router.current().params._id,Router.current().params._attendee_id);
     this.subscription1 = attendee_manager.default_connect_request(Router.current().params._attendee_id)
   }.bind(this));
 };
 
-Template.attendeesDetails.rendered = function () 
+Template.attendeesDetails.rendered = function ()
 {
-  this.autorun(function () 
+  this.autorun(function ()
   {
-    if (!this.subscription.ready() || !this.subscription1.ready()) 
+    if (!this.subscription.ready() || !this.subscription1.ready())
     {
       IonLoading.show();
-    } 
-    else 
+    }
+    else
     {
       IonLoading.hide();
     }
@@ -26,31 +26,31 @@ Template.attendeesDetails.helpers(
 {
   not_me : function()
   {
-      var curr_user_id = Router.current().params._attendee_id ; 
+      var curr_user_id = Router.current().params._attendee_id ;
 
-      console.log('Logged in user:'+Meteor.userId()+' curr_user_id:'+curr_user_id) ; 
+      console.log('Logged in user:'+Meteor.userId()+' curr_user_id:'+curr_user_id) ;
 
-      if(curr_user_id !== Meteor.userId()) 
+      if(curr_user_id !== Meteor.userId())
         return true ;
       else
-        return false ; 
-  }, 
+        return false ;
+  },
   pic_exists : function(pic_url)
   {
-      console.log("attendeesTab'"+pic_url+"'") ; 
-      if (!pic_url.trim() || pic_url === '') 
+      console.log("attendeesTab'"+pic_url+"'") ;
+      if (!pic_url.trim() || pic_url === '')
         return false ;
       else
-        return true ; 
+        return true ;
 
-  },     
+  },
   build_pic : function(pic)
   {
       if(pic)
         return pic ;
       else
-        return "/assets/img/profile.png" ; 
-                  
+        return "/assets/img/profile.png" ;
+
   },
   format_date : function(date){
     return event_manager.format_data(date)
@@ -91,11 +91,14 @@ Template.attendeesDetails.helpers(
     if(cv || linkedin)
       return true ;
     else
-      return false ;     
+      return false ;
   }
 });
 Template.attendeesDetails.events(
 {
+  'click #email_update' : function(event, template){
+    Router.go('/user_profile');
+  },
   'click #meet_candidate' : function(event, template)
   {
     attendee_id = Router.current().params._attendee_id;
@@ -106,23 +109,23 @@ Template.attendeesDetails.events(
     var message = template.find('#message').value;
     template.find('#message').value = "" ;
 
-    // var pic = $('#attendee_pic').attr('src') ; 
-  
-    var upic = Meteor.user().profile.pic ; 
+    // var pic = $('#attendee_pic').attr('src') ;
+
+    var upic = Meteor.user().profile.pic ;
     if(!upic)
-      pic = "/assets/img/profile.png" ; 
+      pic = "/assets/img/profile.png" ;
     else
-      pic = upic ; 
+      pic = upic ;
 
     request ={request_type:request_type,message:message,user_id:user_id,event_id:event_id,
-      attendee_id:attendee_id,pic:upic} ; 
+      attendee_id:attendee_id,pic:upic} ;
 
     console.log(request)
     event_manager.meet_candidate(request);
-  }, 
-  'click .jump2Linkedin' : function(URL) 
+  },
+  'click .jump2Linkedin' : function(URL)
   {
-      OpenInNewTab(url) ; 
+      OpenInNewTab(url) ;
   },
   'click .remove_item' : function(event, template)
   {
@@ -136,16 +139,16 @@ Template.attendeesDetails.events(
     event_id = Router.current().params._id;
 
     user_id = Meteor.userId();
-    request_type = "candidate_cv" ; 
-  
-    var upic = Meteor.user().profile.pic ; 
+    request_type = "candidate_cv" ;
+
+    var upic = Meteor.user().profile.pic ;
     if(!upic)
-      pic = "/assets/img/cv.png" ; 
+      pic = "/assets/img/cv.png" ;
     else
-      pic = upic ; 
+      pic = upic ;
 
     request ={request_type:request_type,message:'Get CV',user_id:user_id,event_id:event_id,
-      attendee_id:attendee_id,pic:upic} ; 
+      attendee_id:attendee_id,pic:upic} ;
 
     attendee_manager.candidate_cv(request);
 
@@ -166,10 +169,10 @@ Template.attendeesDetails.events(
       item_id:attendee_id,
       created_at:new Date()
     }
-  
-    checkout_manager.checkout_item(data) ; 
+
+    checkout_manager.checkout_item(data) ;
 //    Router.go('checkout.tab', {_id: event_id});
-  
+
   },
   'click #matched_call' : function(event, template)
   {
@@ -179,16 +182,16 @@ Template.attendeesDetails.events(
     event_id = Router.current().params._id;
 
     user_id = Meteor.userId();
-    request_type = "candidate_call" ; 
-  
-    var upic = Meteor.user().profile.pic ; 
+    request_type = "candidate_call" ;
+
+    var upic = Meteor.user().profile.pic ;
     if(!upic)
-      pic = "/assets/img/call.png" ; 
+      pic = "/assets/img/call.png" ;
     else
-      pic = upic ; 
+      pic = upic ;
 
     request ={request_type:request_type,message:'Organise Call',user_id:user_id,event_id:event_id,
-      attendee_id:attendee_id,pic:upic} ; 
+      attendee_id:attendee_id,pic:upic} ;
 
     attendee_manager.candidate_call(request);
 
@@ -202,11 +205,11 @@ Template.attendeesDetails.events(
       item_id:attendee_id,
       created_at:new Date()
     }
-  
-    checkout_manager.checkout_item(data) ; 
+
+    checkout_manager.checkout_item(data) ;
 
 
   }
-  
+
 
 });

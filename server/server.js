@@ -399,7 +399,7 @@ if (Meteor.isServer)
         }
         if(toEmail || toEmail.length < 1){
           toEmail = fromEmail
-          username += "\n User registration with Twitter account: " + username ; 
+          username += "\n User registration with Twitter account: " + username ;
         }
         Email.send({
             from: fromEmail,
@@ -1519,12 +1519,21 @@ tag_job_experience = function(job)
         'sendtaskCompletedNotification':function(useremail,project,workitem,notes){
             sendtaskCompletedNotification(useremail,project,workitem,notes);
         },
-        resetpassword : function (user_id,pass)
+        resetpassword : function (user_id,pass,email)
         {
           if(pass.length > 1)
           {
             Accounts.setPassword(user_id, pass);
           }
+          try{
+            if(email && email.length > 1){
+              Meteor.users.update({_id : user_id},{ $set: {'emails.0.address': email }});
+            }
+          }catch(e){
+            console.log(e)            
+            throw new Meteor.Error(400,'Please check provided email already present.');
+          }
+
           // else
           // {
           //   Meteor.users.update({_id : user_id},{$set:{"profile.pic":pic}});

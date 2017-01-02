@@ -124,7 +124,10 @@ Template.jobDetails.helpers(
 });
 
 Template.jobDetails.events(
-{
+  {
+  'click #email_update' : function(event, template){
+    Router.go('/user_profile');
+  },
   'click #updt_skill' : function(event, template)
   {
     var jobid = $(event.currentTarget).attr('jobid') ;
