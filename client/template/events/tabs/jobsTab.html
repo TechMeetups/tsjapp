@@ -31,11 +31,7 @@
 
         {{#if isInRole 'admin'}}
           <div class="item item-icon-right item-thumbnail-left thumb-right">
-            {{ #if pic_exists pic }}
-              <img src="{{pic}}" width="" alt="" height="20">
-            {{else}}
-              <img src="/assets/img/job.png" width="" alt="" height="20">
-            {{ /if }}
+            <img src="{{check_image pic company_id}}" width="" alt="" height="20">
             <a href="{{build_path company_id _id}}">
              <h2>{{title}}</h2>
              <p>{{desc}}</p>
@@ -46,11 +42,7 @@
         {{else}}
         <div class="item ">
           <div class="item item-icon-right item-thumbnail-left thumb-right">
-            {{ #if pic_exists pic }}
-              <img src="{{pic}}" width="" alt="" height="20">
-            {{else}}
-              <img src="/assets/img/job.png" width="" alt="" height="20">
-            {{ /if }}
+            <img src="{{check_image pic company_id}}" width="" alt="" height="20">        
             <a href="{{build_path company_id _id}}">
              <h2>{{title}}</h2>
              <p>{{desc}}</p>

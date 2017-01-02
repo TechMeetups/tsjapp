@@ -18,15 +18,14 @@ Template.jobsTab.helpers(
   },
   pic_exists : function(pic_url)
   {
-      if (!pic_url.trim() || pic_url === '' || pic_url.length < 1)
+      if (pic_url == undefined || !pic_url.trim() || pic_url === '' || pic_url.length < 1)
         return false ;
       else
         return true ;
 
   },
-  check_image:function(image){
-    company = Company.findOne({});
-
+  check_image:function(image,company_id){
+    company = Company.findOne({_id:company_id});
     if(image && image.length > 1){
       return image;
     }else if(company.logo && company.logo.length > 1){
@@ -34,6 +33,8 @@ Template.jobsTab.helpers(
     }
     else if(company.pic && company.pic.length > 1){
       return company.pic;
+    }else{
+      return "/assets/img/job.png"
     }
   }
 });

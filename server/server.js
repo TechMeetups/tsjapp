@@ -203,8 +203,10 @@ if (Meteor.isServer)
 
       if(!limit || limit < 1)
           limit = 10 ;
-
-      return Job.find($set,{sort:{ created_at:-1},limit:limit});
+      jobs = Job.find($set,{sort:{ created_at:-1},limit:limit}).fetch();
+      company_ids = jobs.map(function(doc){return doc.company_id});
+      console.log(company_ids)
+      return [Job.find($set,{sort:{ created_at:-1},limit:limit}),Company.find({_id:{$in:company_ids}})];
     });
 
 
@@ -1530,7 +1532,7 @@ tag_job_experience = function(job)
               Meteor.users.update({_id : user_id},{ $set: {'emails.0.address': email }});
             }
           }catch(e){
-            console.log(e)            
+            console.log(e)
             throw new Meteor.Error(400,'Please check provided email already present.');
           }
 
