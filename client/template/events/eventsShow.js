@@ -77,5 +77,25 @@ Template.eventsShow.events(
          Router.go('events.show', {_id: Router.current().params._id});
        }
      });
+  },
+  "click #btn_add_notification" : function(e,t){
+    IonPopup.confirm({
+       title: 'confirm notification?',
+       template: 'Please press ok to notify all attendees for company notification.',
+       onOk: function() {
+         console.log(Router.current().params._id)
+         Meteor.call("notification_event_add", Router.current().params._id, function(error, result){
+           if(error){
+             console.log("error", error);
+           }
+           if(result){
+
+           }
+         });
+       },
+       onCancel: function() {
+
+       }
+     });
   }
 });

@@ -11,10 +11,12 @@
     {{#if canISearch user_id }}
 
     <div class="buttons">
-      <button class="button" data-ion-modal="_jobNew">{{> ionIcon icon="ios-plus-empty"}} Job {{> ionIcon
-      icon="ion-archive"}}</button>
+
 
       {{#if isInRole 'admin'}}
+      <button class="button" data-ion-modal="_jobNew">{{> ionIcon icon="ios-plus-empty"}} Job {{> ionIcon
+      icon="ion-archive"}}</button>
+      <button class="button" id="btn_update_notification">Update Location Notification</button>
               <!-- <button class="button " id="company_match" >Match</button> -->
       {{/if}}
     </div>

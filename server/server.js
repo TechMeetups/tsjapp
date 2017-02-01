@@ -514,6 +514,69 @@ if (Meteor.isServer)
         });
 
     }
+    var send_company_add_notification = function(company,user,email){
+
+        var fromEmail = "admin@techmeetups.com";
+        var toEmail = email;
+        var username = user.profile.firstname
+        if(username && username.length > 1){
+          username = username
+        }else {
+          username = ""
+        }
+        Email.send({
+            from: fromEmail,
+            to: toEmail,
+            replyTo: fromEmail ,
+            subject: "Event Change Notification" ,
+            text: "Hi "+username+'\n'+
+                    "\nPlease find company details\n"+
+                    "\nName   : "+company.name+
+                    "\nCity : "+company.city+
+                    "\nDetails : "+company.desc+
+
+                   "\n\n"+
+                   "Please email us if you need more details.\n\n"+
+            "Thank you.\n"+
+            "The TechStartupJobs Team.\n"+
+            "http://techstartupjobs.com\n"+
+            "Join.Connect.Meet.Apply"
+            // +"http://www.graphical.io/assets/img/Graphical-IO.png"
+        });
+
+    }
+    var send_job_add_notification = function(job,user,email){
+
+        var fromEmail = "admin@techmeetups.com";
+        var toEmail = email;
+        var username = user.profile.firstname
+        if(username && username.length > 1){
+          username = username
+        }else {
+          username = ""
+        }
+        Email.send({
+            from: fromEmail,
+            to: toEmail,
+            replyTo: fromEmail ,
+            subject: "Event Change Notification" ,
+            text: "Hi "+username+'\n'+
+                    "\nPlease find Job details\n"+
+                    "\nTitle   : "+job.title+
+                    "\nCity : "+job.city+
+                    "\nExperience : "+job.experience+
+                    "\nSkill : "+job.skill+
+                    "\nDetails : "+job.desc+
+                   "\n\n"+
+                   "Please email us if you need more details.\n\n"+
+            "Thank you.\n"+
+            "The TechStartupJobs Team.\n"+
+            "http://techstartupjobs.com\n"+
+            "Join.Connect.Meet.Apply"
+            // +"http://www.graphical.io/assets/img/Graphical-IO.png"
+        });
+
+    }
     var request_for_meet_candidate = function (user,attendee,message)
     {
       var fromEmail = "admin@techmeetups.com";
@@ -1771,6 +1834,42 @@ tag_job_experience = function(job)
         delete_event_company : function(company_id){
           Job.remove({company_id:company_id});
           EventCompany.remove({company_id:company_id});
+        },
+        notification_company_update : function(company_id){
+          if(Meteor.isServer){
+            company = Company.findOne({_id:company_id});
+            if(company.city){
+              users = Meteor.users.find({"profile.city":{$regex : new RegExp(company.city, "i") }}).fetch();
+              for(var u = 0;u < users.length; u++){
+                email = getUserEmail(users[u])
+                console.log(email)
+                if(email != false){
+                  send_company_add_notification(company,users[u],email)
+                }
+              }
+            }
+          }
+        },
+        notification_event_add: function(event_id){
+          if(Meteor.isServer){
+            event = Events.findOne({_id:event_id});
+          }
+        },
+        notification_job_add : function(job_id){
+          if(Meteor.isServer){
+            job = Job.findOne({_id:job_id});
+            console.log(job)
+            if(job.city){
+              users = Meteor.users.find({"profile.city":{$regex : new RegExp(job.city, "i") }}).fetch();
+              for(var u = 0;u < users.length; u++){
+                email = getUserEmail(users[u])
+                if(email != false){
+                  send_job_add_notification(job,users[u],email)                  
+                }
+              }
+
+            }
+          }
         }
     });
 }

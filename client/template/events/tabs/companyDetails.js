@@ -58,5 +58,25 @@ Template.companyDetails.events(
   {
       animateThis($(event.currentTarget),'tada') ;
       match_manager.email_matched(null,Router.current().params._id,null,Router.current().params._company_id) ;
+  },
+  "click #btn_update_notification" : function(e,t){
+    IonPopup.confirm({
+       title: 'confirm notification?',
+       template: 'Please press ok to notify all attendees for company notification.',
+       onOk: function() {
+         console.log(Router.current().params._id)
+         Meteor.call("notification_company_update", Router.current().params._company_id, function(error, result){
+           if(error){
+             console.log("error", error);
+           }
+           if(result){
+
+           }
+         });
+       },
+       onCancel: function() {
+
+       }
+     });
   }
 });

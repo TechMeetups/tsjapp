@@ -228,5 +228,24 @@ Template.jobDetails.events(
   {
        animateThis($(event.currentTarget),'tada') ;
   },
+  'click #btn_job_add_notification':function(e,t){
+    IonPopup.confirm({
+       title: 'confirm notification?',
+       template: 'Please press ok to notify all user for new job notification.',
+       onOk: function() {
+         job_id = Router.current().params._job_id;
+         Meteor.call("notification_job_add", job_id, function(error, result){
+           if(error){
+             console.log("error", error);
+           }
+           if(result){
 
+           }
+         });
+       },
+       onCancel: function() {
+
+       }
+     });
+  }
 });
