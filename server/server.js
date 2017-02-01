@@ -514,6 +514,40 @@ if (Meteor.isServer)
         });
 
     }
+    var send_event_add_notification = function(event,user,email){
+
+        var fromEmail = "admin@techmeetups.com";
+        var toEmail = email;
+        var username = user.profile.firstname
+        if(username && username.length > 1){
+          username = username
+        }else {
+          username = ""
+        }
+        var start_dt = moment(event.start).format("llll");
+        var end_dt = moment(event.end).format("llll");
+        Email.send({
+            from: fromEmail,
+            to: toEmail,
+            replyTo: fromEmail ,
+            subject: "Event Notification" ,
+            text: "Hi "+user.profile.firstname+'\n'+
+                    "\nPlease find updated Event details\n"+
+                    "\nEvent   : "+event.name+
+                    "\nDetails : "+event.desc+
+                    "\nStart   : "+start_dt+
+                    "\nFinish  : "+end_dt+
+                    "\nAddress : "+event.address+
+                   "\n\n"+
+                   "Please email us if you need more details.\n\n"+
+            "Thank you.\n"+
+            "The TechStartupJobs Team.\n"+
+            "http://techstartupjobs.com\n"+
+            "Join.Connect.Meet.Apply"
+            // +"http://www.graphical.io/assets/img/Graphical-IO.png"
+        });
+
+    }
     var send_company_add_notification = function(company,user,email){
 
         var fromEmail = "admin@techmeetups.com";
@@ -528,7 +562,7 @@ if (Meteor.isServer)
             from: fromEmail,
             to: toEmail,
             replyTo: fromEmail ,
-            subject: "Event Change Notification" ,
+            subject: "Company Notification" ,
             text: "Hi "+username+'\n'+
                     "\nPlease find company details\n"+
                     "\nName   : "+company.name+
@@ -559,7 +593,7 @@ if (Meteor.isServer)
             from: fromEmail,
             to: toEmail,
             replyTo: fromEmail ,
-            subject: "Event Change Notification" ,
+            subject: "Job Notification" ,
             text: "Hi "+username+'\n'+
                     "\nPlease find Job details\n"+
                     "\nTitle   : "+job.title+
@@ -1853,18 +1887,26 @@ tag_job_experience = function(job)
         notification_event_add: function(event_id){
           if(Meteor.isServer){
             event = Events.findOne({_id:event_id});
+            if(event.city){
+              users = Meteor.users.find({"profile.city":{$regex : new RegExp(event.city, "i") }}).fetch();
+              for(var u = 0;u < users.length; u++){
+                email = getUserEmail(users[u])
+                if(email != false){
+                  send_event_add_notification(event,users[u],email)
+                }
+              }
+            }
           }
         },
         notification_job_add : function(job_id){
           if(Meteor.isServer){
             job = Job.findOne({_id:job_id});
-            console.log(job)
             if(job.city){
               users = Meteor.users.find({"profile.city":{$regex : new RegExp(job.city, "i") }}).fetch();
               for(var u = 0;u < users.length; u++){
                 email = getUserEmail(users[u])
                 if(email != false){
-                  send_job_add_notification(job,users[u],email)                  
+                  send_job_add_notification(job,users[u],email)
                 }
               }
 
