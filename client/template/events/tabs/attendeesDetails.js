@@ -24,6 +24,16 @@ Template.attendeesDetails.rendered = function ()
 
 Template.attendeesDetails.helpers(
 {
+
+  has_email : function() 
+  {
+      if( !this.emails )
+        return false ; 
+      if( !this.emails[0].address )
+        return false ; 
+      else 
+        return this.emails[0].address ;   
+  }, 
   not_me : function()
   {
       var curr_user_id = Router.current().params._attendee_id ;

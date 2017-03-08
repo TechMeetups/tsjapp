@@ -11,11 +11,10 @@
     {{#if canISearch user_id }}
 
     <div class="buttons">
-      <button class="button" data-ion-modal="_jobNew">{{> ionIcon icon="ios-plus-empty"}} Job {{> ionIcon
-      icon="ion-archive"}}</button>
+      <button class="button button-balanced" data-ion-modal="_jobNew"><i class="icon ion-plus-round"></i> Job</button>
 
       {{#if isInRole 'admin'}}
-              <button class="button" id="company_match" >Match</button>
+              <button class="button button-energized" id="company_match"><i class="icon ion-ios-cog"></i>Match Jobs</button>
       {{/if}}
 
     </div>
@@ -38,7 +37,7 @@
             <p>{{desc}}</p>
           </div>
           {{#if isInRole 'admin'}}
-              <button class="button ion-button clear pull-right" data-ion-modal="_editCompany">Edit</button>
+              <button class="button button-positive ion-button clear pull-right button-small" data-ion-modal="_editCompany"><i class="icon ion-edit"></i> Company</button>
           {{/if}}
       </div>
 

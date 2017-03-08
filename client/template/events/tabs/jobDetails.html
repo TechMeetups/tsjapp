@@ -12,9 +12,9 @@
     <div class="list card">
 
         <div class="item item-divider">
-           <h3>{{city}}  {{#if isInRole 'admin'}}
-                <button class="button ion-button clear pull-right" data-ion-modal="_editJob">Edit</button>
-            {{/if}} </h3>
+           <h3>{{city}}  
+               
+            </h3>
 
         </div>
 
@@ -84,6 +84,12 @@
 
               </div>
 
+              <div class="pull-right">
+                {{#if isInRole 'admin'}}
+                    <button class="button button-positive ion-button clear pull-right button-small" data-ion-modal="_editJob"><i class="icon ion-edit"></i> Job</button>
+                {{/if}}
+              </div>
+
         </div>
 
       <div class="item item-divider">
@@ -118,9 +124,9 @@
       {{/if}}
       {{#if is_email_available}}
       {{#if canISearch user_id}}
-          <a href="{{build_match_path}}" class="button button-block button-balanced" id="match_making" data="{{desc}}">
-                <i class="icon ion-ios-search-strong"></i>&nbsp;
-                Search {{ match_count }}&nbsp;
+          <a href="{{build_match_path}}" class="button button-block button-energized" id="match_making" data="{{desc}}">
+                <i class="icon ion-ios-cog"></i>&nbsp;
+                Match {{ match_count }}&nbsp;
                 <i class="icon ion-ios-people"></i>
           </a>
       {{/if}}
@@ -131,6 +137,8 @@
         </label>
 
       </div>
+
+
 
       <div class="button-bar">
         <button class="button button-dark button-block icon ion-ios-email" id="job_apply">&nbsp;Apply</button>

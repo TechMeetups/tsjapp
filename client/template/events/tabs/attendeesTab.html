@@ -4,7 +4,7 @@
   {{ > backtoolbar }}
     <h1 class="title align-title-center">{{ attendee_count }} Attendees</h1>
     {{#if isInRole 'admin'}}
-      <button class="button button-clear pull-right" data-ion-modal="_attendeeNew"><i class="icon ion-ios-plus-empty"></i></button>
+      <button class="button button-balanced pull-right" data-ion-modal="_attendeeNew"><i class="icon ion-plus-round">Attendee</i></button>
     {{/if}}
   {{/ionHeaderBar}}
 
@@ -29,6 +29,7 @@
                   {{ /if }}
 
                    <h2>{{firstname}}</h2>
+
                    <h3>{{profession}}</h3>
                    <p>{{skill}}</p>
                    <p>Exp. {{experience}} years</p>

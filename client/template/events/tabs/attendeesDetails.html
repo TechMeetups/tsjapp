@@ -81,14 +81,23 @@
       </div>
     </div>
 
+    {{/with}}
+
     {{#if isInRole 'admin'}}
        <div class="button-bar">
-         {{ #if has_cv_linkedin cv linkedin }}
-            <button class="button button-balanced button-block icon ion-document-text" id="matched_cv" data="{{firstname}}">&nbsp;CV</button>
+         {{ #if has_cv_linkedin profile.cv profile.linkedin }}
+            <button class="button button-balanced button-block icon ion-document-text" id="matched_cv" data="{{profile.firstname}}">&nbsp;CV</button>
          {{ else }}
-             <button class="button button-balanced button-block icon ion-document-text disabled" id="matched_cv" data="{{firstname}}">&nbsp;CV</button>
+             <button class="button button-balanced button-block icon ion-document-text disabled" id="matched_cv" data="{{profile.firstname}}">&nbsp;CV</button>
          {{ /if }}
-          <button class="button button-balanced button-block  icon ion-android-calendar" id="matched_call" data="{{firstname}}">&nbsp;Call</button>
+
+         {{#if has_email }}
+            <a href="mailto:{{has_email}}">
+              <button class="button button-energized button-block  icon ion-email" id="matched_email">&nbsp;Email</button>
+            </a>
+          {{ /if }}
+
+          <button class="button button-staable button-block  icon ion-android-calendar" id="matched_call" data="{{firstname}}">&nbsp;Schedule Call</button>
       </div>
 
     {{/if}}
@@ -119,13 +128,6 @@
             <input type="text" id="message" placeholder="Enter your message">
           </label>
         </div>
-  <!--
-      <div class="list list-inset">
-        <label class="item item-input-inset">
-          <i class="icon ion-chatboxes placeholder-icon"></i>
-          <input type="text" id="message" placeholder="Enter your message">
-        </label>
-      </div> -->
 
         <a ui-sref="tabsController.checkout" class="button  button-dark button-block  icon-right ion-chatboxes" id="meet_candidate">Send your message</a>
       {{ /if }}
@@ -133,7 +135,7 @@
         <button class="button button-dark button-block  icon ion-android-email" id="email_update">&nbsp;Please update email for communicate</button>
       {{/if}}
 
-      {{/with}}
+      
     {{/ionList}}
     {{/ionContent}}
     {{> _tabs}}

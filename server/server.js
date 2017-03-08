@@ -158,7 +158,7 @@ if (Meteor.isServer)
           }
           else
           {
-                return Meteor.users.find({_id:{$in:user_ids}},{limit:limit});
+                return Meteor.users.find({_id:{$in:user_ids}},{sort:{ 'profile.premium' : -1},limit:limit});
           }
       }
       else
@@ -180,7 +180,7 @@ if (Meteor.isServer)
           }
           else
           {
-              return Meteor.users.find({ },{limit:limit});
+              return Meteor.users.find({ },{sort:{ 'profile.premium' : -1},limit:limit});
           }
       }
 

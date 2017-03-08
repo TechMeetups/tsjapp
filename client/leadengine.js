@@ -31,7 +31,7 @@ if (Meteor.isClient)
       if(email == false){
         return false;
       }else{
-        return true;
+        return email;
       }
   })
 
