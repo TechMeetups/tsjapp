@@ -106,6 +106,12 @@ Template.attendeesDetails.helpers(
 });
 Template.attendeesDetails.events(
 {
+  "click .markPremium" : function(event, template)
+  {
+      var id = $(event.currentTarget).attr('data') ; 
+      if( id )
+        attendee_manager.updatePriority(id) ; 
+  },   
   'click #email_update' : function(event, template){
     Router.go('/user_profile');
   },

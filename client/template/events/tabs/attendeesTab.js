@@ -56,6 +56,13 @@ Template.attendeesTab.helpers(
 
 Template.attendeesTab.events(
 {
+  "click .markPremium" : function(event, template)
+  {
+      var id = $(event.currentTarget).attr('data') ; 
+      if( id )
+        attendee_manager.updatePriority(id) ; 
+        
+  },   
   "click #showMoreResults": function(event, template)
   {
     Session.set("attendee_limit",Session.get("attendee_limit") + EVENT_INCREMENT);

@@ -4,6 +4,14 @@
     <i class="icon ion-ios-arrow-back"></i>
   </button>
     <h1 class="title align-title-center">{{ title }}</h1>
+
+            {{#if isInRole 'admin'}}
+                <button class="button button-assertive active" id="btn_job_add_notification">
+                      <i class="icon ion-android-notifications-none"></i>
+                      <i class="icon ion-email-unread"></i>
+                    New Job in City</button>
+              {{ /if }}  
+
   {{/ionHeaderBar}}
 
   {{#ionView}}
@@ -12,9 +20,9 @@
     <div class="list card">
 
         <div class="item item-divider">
-           <h3>{{city}}  
-               
-            </h3>
+
+           <h3>{{city}} </h3>
+                  
 
         </div>
 
@@ -85,6 +93,7 @@
               </div>
 
               <div class="pull-right">
+
                 {{#if isInRole 'admin'}}
                     <button class="button button-positive ion-button clear pull-right button-small" data-ion-modal="_editJob"><i class="icon ion-edit"></i> Job</button>
                 {{/if}}

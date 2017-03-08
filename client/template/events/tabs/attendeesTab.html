@@ -29,12 +29,22 @@
                   {{ /if }}
 
                    <h2>{{firstname}}</h2>
+                    {{ #if premium }}
+                      <i class="icon ion-ios-star pull-right"></i>
+                    {{ else }}
+                      {{#if isInRole 'admin'}}
+                          <i class="icon ion-ios-star-outline pull-right markPremium" data="{{../_id}}"></i>
+                      {{ /if }}
+                    {{ /if }}
+
 
                    <h3>{{profession}}</h3>
                    <p>{{skill}}</p>
                    <p>Exp. {{experience}} years</p>
                  {{/with}}
              {{/ionItem}}
+
+
            </a>
         {{/if}}
       {{/each}}
