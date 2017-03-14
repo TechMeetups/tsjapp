@@ -1512,7 +1512,7 @@ tag_job_experience = function(job)
             {
               user_id = Accounts.createUser(
               {
-                  username: line_parts[0],
+                  username: line_parts[1],
                   email : line_parts[1],
                   password : line_parts[1],
                   profile  :
