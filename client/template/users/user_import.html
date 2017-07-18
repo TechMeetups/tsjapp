@@ -9,12 +9,17 @@
   {{#ionView}}
     {{#ionContent}}
   <form id="attendees-new-form" novalidate="novalidate">
+
+  
+
     <div class="bar bar-header bar-stable">
             <h2 class="title">Import Attendee Data</h2>
     </div>
     <div class="content has-header overflow-scroll">
+
         <input class="input-file" id="import_file" type="file" name="files[]">
-        <button type="button" class="btn btn-primary" id="btn_import_file">import</button>
+        <button type="button" class="btn btn-primary" id="btn_import_file">Import (fixed)</button>
+        <button type="button" class="btn btn-warning" id="btn_import_file_dynamic">Import (dynamic)</button>
     </div>
  </form>
  {{/ionContent}}
