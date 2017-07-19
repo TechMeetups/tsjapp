@@ -18,7 +18,18 @@
     <div class="content has-header overflow-scroll">
 
         <input class="input-file" id="import_file" type="file" name="files[]">
+        
+        <h4>Fixed format (column position matters and should be in this order) :</h4>
+        <p>
+        1 - firstname, 2 - email, 3 - experience in years, 4 - skills, 5 - date joined, 6 - looking for, 7 - profession, 8 - pic URL, 9 - CV URL, 10 - Linkedin URL, 11 - City, 12 - Event Name, 13 - Eventbrite Id  
+        </p>
         <button type="button" class="btn btn-primary" id="btn_import_file">Import (fixed)</button>
+        <h4>Dynamic format (column position doesnt matter but column names must match ) :</h4>
+
+        <p> 
+        firstname, email, experience, skills, orderdate, lookingfor, profession, pic, cv, linkedin, city, eventname, eventid 
+        </p>
+
         <button type="button" class="btn btn-warning" id="btn_import_file_dynamic">Import (dynamic)</button>
     </div>
  </form>

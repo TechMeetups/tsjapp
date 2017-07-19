@@ -1847,7 +1847,7 @@ tag_job_experience = function(job)
 // import_one_attendee = function ( email , fname , exp, skill, lookingfor, profession, pic, cv, linkedin, city, eventbright_id, event_name, ecity, dataObj )
             
             import_one_attendee( attendeeList[i].email , attendeeList[i].firstname , attendeeList[i].experience, 
-              attendeeList[i].skills, attendeeList[i].lookingfor, attendeeList[i].profession, attendeeList[i].picture, 
+              attendeeList[i].skills, attendeeList[i].lookingfor, attendeeList[i].profession, attendeeList[i].pic, 
               attendeeList[i].cv, attendeeList[i].linkedin, attendeeList[i].city, attendeeList[i].eventid, 
               attendeeList[i].eventname, attendeeList[i].city, attendeeList[i].orderdate ) ; 
 
