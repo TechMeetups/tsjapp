@@ -1585,7 +1585,7 @@ tag_job_experience = function(job)
 
       Meteor.methods(
       {
-        'email_matched_job' : function(user, title, profession, experience, skill, city )
+        'email_matched_job' : function(user, title, profession, experience, skill, city, showemail, showlinkedin )
         {
             console.log('Server.email_matched_job') ;
             console.log( arguments ) ;
@@ -1631,8 +1631,14 @@ tag_job_experience = function(job)
             for(var u = 0, found=1;u <len ; u++, found++)
             {
                 var uop = users[u].profile ; 
-                message = message + found +'. '+uop.firstname + ' ('+users[u].emails[0].address+') '+uop.experience+' years exp. in '+uop.city+ ' [' + users[u]._id +']'+'\n' ; 
-                message = message + '       '+uop.profession + '. ' + uop.skill + '. ' + uop.linkedin +  '\n\n' ; 
+                message = message + found +'. '+uop.firstname ; 
+                if( showemail )
+                  message = message + ' ('+users[u].emails[0].address+')' ; 
+                message = message + ' ' +uop.experience+' years exp. in '+uop.city+ ' [ID:' + users[u]._id +']'+'\n' ; 
+                message = message + '       '+uop.profession + '. ' + uop.skill + '. ' ; 
+                if( showlinkedin )
+                  message = message + uop.linkedin ; 
+                message = message + '\n\n' ; 
             }
             
 

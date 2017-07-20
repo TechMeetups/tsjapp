@@ -18,6 +18,8 @@ Template.matchJob.events(
       var experience = $('#experience').val() ; 
       var skill = $('#skill').val() ; 
       var city = $('#city').val() ; 
+      var showemail = $('#showemail').is(':checked') ; 
+      var showlinkedin = $('#showlinkedin').is(':checked') ; 
 
       var usr = Meteor.user() ;
 
@@ -26,7 +28,7 @@ Template.matchJob.events(
         customTemplate: "Matching candidates ...",
       });
 
-        Meteor.call("email_matched_job", usr, title, profession, experience, skill, city , function(error, res)
+        Meteor.call("email_matched_job", usr, title, profession, experience, skill, city , showemail, showlinkedin, function(error, res)
         {
           if(error)
           {
