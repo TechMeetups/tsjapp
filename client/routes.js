@@ -16,6 +16,8 @@ Router.map(function()
     this.route('forgotpassword', {path: '/forgotpassword'});
     this.route('userImport', {path: '/user_import'});
 
+    this.route('matchJob', {path: '/match_job'});
+
 
     this.route('events.show',
     {

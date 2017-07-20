@@ -1,0 +1,68 @@
+<template name="matchJob">
+  {{#contentFor "headerButtonLeft"}}
+    {{>ionNavBackButton path="events"}}
+  {{/contentFor}}
+
+  {{#contentFor "headerTitle"}}
+    <h1 class="title">Match Job</h1>
+  {{/contentFor}}
+  {{#ionView}}
+    {{#ionContent}}
+
+    
+    <div class="list">
+      
+
+      <label class="item item-input">
+        <span class="input-label">Job Title</span>
+        <input type="text" placeholder="Original Title of Job..." id="title" >
+      </label>
+
+      <label class="item item-input">
+        <span class="input-label">Profession</span>
+        <input type="text" placeholder="Developer, Designer, Product Manager,..." id="profession" >
+      </label>
+
+      
+      
+      
+      <label class="item item-input">
+        <span class="input-label">Experience</span>
+        <input type="number" name="volume" min="0" max="20" id="experience" placeholder="In years" >
+        <span class="input-label">(years)</span>
+      </label>
+    
+      <label class="item item-input">
+        <span class="input-label">Skills</span>
+        <textarea placeholder="Comma separated" rows="2" id="skill"></textarea>
+      </label>
+
+     <label class="item item-input">
+        <span class="input-label">City</span>
+        <input type="text" placeholder="City" id="city" >
+      </label>
+
+
+    </div>
+
+      <div class="padding">
+      
+      {{#if canISearch user_id}}
+          <a href="#" class="button button-block button-energized" id="match_job" >
+                <i class="icon ion-ios-cog"></i>&nbsp;
+                Match {{ match_count }}&nbsp;
+                <i class="icon ion-ios-people"></i>
+          </a>
+      {{/if}}
+
+
+      <div id="showFound" class="padding" style="display: none">
+        <h4> Found <span id="foundVal">0</span></h4>
+        <p>List of matched candidates sent by Email</p>
+      </div>
+
+    </div>
+      {{/ionContent}}
+  {{/ionView}}
+</template>
+

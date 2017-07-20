@@ -1585,6 +1585,75 @@ tag_job_experience = function(job)
 
       Meteor.methods(
       {
+        'email_matched_job' : function(user, title, profession, experience, skill, city )
+        {
+            console.log('Server.email_matched_job') ;
+            console.log( arguments ) ;
+
+            var job = {} ; 
+            job.title = title ; 
+            job.experience = experience ; 
+            job.skill = skill ; 
+            job.profession = profession ; 
+            
+
+            keywords = match_manager.loadKeyWords() ;
+            
+
+            var message = "Job : "+profession+' in '+city + ' with '+experience+' years of exp.'+ ' Skills: '+skill+ '\n'
+            message += title + '\n\n';
+
+            var users = Meteor.users.find({}).fetch();
+
+            var len = users.length ; 
+            console.log('Matching Users:'+len)
+            var uid = [] ; 
+
+            for(var u = 0, found=0;u <len ; u++)
+            {
+                console.log('Searching '+u)
+                if( match_user_job(users[u],job) > 0)
+                {
+                  ++found ;     
+                  console.log('Found:'+found)
+                      
+                  uid.push( users[u]._id ) ; 
+                    
+                }  
+            }
+
+
+            users =  Meteor.users.find({_id:{$in:uid}},{sort:{ 'profile.city' : -1} }).fetch();
+
+            var len = users.length ; 
+            console.log('Found Users:'+len)
+            
+            for(var u = 0, found=1;u <len ; u++, found++)
+            {
+                var uop = users[u].profile ; 
+                message = message + found +'. '+uop.firstname + ' ('+users[u].emails[0].address+') '+uop.experience+' years exp. in '+uop.city+ ' [' + users[u]._id +']'+'\n' ; 
+                message = message + '       '+uop.profession + '. ' + uop.skill + '. ' + uop.linkedin +  '\n\n' ; 
+            }
+            
+
+
+            // if( event_id )
+            //    message = email_matched_event( user, job_id, event_id, searchValue, limit, company_id ) ;
+            // else
+            // {
+            //   var events = Events.find({}).fetch()  ;
+            //   for( e=0;e<events.length;e++)
+            //   {
+            //       message += email_matched_event( user, job_id, events[e]._id, searchValue, limit, company_id ) ;
+            //   }
+
+            // }
+
+            email_matched_list(user,message) ;
+
+            return found ;
+
+        },
         'email_matched' : function(user, job_id, event_id, searchValue, limit, company_id)
         {
             console.log('Server.email_matched') ;
