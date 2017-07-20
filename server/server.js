@@ -1627,14 +1627,22 @@ tag_job_experience = function(job)
 
             var len = users.length ; 
             console.log('Found Users:'+len)
-            
+            var ocity = "" ; 
+
             for(var u = 0, found=1;u <len ; u++, found++)
             {
                 var uop = users[u].profile ; 
+
+                if( uop.city != ocity )
+                {
+                  message = message + '\n'+uop.city+'\n'+'----------------------------------------'+'\n' ; 
+                  ocity = uop.city ; 
+                }  
+
                 message = message + found +'. '+uop.firstname ; 
                 if( showemail )
                   message = message + ' ('+users[u].emails[0].address+')' ; 
-                message = message + ' ' +uop.experience+' years exp. in '+uop.city+ ' [ID:' + users[u]._id +']'+'\n' ; 
+                message = message + ' ' +uop.experience+' years exp.       [ID:' + users[u]._id +']'+'\n' ; 
                 message = message + '       '+uop.profession + '. ' + uop.skill + '. ' ; 
                 if( showlinkedin )
                   message = message + uop.linkedin ; 
