@@ -1603,7 +1603,13 @@ tag_job_experience = function(job)
             var message = "Job : "+profession+' in '+city + ' with '+experience+' years of exp.'+ ' Skills: '+skill+ '\n'
             message += title + '\n\n';
 
-            var users = Meteor.users.find({}).fetch();
+            var $set = {} ; 
+
+            if( city )
+              $set['profile.city'] = { '$regex' : new RegExp(city, "i")};
+            // $set['city'] = { '$regex' : new RegExp(city, "i")};
+                
+            var users = Meteor.users.find($set).fetch();
 
             var len = users.length ; 
             console.log('Matching Users:'+len)
