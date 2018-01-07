@@ -16,16 +16,19 @@ Template._attendeeNew.events({
             event.preventDefault();
             var name = template.find('#name').value;
             var pic = template.find('#pic').value;
+            var linkedin = template.find('#linkedin').value;
             var email = template.find('#email').value;
             var skill = template.find('#skill').value;
+            var profession = template.find('#profession').value;
             var lookingfor = template.find('#lookingfor').value;
             var experience = template.find('#experience').value;
-            data = {name:name,email:email,pic:pic,skill:skill,lookingfor:lookingfor,experience:experience}
+            data = {name:name,email:email,pic:pic,linkedin:linkedin,skill:skill,lookingfor:lookingfor,
+              experience:experience, profession:profession}
             event_id = Router.current().params._id
             console.log(data)
             console.log(event_id)
-            attendee_manager.add(data,event_id)
-            IonModal.close();
+            attendee_manager.add(data,event_id) ; 
+              IonModal.close();
           //  template.modal.hide();
             //Router.go('events');
   }

@@ -1,3 +1,21 @@
+Router.route('/api/v1/users/:email/workitems.json', {where: 'server'})
+.get(function ()
+{
+    console.log("inside workitems get ")
+    var email   = this.params.email;
+    
+})
+.post(function ()
+{
+    var email   = this.params.email;
+
+    var data = this.request.body;
+    console.log( 'Work Item Create Obj' )
+    console.log( data )
+
+    this.response.writeHead(200, {'Content-Type':'application/json'});
+    this.response.end(JSON.stringify({"status":"success"}));
+}) ; 
 
 if (Meteor.isServer)
 {
